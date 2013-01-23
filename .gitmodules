@@ -1,6 +1,0 @@
-[submodule "lib/ActionBarSherlock"]
-	path = lib/ActionBarSherlock
-	url = https://github.com/JakeWharton/ActionBarSherlock.git
-[submodule "lib/VitamioBundle"]
-	path = lib/VitamioBundle
-	url = https://github.com/yixia/VitamioBundle.git
