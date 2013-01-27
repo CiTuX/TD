@@ -1,3 +1,4 @@
 include 'lib/ActionBarSherlock/library'
+include 'lib/ZI'
 include 'lib/VitamioBundle'
 include 'lib/DataDroid/DataDroid'

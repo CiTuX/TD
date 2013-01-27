@@ -4,6 +4,7 @@ buildscript {
         }
         dependencies {
             classpath 'com.android.tools.build:gradle:0.2'
+            classpath 'com.google.android:support-v4:r7'
         }
 }
 apply plugin: 'android'
@@ -30,8 +31,9 @@ android {
         }
     }
     dependencies {
-        compile project("lib/ActionBarSherlock/library")
-        compile project("lib/VitamioBundle")
-        compile project("lib/DataDroid/DataDroid")
+        compile project(":lib/ActionBarSherlock/library")
+        compile project(":lib/ZI")
+        compile project(":lib/VitamioBundle")
+        compile project(":lib/DataDroid/DataDroid")
     }
 }

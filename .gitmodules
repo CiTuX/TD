@@ -7,3 +7,6 @@
 [submodule "lib/DataDroid"]
 	path = lib/DataDroid
 	url = git@github.com:CiTuX/DataDroid.git
+[submodule "lib/ZI"]
+	path = lib/ZI
+	url = git@github.com:CiTuX/ZI.git
