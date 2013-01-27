@@ -10,10 +10,6 @@ apply plugin: 'android'
 
 android {
     target = 'android-17'
-    defaultConfig {
-        versionCode = 1
-        versionName = "1.0"
-    }
     sourceSets {
         main {
             manifest {
@@ -32,5 +28,9 @@ android {
                 srcDir 'src'
             }
         }
+    }
+    dependencies {
+        compile project("lib/ActionBarSherlock/library")
+        compile project("lib/VitamioBundle")
     }
 }

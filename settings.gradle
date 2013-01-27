@@ -1,1 +1,3 @@
-include 'lib/ActionBarSherlock', 'lib/VitamioBundle'
+include 'lib/ActionBarSherlock/library'
+include 'lib/VitamioBundle'
+include 'lib/VitamioBundle/lib/ZI'

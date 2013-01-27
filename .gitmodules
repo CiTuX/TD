@@ -1,0 +1,6 @@
+[submodule "lib/VitamioBundle"]
+	path = lib/VitamioBundle
+	url = git@github.com:CiTuX/VitamioBundle.git
+[submodule "lib/ActionBarSherlock"]
+	path = lib/ActionBarSherlock
+	url = git@github.com:CiTuX/ActionBarSherlock.git
