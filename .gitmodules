@@ -4,3 +4,6 @@
 [submodule "lib/ActionBarSherlock"]
 	path = lib/ActionBarSherlock
 	url = git@github.com:CiTuX/ActionBarSherlock.git
+[submodule "lib/DataDroid"]
+	path = lib/DataDroid
+	url = git@github.com:CiTuX/DataDroid.git

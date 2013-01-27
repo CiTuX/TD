@@ -32,5 +32,6 @@ android {
     dependencies {
         compile project("lib/ActionBarSherlock/library")
         compile project("lib/VitamioBundle")
+        compile project("lib/DataDroid/DataDroid")
     }
 }
