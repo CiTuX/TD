@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General -->
     <string name="app_name">TwitchDroid</string>
+
+    <!-- Dialog texts -->
+    <string name="dialog_error_connection_error_title">Connexion error</string>
+    <string name="dialog_error_connection_error_message">A connexion error occurred. Please verify
+        that you are connected to an Edge, 3G or Wifi network.</string>
+    <string name="dialog_error_data_error_title">Incorrect data</string>
+    <string name="dialog_error_data_error_message">Received data are invalid.</string>
+    <string name="dialog_error_title">Error</string>
+    <string name="dialog_button_retry">Retry</string>
+    <string name="progress_dialog_title">Loading</string>
+    <string name="progress_dialog_message">Loading in progress…</string>
 </resources>

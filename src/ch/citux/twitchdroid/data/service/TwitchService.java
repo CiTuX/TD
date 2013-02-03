@@ -8,16 +8,9 @@
 
 package ch.citux.twitchdroid.data.service;
 
-import android.content.Intent;
-
 import com.foxykeep.datadroid.service.RequestService;
 
-/**
- * This class is called by the {@link SkeletonRequestManager} through the {@link android.content.Intent} system.
- *
- * @author Foxykeep
- */
-public final class SkeletonService extends RequestService {
+public final class TwitchService extends RequestService {
 
     // TODO by default only one concurrent worker thread will be used. If you want to change that,
     // override the getMaximumNumberOfThreads() method
