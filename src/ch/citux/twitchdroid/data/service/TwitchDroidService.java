@@ -1,20 +1,15 @@
 package ch.citux.twitchdroid.data.service;
 
-import ch.citux.twitchdroid.data.model.Channel;
-import ch.citux.twitchdroid.data.model.Stream;
-import ch.citux.twitchdroid.data.model.StreamToken;
-import net.chilicat.m3u8.PlayList;
-
-import java.util.ArrayList;
+import ch.citux.twitchdroid.data.model.*;
 
 public interface TwitchDroidService {
 
-    public ArrayList<Channel> getFavorites(String username);
+    public Favorites getFavorites(String username);
 
-    public ArrayList<Stream> listStreams(String channel);
+    public ChannelStatus getChannelStatus(String channel);
 
     public StreamToken getStreamToken(String channel);
 
-    public PlayList getStreamPlaylist(String channel, String token, boolean hd);
+    public StreamPlayList getStreamPlaylist(String channel, String token, String hd);
 
 }

@@ -3,12 +3,16 @@
     <!-- General -->
     <string name="app_name">TwitchDroid</string>
 
-    <!-- Dialog texts -->
-    <string name="dialog_error_connection_error_title">Connexion error</string>
-    <string name="dialog_error_connection_error_message">A connexion error occurred. Please verify
-        that you are connected to an Edge, 3G or Wifi network.</string>
-    <string name="dialog_error_data_error_title">Incorrect data</string>
-    <string name="dialog_error_data_error_message">Received data are invalid.</string>
+    <!-- Error Messages -->
+    <string name="error_unexpected">A unicorn has blocked the request, please contact the developer.</string>
+    <string name="error_connection_error_title">Connexion error</string>
+    <string name="error_connection_error_message">A connexion error occurred. Please verify
+        that you are connected to an Edge, 3G or Wifi network.
+    </string>
+    <string name="error_data_error_title">Incorrect data</string>
+    <string name="error_data_error_message">Received data are invalid.</string>
+
+    <!-- Dialog Messages -->
     <string name="dialog_error_title">Error</string>
     <string name="dialog_button_retry">Retry</string>
     <string name="progress_dialog_title">Loading</string>

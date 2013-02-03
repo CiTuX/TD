@@ -1,6 +1,6 @@
 package ch.citux.twitchdroid.data.model;
 
-public class Channel {
+public class Channel extends Base {
 
     private String about;
     private String category;

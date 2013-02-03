@@ -42,10 +42,8 @@ android {
         compile project(':lib/ActionBarSherlock/library')
         compile project(':lib/ZI')
         compile project(':lib/VitamioBundle')
-        compile files('libs/m3u8parser-0.1.jar')
+        compile files('libs/jplaylistparser-0.2.1.jar')
         compile 'com.google.android:support-v4:r7'
         compile 'com.google.code.gson:gson:2.2.2'
-        compile 'commons-codec:commons-codec:1.7'
-        compile 'commons-lang:commons-lang:2.6'
     }
 }

@@ -1,7 +1,7 @@
 
 package ch.citux.twitchdroid.data.model;
 
-public class Stream {
+public class Stream extends Base {
 
     private boolean abuse_reported;
     private String audio_codec;
