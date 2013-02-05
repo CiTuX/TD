@@ -6,11 +6,13 @@ import ch.citux.twitchdroid.data.model.*;
 import ch.citux.twitchdroid.data.worker.TwitchDroidRequestHandler;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import net.sourceforge.jplaylistparser.playlist.Playlist;
-import net.sourceforge.jplaylistparser.playlist.PlaylistEntry;
+import net.chilicat.m3u8.Element;
+import net.chilicat.m3u8.Playlist;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class TwitchDroidServiceImpl implements TwitchDroidService {
@@ -72,13 +74,20 @@ public class TwitchDroidServiceImpl implements TwitchDroidService {
         String url = buildUrl(TwitchConfig.URL_API_GET_STREAM_PLAYLIST, channel, token, hd);
         Response<Playlist> response = TwitchDroidRequestHandler.startPlaylistRequest(url);
         if (response.getStatus() == Response.Status.OK) {
-            List<PlaylistEntry> entries = response.getResult().getPlaylistEntries();
-            if (entries.size() > 0) {
-                for (PlaylistEntry entry : entries) {
-                    Log.d(TAG, entry.toString());
+            List<Element> elements = response.getResult().getElements();
+            if (elements.size() > 0) {
+                HashMap<String, String> streams = new HashMap<String, String>();
+                List<String> qualities = Arrays.asList(StreamPlayList.SUPPORTED_QUALITIES);
+                for (Element element : elements) {
+                    Log.d(TAG, "URI: " + element.getURI() + "Name: " + element.getName());
+                    String quality = element.getName();
+                    if (qualities.contains(quality)) {
+                        streams.put(element.getName(), element.getURI().toString());
+                    }
                 }
+                result.setStreams(streams);
             }
         }
-        return null;
+        return result;
     }
 }

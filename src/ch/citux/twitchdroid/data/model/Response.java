@@ -5,7 +5,8 @@ public class Response<Result> {
     public enum Status {
         OK,
         ERROR_URL,
-        ERROR_CONNECTION
+        ERROR_CONNECTION,
+        ERROR_CONTENT
     }
 
     private Status status;

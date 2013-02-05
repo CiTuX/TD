@@ -3,10 +3,8 @@ package ch.citux.twitchdroid.data.worker;
 import android.util.Log;
 import ch.citux.twitchdroid.BuildConfig;
 import ch.citux.twitchdroid.data.model.Response;
-import net.sourceforge.jplaylistparser.exception.JPlaylistParserException;
-import net.sourceforge.jplaylistparser.parser.AutoDetectParser;
-import net.sourceforge.jplaylistparser.playlist.Playlist;
-import org.xml.sax.SAXException;
+import net.chilicat.m3u8.ParseException;
+import net.chilicat.m3u8.Playlist;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,12 +53,12 @@ public class TwitchDroidRequestHandler {
     public static Response<Playlist> startPlaylistRequest(String request) {
         Log.d(TAG, "Url :" + request);
         Response.Status status;
-        Playlist result = new Playlist();
+        Playlist result = null;
         HttpURLConnection urlConnection = null;
         try {
             URL url = new URL(request);
             urlConnection = (HttpURLConnection) url.openConnection();
-            result = readPlaylist(url, urlConnection.getContentType(), urlConnection.getInputStream());
+            result = Playlist.parse(urlConnection.getInputStream()) ;
             status = Response.Status.OK;
         } catch (MalformedURLException e) {
             if (BuildConfig.DEBUG) {
@@ -76,6 +74,8 @@ public class TwitchDroidRequestHandler {
                 Log.e(TAG, e.toString());
             }
             status = Response.Status.ERROR_CONNECTION;
+        } catch (ParseException e) {
+            status = Response.Status.ERROR_CONTENT;
         }
         if (urlConnection != null) {
             urlConnection.disconnect();
@@ -91,32 +91,5 @@ public class TwitchDroidRequestHandler {
             out.append(line);
         }
         return out.toString();
-    }
-
-    private static Playlist readPlaylist(URL url, String contentType, InputStream in) {
-        AutoDetectParser parser = new AutoDetectParser();
-        Playlist playlist = new Playlist();
-        try {
-            parser.parse(url.toString(), contentType, in, playlist);
-        } catch (IOException e) {
-            if (BuildConfig.DEBUG) {
-                e.printStackTrace();
-            } else {
-                Log.e(TAG, e.toString());
-            }
-        } catch (SAXException e) {
-            if (BuildConfig.DEBUG) {
-                e.printStackTrace();
-            } else {
-                Log.e(TAG, e.toString());
-            }
-        } catch (JPlaylistParserException e) {
-            if (BuildConfig.DEBUG) {
-                e.printStackTrace();
-            } else {
-                Log.e(TAG, e.toString());
-            }
-        }
-        return playlist;
     }
 }
