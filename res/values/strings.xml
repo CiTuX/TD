@@ -17,4 +17,9 @@
     <string name="dialog_button_retry">Retry</string>
     <string name="progress_dialog_title">Loading</string>
     <string name="progress_dialog_message">Loading in progress…</string>
+
+    <!-- Channel -->
+    <string name="channel_name">Channel-Name</string>
+    <string name="channel_stream">Stream</string>
+
 </resources>

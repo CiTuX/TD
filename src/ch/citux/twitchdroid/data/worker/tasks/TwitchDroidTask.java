@@ -1,6 +1,7 @@
 package ch.citux.twitchdroid.data.worker.tasks;
 
 import android.content.Context;
+import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.TwitchDroidApplication;
 import ch.citux.twitchdroid.data.worker.TwitchDroidCallback;
 import com.yixia.zi.utils.AsyncTask;
@@ -18,10 +19,14 @@ public abstract class TwitchDroidTask<Params, Result> extends AsyncTask<Params, 
     @Override
     protected void onPostExecute(Result result) {
         super.onPostExecute(result);
-        callback.onResponse(result);
+        if (result != null) {
+            callback.onResponse(result);
+        } else {
+            callback.onError(getString(R.string.error_connection_error_title), getString(R.string.error_connection_error_message));
+        }
     }
 
-    protected String getString(int resId){
+    protected String getString(int resId) {
         return context.getString(resId);
     }
 
