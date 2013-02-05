@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="56dp">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toLeftOf="@+id/status"
+        android:layout_centerVertical="true"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imgChannelLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:contentDescription="@string/channel_logo"/>
+
+        <TextView
+            android:id="@+id/txtChannelTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/imgChannelLogo"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:textSize="24sp"
+            android:singleLine="true"
+            android:ellipsize="marquee"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/status"
+        android:layout_width="8dp"
+        android:layout_height="56dp"
+        android:layout_alignParentRight="true"
+        android:visibility="visible"/>
+
+</RelativeLayout>

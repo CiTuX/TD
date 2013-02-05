@@ -7,20 +7,24 @@ import android.view.ViewGroup;
 import ch.citux.twitchdroid.data.model.Favorites;
 import ch.citux.twitchdroid.data.worker.TwitchDroidCallback;
 import ch.citux.twitchdroid.data.worker.TwitchDroidTaskManager;
+import ch.citux.twitchdroid.ui.adapter.FavoritesAdapter;
 import com.actionbarsherlock.app.SherlockListFragment;
-import com.yixia.zi.utils.Log;
 
-public class ChannelListFragment extends SherlockListFragment implements TwitchDroidCallback<Favorites> {
+public class FavoritesListFragment extends SherlockListFragment implements TwitchDroidCallback<Favorites> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        TwitchDroidTaskManager.getFavorites(this, "citux_ch");
+        TwitchDroidTaskManager.getFavorites(this, "jackfrags");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onResponse(Favorites response) {
-        Log.d("RESULT", response.getChannels().get(0).getId());
+        FavoritesAdapter adapter = new FavoritesAdapter(getActivity(), response.getChannels());
+        setListAdapter(adapter);
+//        for (Channel channel : response.getChannels()) {
+//            Log.d("RESULT", "Channel: " + channel.getLogin());
+//        }
     }
 
     @Override

@@ -1,9 +1,10 @@
 package ch.citux.twitchdroid.data.model;
 
+import ch.citux.twitchdroid.TwitchDroidApplication;
+
 public abstract class Base {
 
     private String error;
-    private int errorResId;
 
     public String getError() {
         return error;
@@ -13,15 +14,11 @@ public abstract class Base {
         this.error = error;
     }
 
-    public int getErrorResId() {
-        return errorResId;
-    }
-
     public void setErrorResId(int errorResId) {
-        this.errorResId = errorResId;
+        this.error = TwitchDroidApplication.getContext().getString(errorResId);
     }
 
     public boolean hasError() {
-        return error != null || errorResId != 0;
+        return error != null;
     }
 }

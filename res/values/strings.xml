@@ -21,5 +21,6 @@
     <!-- Channel -->
     <string name="channel_name">Channel-Name</string>
     <string name="channel_stream">Stream</string>
+    <string name="channel_logo">Logo</string>
 
 </resources>

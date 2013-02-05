@@ -22,7 +22,7 @@ public class TaskGetStreamPlaylist extends TwitchDroidTask<String, StreamPlayLis
             StreamToken streamToken = TwitchDroidServiceImpl.getInstance().getStreamToken(params[0]);
             if (streamToken.getToken() != null) {
                 String token = HashUtils.decodeJSON(streamToken.getToken());
-                String hash = HashUtils.encodeHmacSHA1(TwitchConfig.CLIENT_ID, token);
+                String hash = HashUtils.encodeHmacSHA1(TwitchConfig.USHER_STREAM_TOKEN, token);
                 token = HashUtils.encodeURL(hash + ":" + token);
 //                token = hash + ":" + token;
                 Log.d("Twitch", token);
