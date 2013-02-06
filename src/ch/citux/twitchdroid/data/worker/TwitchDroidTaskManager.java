@@ -1,10 +1,12 @@
 package ch.citux.twitchdroid.data.worker;
 
-import ch.citux.twitchdroid.data.model.ChannelStatus;
+import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.model.Favorites;
 import ch.citux.twitchdroid.data.model.StreamPlayList;
-import ch.citux.twitchdroid.data.model.StreamToken;
-import ch.citux.twitchdroid.data.worker.tasks.*;
+import ch.citux.twitchdroid.data.worker.tasks.TaskGetChannel;
+import ch.citux.twitchdroid.data.worker.tasks.TaskGetFavorites;
+import ch.citux.twitchdroid.data.worker.tasks.TaskGetStreamPlaylist;
+import ch.citux.twitchdroid.data.worker.tasks.TwitchDroidTask;
 
 public class TwitchDroidTaskManager {
 
@@ -23,9 +25,9 @@ public class TwitchDroidTaskManager {
         currentTask = task;
     }
 
-    public static void getStreams(TwitchDroidCallback<ChannelStatus> callback, String channel) {
+    public static void getChannel(TwitchDroidCallback<Channel> callback, String channel) {
         cancelTask();
-        TaskGetChannelStatus task = new TaskGetChannelStatus(callback);
+        TaskGetChannel task = new TaskGetChannel(callback);
         task.execute(channel);
         currentTask = task;
     }

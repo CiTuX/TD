@@ -18,8 +18,6 @@ public class FavoritesAdapter extends BaseAdapter {
     private ArrayList<Channel> data;
     private LayoutInflater inflater;
     private ImageFetcher imageFetcher;
-    private int colorOnline;
-    private int colorOfflline;
 
     public FavoritesAdapter(Context context) {
         init(context, new ArrayList<Channel>());
@@ -33,8 +31,6 @@ public class FavoritesAdapter extends BaseAdapter {
         this.data = data;
         inflater = LayoutInflater.from(context);
         imageFetcher = new ImageFetcher(context);
-        colorOnline = context.getResources().getColor(R.color.online);
-        colorOfflline = context.getResources().getColor(R.color.offline);
     }
 
     public void setData(ArrayList<Channel> data) {
@@ -54,7 +50,7 @@ public class FavoritesAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return data.get(position).getId();
+        return position;
     }
 
     @Override
@@ -71,9 +67,9 @@ public class FavoritesAdapter extends BaseAdapter {
         }
 
         Channel channel = getItem(position);
-        imageFetcher.loadThumbnailImage(channel.getImage_url_small(), holder.imgChannelLogo, R.drawable.default_channel_logo_small);
+        imageFetcher.loadThumbnailImage(channel.getLogo_url(), holder.imgChannelLogo, R.drawable.default_channel_logo_small);
         holder.txtChannelTitle.setText(channel.getTitle());
-        holder.status.setBackgroundResource(position % 2 == 1 ? R.color.online : R.color.offline);
+        holder.status.setBackgroundResource(channel.isOnline() ? R.color.online : R.color.offline);
 
         return convertView;
     }

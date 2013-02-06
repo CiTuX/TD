@@ -1,9 +1,14 @@
 package ch.citux.twitchdroid.data.service;
 
 import android.util.Log;
+import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.config.TwitchConfig;
+import ch.citux.twitchdroid.data.dto.JustinChannel;
+import ch.citux.twitchdroid.data.dto.TwitchChannel;
+import ch.citux.twitchdroid.data.dto.UsherStreamToken;
 import ch.citux.twitchdroid.data.model.*;
 import ch.citux.twitchdroid.data.worker.TwitchDroidRequestHandler;
+import ch.citux.twitchdroid.util.DtoMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.chilicat.m3u8.Element;
@@ -44,16 +49,27 @@ public class TwitchDroidServiceImpl implements TwitchDroidService {
         String url = buildUrl(TwitchConfig.URL_API_GET_FAVORITES, username);
         Response<String> response = TwitchDroidRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
-            ArrayList<Channel> channels = gson.fromJson(response.getResult(), new TypeToken<ArrayList<Channel>>() {
+            ArrayList<JustinChannel> justinChannels = gson.fromJson(response.getResult(), new TypeToken<ArrayList<JustinChannel>>() {
             }.getType());
-            result.setChannels(channels);
+            result.setChannels(DtoMapper.mapJustinChannels(justinChannels));
+        } else {
+            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
 
     @Override
-    public ChannelStatus getChannelStatus(String channel) {
-        return null;
+    public Channel getChannel(String channel) {
+        Channel result = new Channel();
+        String url = buildUrl(TwitchConfig.URL_API_GET_CHANNEL, channel);
+        Response<String> response = TwitchDroidRequestHandler.startStringRequest(url);
+        if (response.getStatus() == Response.Status.OK) {
+            TwitchChannel twitchChannel = gson.fromJson(response.getResult(), TwitchChannel.class);
+            result = DtoMapper.mapChannel(twitchChannel);
+        } else {
+            result.setErrorResId(R.string.error_data_error_message);
+        }
+        return result;
     }
 
     @Override
@@ -62,8 +78,11 @@ public class TwitchDroidServiceImpl implements TwitchDroidService {
         String url = buildUrl(TwitchConfig.URL_API_GET_STREAM_TOKEN, channel);
         Response<String> response = TwitchDroidRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
-            result = gson.<ArrayList<StreamToken>>fromJson(response.getResult(), new TypeToken<ArrayList<StreamToken>>() {
+            UsherStreamToken streamToken = gson.<ArrayList<UsherStreamToken>>fromJson(response.getResult(), new TypeToken<ArrayList<UsherStreamToken>>() {
             }.getType()).get(0);
+            result.setToken(streamToken.getToken());
+        } else {
+            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -87,6 +106,8 @@ public class TwitchDroidServiceImpl implements TwitchDroidService {
                 }
                 result.setStreams(streams);
             }
+        } else {
+            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }

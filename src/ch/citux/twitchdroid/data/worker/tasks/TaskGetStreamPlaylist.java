@@ -3,6 +3,7 @@ package ch.citux.twitchdroid.data.worker.tasks;
 import android.util.Log;
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.config.TwitchConfig;
+import ch.citux.twitchdroid.data.dto.UsherStreamToken;
 import ch.citux.twitchdroid.data.model.StreamPlayList;
 import ch.citux.twitchdroid.data.model.StreamToken;
 import ch.citux.twitchdroid.data.service.TwitchDroidServiceImpl;
