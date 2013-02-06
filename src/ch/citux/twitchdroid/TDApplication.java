@@ -3,11 +3,11 @@ package ch.citux.twitchdroid;
 import android.app.Application;
 import android.content.Context;
 
-public class TwitchDroidApplication extends Application {
+public class TDApplication extends Application {
 
-    private static TwitchDroidApplication instance;
+    private static TDApplication instance;
 
-    public TwitchDroidApplication() {
+    public TDApplication() {
         instance = this;
     }
 

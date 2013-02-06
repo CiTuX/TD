@@ -2,12 +2,12 @@ package ch.citux.twitchdroid.data.service;
 
 import android.util.Log;
 import ch.citux.twitchdroid.R;
-import ch.citux.twitchdroid.config.TwitchConfig;
+import ch.citux.twitchdroid.config.TDConfig;
 import ch.citux.twitchdroid.data.dto.JustinChannel;
 import ch.citux.twitchdroid.data.dto.TwitchChannel;
 import ch.citux.twitchdroid.data.dto.UsherStreamToken;
 import ch.citux.twitchdroid.data.model.*;
-import ch.citux.twitchdroid.data.worker.TwitchDroidRequestHandler;
+import ch.citux.twitchdroid.data.worker.TDRequestHandler;
 import ch.citux.twitchdroid.util.DtoMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,21 +20,21 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class TwitchDroidServiceImpl implements TwitchDroidService {
+public class TDServiceImpl implements TDService {
 
-    private static final String TAG = "TwitchDroidService";
+    private static final String TAG = "TDService";
 
-    private static TwitchDroidServiceImpl instance;
+    private static TDServiceImpl instance;
 
     private Gson gson;
 
-    private TwitchDroidServiceImpl() {
+    private TDServiceImpl() {
         gson = new Gson();
     }
 
-    public static TwitchDroidServiceImpl getInstance() {
+    public static TDServiceImpl getInstance() {
         if (instance == null) {
-            instance = new TwitchDroidServiceImpl();
+            instance = new TDServiceImpl();
         }
         return instance;
     }
@@ -46,8 +46,8 @@ public class TwitchDroidServiceImpl implements TwitchDroidService {
     @Override
     public Favorites getFavorites(String username) {
         Favorites result = new Favorites();
-        String url = buildUrl(TwitchConfig.URL_API_GET_FAVORITES, username);
-        Response<String> response = TwitchDroidRequestHandler.startStringRequest(url);
+        String url = buildUrl(TDConfig.URL_API_GET_FAVORITES, username);
+        Response<String> response = TDRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
             ArrayList<JustinChannel> justinChannels = gson.fromJson(response.getResult(), new TypeToken<ArrayList<JustinChannel>>() {
             }.getType());
@@ -61,8 +61,8 @@ public class TwitchDroidServiceImpl implements TwitchDroidService {
     @Override
     public Channel getChannel(String channel) {
         Channel result = new Channel();
-        String url = buildUrl(TwitchConfig.URL_API_GET_CHANNEL, channel);
-        Response<String> response = TwitchDroidRequestHandler.startStringRequest(url);
+        String url = buildUrl(TDConfig.URL_API_GET_CHANNEL, channel);
+        Response<String> response = TDRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
             TwitchChannel twitchChannel = gson.fromJson(response.getResult(), TwitchChannel.class);
             result = DtoMapper.mapChannel(twitchChannel);
@@ -75,8 +75,8 @@ public class TwitchDroidServiceImpl implements TwitchDroidService {
     @Override
     public StreamToken getStreamToken(String channel) {
         StreamToken result = new StreamToken();
-        String url = buildUrl(TwitchConfig.URL_API_GET_STREAM_TOKEN, channel);
-        Response<String> response = TwitchDroidRequestHandler.startStringRequest(url);
+        String url = buildUrl(TDConfig.URL_API_GET_STREAM_TOKEN, channel);
+        Response<String> response = TDRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
             UsherStreamToken streamToken = gson.<ArrayList<UsherStreamToken>>fromJson(response.getResult(), new TypeToken<ArrayList<UsherStreamToken>>() {
             }.getType()).get(0);
@@ -90,8 +90,8 @@ public class TwitchDroidServiceImpl implements TwitchDroidService {
     @Override
     public StreamPlayList getStreamPlaylist(String channel, String token, String hd) {
         StreamPlayList result = new StreamPlayList();
-        String url = buildUrl(TwitchConfig.URL_API_GET_STREAM_PLAYLIST, channel, token, hd);
-        Response<Playlist> response = TwitchDroidRequestHandler.startPlaylistRequest(url);
+        String url = buildUrl(TDConfig.URL_API_GET_STREAM_PLAYLIST, channel, token, hd);
+        Response<Playlist> response = TDRequestHandler.startPlaylistRequest(url);
         if (response.getStatus() == Response.Status.OK) {
             List<Element> elements = response.getResult().getElements();
             if (elements.size() > 0) {

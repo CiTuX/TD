@@ -1,8 +1,8 @@
 package ch.citux.twitchdroid.data.worker;
 
-import android.util.Log;
-import ch.citux.twitchdroid.BuildConfig;
+import ch.citux.twitchdroid.config.TDConfig;
 import ch.citux.twitchdroid.data.model.Response;
+import ch.citux.twitchdroid.util.Log;
 import net.chilicat.m3u8.ParseException;
 import net.chilicat.m3u8.Playlist;
 
@@ -15,56 +15,52 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class TwitchDroidRequestHandler {
+public class TDRequestHandler {
 
     private static final String TAG = "TwitchDroidRequestHandler";
     private static final String HTTP = "http";
     private static final String HTTPS = "https";
+    private static final String HEADER_ACCEPT = "Accept";
 
     public static Response<String> startStringRequest(String request) {
-        Log.d(TAG, "Url :" + request);
         Response.Status status;
         String result = "";
-        HttpURLConnection urlConnection = null;
-        try {
-            URL url = new URL(request);
-
-            if (url.getProtocol().equals(HTTP)) {
-                urlConnection = (HttpURLConnection) url.openConnection();
-            } else if (url.getProtocol().equals(HTTPS)) {
-                urlConnection = (HttpsURLConnection) url.openConnection();
-            } else {
-                throw new MalformedURLException();
+        Response<InputStream> response = startRequest(request);
+        if (response.getStatus() == Response.Status.OK) {
+            try {
+                result = readString(response.getResult());
+                status = Response.Status.OK;
+            } catch (IOException e) {
+                Log.e(TAG, e);
+                status = Response.Status.ERROR_CONNECTION;
             }
-
-            result = readString(urlConnection.getInputStream());
-            Log.d(TAG, result);
-            status = Response.Status.OK;
-        } catch (MalformedURLException e) {
-            if (BuildConfig.DEBUG) {
-                e.printStackTrace();
-            } else {
-                Log.e(TAG, e.toString());
-            }
-            status = Response.Status.ERROR_URL;
-        } catch (IOException e) {
-            if (BuildConfig.DEBUG) {
-                e.printStackTrace();
-            } else {
-                Log.e(TAG, e.toString());
-            }
-            status = Response.Status.ERROR_CONNECTION;
-        }
-        if (urlConnection != null) {
-            urlConnection.disconnect();
+        } else {
+            status = response.getStatus();
         }
         return new Response<String>(status, result);
     }
 
     public static Response<Playlist> startPlaylistRequest(String request) {
-        Log.d(TAG, "Url :" + request);
         Response.Status status;
         Playlist result = null;
+        Response<InputStream> response = startRequest(request);
+        if (response.getStatus() == Response.Status.OK) {
+            try {
+                result = Playlist.parse(response.getResult());
+                status = Response.Status.OK;
+            } catch (ParseException e) {
+                status = Response.Status.ERROR_CONTENT;
+            }
+        } else {
+            status = response.getStatus();
+        }
+        return new Response<Playlist>(status, result);
+    }
+
+    private static Response<InputStream> startRequest(String request) {
+        Log.d(TAG, "Url :" + request);
+        Response.Status status;
+        InputStream result = null;
         HttpURLConnection urlConnection = null;
         try {
             URL url = new URL(request);
@@ -77,29 +73,20 @@ public class TwitchDroidRequestHandler {
                 throw new MalformedURLException();
             }
 
-            result = Playlist.parse(urlConnection.getInputStream());
+            if (request.startsWith(TDConfig.URL_API_TWITCH_BASE)) {
+                urlConnection.addRequestProperty(HEADER_ACCEPT, TDConfig.TWITCH_ACCEPT);
+            }
+
+            result = urlConnection.getInputStream();
             status = Response.Status.OK;
         } catch (MalformedURLException e) {
-            if (BuildConfig.DEBUG) {
-                e.printStackTrace();
-            } else {
-                Log.e(TAG, e.toString());
-            }
+            Log.e(TAG, e);
             status = Response.Status.ERROR_URL;
         } catch (IOException e) {
-            if (BuildConfig.DEBUG) {
-                e.printStackTrace();
-            } else {
-                Log.e(TAG, e.toString());
-            }
+            Log.e(TAG, e);
             status = Response.Status.ERROR_CONNECTION;
-        } catch (ParseException e) {
-            status = Response.Status.ERROR_CONTENT;
         }
-        if (urlConnection != null) {
-            urlConnection.disconnect();
-        }
-        return new Response<Playlist>(status, result);
+        return new Response<InputStream>(status, result);
     }
 
     private static String readString(InputStream in) throws IOException {
@@ -109,6 +96,7 @@ public class TwitchDroidRequestHandler {
         while ((line = reader.readLine()) != null) {
             out.append(line);
         }
+        in.close();
         return out.toString();
     }
 }

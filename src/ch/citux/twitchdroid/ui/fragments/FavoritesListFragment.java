@@ -5,13 +5,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.model.Favorites;
-import ch.citux.twitchdroid.data.worker.TwitchDroidCallback;
-import ch.citux.twitchdroid.data.worker.TwitchDroidTaskManager;
+import ch.citux.twitchdroid.data.worker.TDCallback;
+import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.ui.adapter.FavoritesAdapter;
-import ch.citux.twitchdroid.util.Log;
 import com.actionbarsherlock.app.SherlockListFragment;
 
-public class FavoritesListFragment extends SherlockListFragment implements TwitchDroidCallback<Favorites>, AdapterView.OnItemClickListener {
+public class FavoritesListFragment extends SherlockListFragment implements TDCallback<Favorites>, AdapterView.OnItemClickListener {
 
     private FavoritesAdapter adapter;
 
@@ -23,7 +22,7 @@ public class FavoritesListFragment extends SherlockListFragment implements Twitc
     }
 
     private void loadData() {
-        TwitchDroidTaskManager.getFavorites(this, "jackfrags");
+        TDTaskManager.getFavorites(this, "jackfrags");
     }
 
     @Override
@@ -38,10 +37,10 @@ public class FavoritesListFragment extends SherlockListFragment implements Twitc
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TwitchDroidTaskManager.getChannel(new ChannelCallback(), adapter.getItem(position).getChannel_name());
+        TDTaskManager.getChannel(new ChannelCallback(), adapter.getItem(position).getChannel_name());
     }
 
-    private class ChannelCallback implements TwitchDroidCallback<Channel> {
+    private class ChannelCallback implements TDCallback<Channel> {
 
         @Override
         public void onResponse(Channel response) {

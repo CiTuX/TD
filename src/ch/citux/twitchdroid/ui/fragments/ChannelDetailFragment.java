@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.data.model.StreamPlayList;
-import ch.citux.twitchdroid.data.worker.TwitchDroidCallback;
-import ch.citux.twitchdroid.data.worker.TwitchDroidTaskManager;
+import ch.citux.twitchdroid.data.worker.TDCallback;
+import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.ui.dialogs.ErrorDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import io.vov.vitamio.activity.VideoActivity;
 
-public class ChannelDetailFragment extends SherlockFragment implements TwitchDroidCallback<StreamPlayList>, View.OnClickListener {
+public class ChannelDetailFragment extends SherlockFragment implements TDCallback<StreamPlayList>, View.OnClickListener {
 
     private EditText txtChannelName;
 
@@ -45,6 +45,6 @@ public class ChannelDetailFragment extends SherlockFragment implements TwitchDro
 
     @Override
     public void onClick(View v) {
-        TwitchDroidTaskManager.getStreamPlaylist(this, txtChannelName.getText().toString(), true);
+        TDTaskManager.getStreamPlaylist(this, txtChannelName.getText().toString(), true);
     }
 }

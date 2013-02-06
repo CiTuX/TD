@@ -1,6 +1,6 @@
 package ch.citux.twitchdroid.data.model;
 
-import ch.citux.twitchdroid.TwitchDroidApplication;
+import ch.citux.twitchdroid.TDApplication;
 
 public abstract class Base {
 
@@ -15,7 +15,7 @@ public abstract class Base {
     }
 
     public void setErrorResId(int errorResId) {
-        this.error = TwitchDroidApplication.getContext().getString(errorResId);
+        this.error = TDApplication.getContext().getString(errorResId);
     }
 
     public boolean hasError() {

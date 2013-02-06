@@ -3,7 +3,7 @@ package ch.citux.twitchdroid.data.service;
 import ch.citux.twitchdroid.data.dto.UsherStreamToken;
 import ch.citux.twitchdroid.data.model.*;
 
-public interface TwitchDroidService {
+public interface TDService {
 
     public Favorites getFavorites(String username);
 

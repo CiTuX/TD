@@ -1,6 +1,6 @@
 package ch.citux.twitchdroid.data.worker;
 
-public interface TwitchDroidCallback<Result> {
+public interface TDCallback<Result> {
 
     public void onResponse(Result response);
 

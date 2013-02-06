@@ -2,19 +2,19 @@ package ch.citux.twitchdroid.data.worker.tasks;
 
 import android.content.Context;
 import ch.citux.twitchdroid.R;
-import ch.citux.twitchdroid.TwitchDroidApplication;
+import ch.citux.twitchdroid.TDApplication;
 import ch.citux.twitchdroid.data.model.Base;
-import ch.citux.twitchdroid.data.worker.TwitchDroidCallback;
+import ch.citux.twitchdroid.data.worker.TDCallback;
 import com.yixia.zi.utils.AsyncTask;
 
 public abstract class TwitchDroidTask<Params, Result extends Base> extends AsyncTask<Params, Void, Result> {
 
     protected Context context;
-    protected TwitchDroidCallback<Result> callback;
+    protected TDCallback<Result> callback;
 
-    public TwitchDroidTask(TwitchDroidCallback<Result> callback) {
+    public TwitchDroidTask(TDCallback<Result> callback) {
         this.callback = callback;
-        this.context = TwitchDroidApplication.getContext();
+        this.context = TDApplication.getContext();
     }
 
     @Override
