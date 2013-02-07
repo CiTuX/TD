@@ -5,7 +5,7 @@ import ch.citux.twitchdroid.data.model.Favorites;
 import ch.citux.twitchdroid.data.service.TDServiceImpl;
 import ch.citux.twitchdroid.data.worker.TDCallback;
 
-public class TaskGetFavorites extends TwitchDroidTask<String, Favorites> {
+public class TaskGetFavorites extends TDTask<String, Favorites> {
 
 
     public TaskGetFavorites(TDCallback<Favorites> callback) {

@@ -25,7 +25,10 @@ public class DtoMapper {
     }
 
     private static String changeQuality(String hqLogo) {
-        return hqLogo.replaceAll("-(\\d+)x(\\d+).png", "-70x70.png");
+        if (hqLogo != null) {
+            return hqLogo.replaceAll("-(\\d+)x(\\d+).png", "-70x70.png");
+        }
+        return hqLogo;
     }
 
     public static ArrayList<Channel> mapJustinChannels(ArrayList<JustinChannel> jChannels) {

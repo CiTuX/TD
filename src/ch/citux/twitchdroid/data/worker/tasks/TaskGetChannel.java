@@ -5,7 +5,7 @@ import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.service.TDServiceImpl;
 import ch.citux.twitchdroid.data.worker.TDCallback;
 
-public class TaskGetChannel extends TwitchDroidTask<String, Channel> {
+public class TaskGetChannel extends TDTask<String, Channel> {
 
 
     public TaskGetChannel(TDCallback<Channel> callback) {

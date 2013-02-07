@@ -1,20 +1,26 @@
 package ch.citux.twitchdroid.data.worker.tasks;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.TDApplication;
 import ch.citux.twitchdroid.data.model.Base;
 import ch.citux.twitchdroid.data.worker.TDCallback;
-import com.yixia.zi.utils.AsyncTask;
 
-public abstract class TwitchDroidTask<Params, Result extends Base> extends AsyncTask<Params, Void, Result> {
+public abstract class TDTask<Params, Result extends Base> extends AsyncTask<Params, Void, Result> {
 
     protected Context context;
     protected TDCallback<Result> callback;
 
-    public TwitchDroidTask(TDCallback<Result> callback) {
+    public TDTask(TDCallback<Result> callback) {
         this.callback = callback;
         this.context = TDApplication.getContext();
+    }
+
+    @Override
+    protected void onPreExecute() {
+        callback.startLoading();
+        super.onPreExecute();
     }
 
     @Override
@@ -30,6 +36,7 @@ public abstract class TwitchDroidTask<Params, Result extends Base> extends Async
         } else {
             callback.onError(getString(R.string.error_connection_error_title), getString(R.string.error_connection_error_message));
         }
+        callback.stopLoading();
     }
 
     protected String getString(int resId) {

@@ -56,7 +56,7 @@ public class FavoritesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.favorites_list_item, null);
             holder.imgChannelLogo = (ImageView) convertView.findViewById(R.id.imgChannelLogo);

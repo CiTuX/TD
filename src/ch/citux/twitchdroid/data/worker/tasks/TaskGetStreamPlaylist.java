@@ -9,7 +9,7 @@ import ch.citux.twitchdroid.data.service.TDServiceImpl;
 import ch.citux.twitchdroid.data.worker.TDCallback;
 import ch.citux.twitchdroid.util.HashUtils;
 
-public class TaskGetStreamPlaylist extends TwitchDroidTask<String, StreamPlayList> {
+public class TaskGetStreamPlaylist extends TDTask<String, StreamPlayList> {
 
 
     public TaskGetStreamPlaylist(TDCallback<StreamPlayList> callback) {

@@ -31,6 +31,13 @@ public class Log {
         }
     }
 
+    public static void e(Object caller, String message) {
+        String tag = caller.getClass().getSimpleName();
+        if (!StringUtils.isBlank(message)) {
+            android.util.Log.e(tag, message);
+        }
+    }
+
     public static void e(String tag, Exception exception) {
         if (exception != null && !StringUtils.isBlank(exception.getMessage())) {
             if (BuildConfig.DEBUG) {

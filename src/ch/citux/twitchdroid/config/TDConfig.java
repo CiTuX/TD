@@ -2,6 +2,8 @@ package ch.citux.twitchdroid.config;
 
 public class TDConfig {
 
+    public static final String SETTINGS_CHANNEL_NAME = "channel_name";
+
     public static final String TWITCH_ACCEPT = "application/vnd.twitchtv+json";
     public static final String USHER_STREAM_TOKEN = "Wd75Yj9sS26Lmhve";
 

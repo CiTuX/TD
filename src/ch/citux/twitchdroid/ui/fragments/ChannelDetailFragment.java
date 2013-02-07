@@ -9,13 +9,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.data.model.StreamPlayList;
-import ch.citux.twitchdroid.data.worker.TDCallback;
 import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.ui.dialogs.ErrorDialogFragment;
-import com.actionbarsherlock.app.SherlockFragment;
 import io.vov.vitamio.activity.VideoActivity;
 
-public class ChannelDetailFragment extends SherlockFragment implements TDCallback<StreamPlayList>, View.OnClickListener {
+public class ChannelDetailFragment extends TDFragment<StreamPlayList> implements View.OnClickListener {
 
     private EditText txtChannelName;
 
@@ -37,10 +35,6 @@ public class ChannelDetailFragment extends SherlockFragment implements TDCallbac
             ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
             builder.setMessage("Stream offline :(").setTitle("Error").show();
         }
-    }
-
-    @Override
-    public void onError(String title, String message) {
     }
 
     @Override

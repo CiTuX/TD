@@ -3,14 +3,14 @@ package ch.citux.twitchdroid.data.worker;
 import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.model.Favorites;
 import ch.citux.twitchdroid.data.model.StreamPlayList;
+import ch.citux.twitchdroid.data.worker.tasks.TDTask;
 import ch.citux.twitchdroid.data.worker.tasks.TaskGetChannel;
 import ch.citux.twitchdroid.data.worker.tasks.TaskGetFavorites;
 import ch.citux.twitchdroid.data.worker.tasks.TaskGetStreamPlaylist;
-import ch.citux.twitchdroid.data.worker.tasks.TwitchDroidTask;
 
 public class TDTaskManager {
 
-    private static TwitchDroidTask currentTask;
+    private static TDTask currentTask;
 
     public static void cancelTask() {
         if (currentTask != null) {

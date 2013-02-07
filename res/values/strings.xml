@@ -3,7 +3,11 @@
     <!-- General -->
     <string name="app_name">TwitchDroid</string>
 
-    <!-- Error Messages -->
+    <!-- ActionBarItems -->
+    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- ErrorMessages -->
     <string name="error_unexpected">A unicorn has blocked the request, please contact the developer.</string>
     <string name="error_connection_error_title">Connexion error</string>
     <string name="error_connection_error_message">A connexion error occurred. Please verify
@@ -12,7 +16,7 @@
     <string name="error_data_error_title">Incorrect data</string>
     <string name="error_data_error_message">Received data are invalid.</string>
 
-    <!-- Dialog Messages -->
+    <!-- DialogMessages -->
     <string name="dialog_error_title">Error</string>
     <string name="dialog_button_retry">Retry</string>
     <string name="progress_dialog_title">Loading</string>
@@ -20,6 +24,7 @@
 
     <!-- Channel -->
     <string name="channel_name">Channel-Name</string>
+    <string name="channel_name_empty">There\'s no Channel-Name defined.\nYou can change it under settings.</string>
     <string name="channel_stream">Stream</string>
     <string name="channel_logo">Logo</string>
 
