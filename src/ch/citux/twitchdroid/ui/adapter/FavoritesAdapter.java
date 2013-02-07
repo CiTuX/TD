@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.data.model.Channel;
+import ch.citux.twitchdroid.data.model.Logo;
 import com.yixia.zi.utils.ImageFetcher;
 
 import java.util.ArrayList;
@@ -61,15 +62,13 @@ public class FavoritesAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.favorites_list_item, null);
             holder.imgChannelLogo = (ImageView) convertView.findViewById(R.id.imgChannelLogo);
             holder.txtChannelTitle = (TextView) convertView.findViewById(R.id.txtChannelTitle);
-            holder.status = convertView.findViewById(R.id.status);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         Channel channel = getItem(position);
-        imageFetcher.loadThumbnailImage(channel.getLogo_url(), holder.imgChannelLogo, R.drawable.default_channel_logo_small);
+        imageFetcher.loadThumbnailImage(channel.getLogo(Logo.SMALL), holder.imgChannelLogo, R.drawable.default_channel_logo_small);
         holder.txtChannelTitle.setText(channel.getTitle());
-        holder.status.setBackgroundResource(channel.isOnline() ? R.color.online : R.color.offline);
 
         return convertView;
     }
@@ -77,7 +76,6 @@ public class FavoritesAdapter extends BaseAdapter {
     private static class ViewHolder {
         ImageView imgChannelLogo;
         TextView txtChannelTitle;
-        View status;
     }
 
 }

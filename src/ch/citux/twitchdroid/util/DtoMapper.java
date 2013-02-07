@@ -3,6 +3,7 @@ package ch.citux.twitchdroid.util;
 import ch.citux.twitchdroid.data.dto.JustinChannel;
 import ch.citux.twitchdroid.data.dto.TwitchChannel;
 import ch.citux.twitchdroid.data.model.Channel;
+import ch.citux.twitchdroid.data.model.Logo;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class DtoMapper {
     public static Channel mapChannel(JustinChannel jChannel) {
         Channel channel = new Channel();
         channel.setChannel_name(jChannel.getLogin());
-        channel.setLogo_url(jChannel.getImage_url_small());
+        channel.setLogos(readLogos(jChannel.getImage_url_medium()));
         channel.setTitle(jChannel.getTitle());
         return channel;
     }
@@ -19,16 +20,17 @@ public class DtoMapper {
     public static Channel mapChannel(TwitchChannel tChannel) {
         Channel channel = new Channel();
         channel.setChannel_name(tChannel.getName());
-        channel.setLogo_url(changeQuality(tChannel.getLogo()));
+        channel.setLogos(readLogos(tChannel.getLogo()));
         channel.setTitle(tChannel.getTitle());
         return channel;
     }
 
-    private static String changeQuality(String hqLogo) {
-        if (hqLogo != null) {
-            return hqLogo.replaceAll("-(\\d+)x(\\d+).png", "-70x70.png");
+    private static ArrayList<Logo> readLogos(String hqLogo) {
+        ArrayList<Logo> logos = new ArrayList<Logo>();
+        for (String size : Logo.SIZES) {
+            logos.add(new Logo(hqLogo.replaceAll("-(\\d+)x(\\d+)", size), size));
         }
-        return hqLogo;
+        return logos;
     }
 
     public static ArrayList<Channel> mapJustinChannels(ArrayList<JustinChannel> jChannels) {

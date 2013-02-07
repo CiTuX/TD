@@ -1,9 +1,11 @@
 package ch.citux.twitchdroid.data.model;
 
+import java.util.ArrayList;
+
 public class Channel extends Base {
 
     private String channel_name;
-    private String logo_url;
+    private ArrayList<Logo> logos;
     private boolean online;
     private String title;
 
@@ -15,12 +17,23 @@ public class Channel extends Base {
         this.channel_name = channel_name;
     }
 
-    public String getLogo_url() {
-        return logo_url;
+    public String getLogo(String size) {
+        if (logos != null) {
+            for (Logo logo : logos) {
+                if (logo.getSize().equals(size)) {
+                    return logo.getUrl();
+                }
+            }
+        }
+        return null;
     }
 
-    public void setLogo_url(String logo_url) {
-        this.logo_url = logo_url;
+    public ArrayList<Logo> getLogos() {
+        return logos;
+    }
+
+    public void setLogos(ArrayList<Logo> logos) {
+        this.logos = logos;
     }
 
     public boolean isOnline() {

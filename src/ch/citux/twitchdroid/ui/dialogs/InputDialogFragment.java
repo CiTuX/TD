@@ -59,12 +59,19 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         Bundle args = getArguments();
+        final String text = args.getString(BUNDLE_TEXT);
         mInputText = new EditText(getActivity());
         mInputText.setHint(args.getString(BUNDLE_HINT));
         mInputText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        mInputText.setText(args.getString(BUNDLE_TEXT));
+        mInputText.setText(text);
         mInputText.setSingleLine();
         mInputText.setOnEditorActionListener(this);
+        mInputText.post(new Runnable() {
+            @Override
+            public void run() {
+                mInputText.setSelection(text.length());
+            }
+        });
         builder.setView(mInputText);
         builder.setTitle(args.getString(BUNDLE_TITLE));
         builder.setNeutralButton(getActivity().getString(android.R.string.ok), this);

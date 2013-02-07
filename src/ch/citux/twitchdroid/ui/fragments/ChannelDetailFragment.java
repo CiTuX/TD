@@ -15,6 +15,8 @@ import io.vov.vitamio.activity.VideoActivity;
 
 public class ChannelDetailFragment extends TDFragment<StreamPlayList> implements View.OnClickListener {
 
+    public static final String CHANNEL_NAME = "CHANNEL_NAME";
+
     private EditText txtChannelName;
 
     @Override
