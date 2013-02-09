@@ -24,7 +24,6 @@ public class TaskGetStreamPlaylist extends TDTask<String, StreamPlayList> {
                 String token = HashUtils.decodeJSON(streamToken.getToken());
                 String hash = HashUtils.encodeHmacSHA1(TDConfig.USHER_STREAM_TOKEN, token);
                 token = HashUtils.encodeURL(hash + ":" + token);
-//                token = hash + ":" + token;
                 Log.d("Twitch", token);
                 return TDServiceImpl.getInstance().getStreamPlaylist(params[0], token, params[1]);
             }

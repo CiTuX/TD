@@ -8,7 +8,7 @@ public class TwitchStreamElement {
     private long _id;
     private String background;
     private String broadcaster;
-    private List<TwitchChannel> channel;
+    private TwitchChannel channel;
     private long channel_id;
     private Date created_at;
     private long delay_length;
@@ -44,11 +44,11 @@ public class TwitchStreamElement {
         this.broadcaster = broadcaster;
     }
 
-    public List<TwitchChannel> getChannel() {
+    public TwitchChannel getChannel() {
         return channel;
     }
 
-    public void setChannel(List<TwitchChannel> channel) {
+    public void setChannel(TwitchChannel channel) {
         this.channel = channel;
     }
 

@@ -2,8 +2,11 @@ package ch.citux.twitchdroid.util;
 
 import ch.citux.twitchdroid.data.dto.JustinChannel;
 import ch.citux.twitchdroid.data.dto.TwitchChannel;
+import ch.citux.twitchdroid.data.dto.TwitchStream;
+import ch.citux.twitchdroid.data.dto.TwitchStreamElement;
 import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.model.Logo;
+import ch.citux.twitchdroid.data.model.Stream;
 
 import java.util.ArrayList;
 
@@ -25,10 +28,32 @@ public class DtoMapper {
         return channel;
     }
 
+    public static Stream mapStream(TwitchStream tStream) {
+        Stream stream = new Stream();
+        TwitchStreamElement streamElement = null;
+        if (tStream.getStream() != null) {
+            streamElement = tStream.getStream();
+        } else if (tStream.getStreams() != null) {
+            streamElement = tStream.getStreams().get(0);
+        }
+        if (streamElement != null) {
+            stream.setId(streamElement.get_id());
+            stream.setChannel(mapChannel(streamElement.getChannel()));
+            stream.setChannel_id(streamElement.getChannel_id());
+            stream.setGame(streamElement.getGame());
+            stream.setName(streamElement.getName());
+            stream.setStatus(streamElement.getStatus());
+        }
+        return stream;
+
+    }
+
     private static ArrayList<Logo> readLogos(String hqLogo) {
         ArrayList<Logo> logos = new ArrayList<Logo>();
-        for (String size : Logo.SIZES) {
-            logos.add(new Logo(hqLogo.replaceAll("-(\\d+)x(\\d+)", size), size));
+        if (hqLogo != null) {
+            for (String size : Logo.SIZES) {
+                logos.add(new Logo(hqLogo.replaceAll("-(\\d+)x(\\d+)", size), size));
+            }
         }
         return logos;
     }

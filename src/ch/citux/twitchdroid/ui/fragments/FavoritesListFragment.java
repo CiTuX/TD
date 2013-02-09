@@ -17,6 +17,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.yixia.zi.utils.StringUtils;
+import com.yixia.zi.widget.Toast;
 
 public class FavoritesListFragment extends TDFragment<Favorites> implements
         AdapterView.OnItemClickListener,
@@ -96,6 +97,7 @@ public class FavoritesListFragment extends TDFragment<Favorites> implements
 
         @Override
         public void onResponse(Channel response) {
+            Toast.showText(getActivity(), response.isOnline() ? "Online" : "Offline", Toast.LENGTH_SHORT);
         }
     }
 

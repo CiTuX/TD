@@ -5,6 +5,7 @@ import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.config.TDConfig;
 import ch.citux.twitchdroid.data.dto.JustinChannel;
 import ch.citux.twitchdroid.data.dto.TwitchChannel;
+import ch.citux.twitchdroid.data.dto.TwitchStream;
 import ch.citux.twitchdroid.data.dto.UsherStreamToken;
 import ch.citux.twitchdroid.data.model.*;
 import ch.citux.twitchdroid.data.worker.TDRequestHandler;
@@ -66,6 +67,22 @@ public class TDServiceImpl implements TDService {
         if (response.getStatus() == Response.Status.OK) {
             TwitchChannel twitchChannel = gson.fromJson(response.getResult(), TwitchChannel.class);
             result = DtoMapper.mapChannel(twitchChannel);
+        } else {
+            result.setErrorResId(R.string.error_data_error_message);
+        }
+        return result;
+    }
+
+    @Override
+    public Stream getStream(String channel) {
+        Stream result = new Stream();
+        String url = buildUrl(TDConfig.URL_API_GET_STREAM, channel);
+        Response<String> response = TDRequestHandler.startStringRequest(url);
+        if (response.getStatus() == Response.Status.OK) {
+            TwitchStream twitchStream = gson.fromJson(response.getResult(), TwitchStream.class);
+            if (twitchStream.getStream() != null || twitchStream.getStreams() != null) {
+                result = DtoMapper.mapStream(twitchStream);
+            }
         } else {
             result.setErrorResId(R.string.error_data_error_message);
         }

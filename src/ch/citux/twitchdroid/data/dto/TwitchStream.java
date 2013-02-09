@@ -4,14 +4,14 @@ import java.util.List;
 
 public class TwitchStream {
 
-    private List<TwitchStreamElement> stream;
+    private TwitchStreamElement stream;
     private List<TwitchStreamElement> streams;
 
-    public List<TwitchStreamElement> getStream() {
+    public TwitchStreamElement getStream() {
         return stream;
     }
 
-    public void setStream(List<TwitchStreamElement> stream) {
+    public void setStream(TwitchStreamElement stream) {
         this.stream = stream;
     }
 

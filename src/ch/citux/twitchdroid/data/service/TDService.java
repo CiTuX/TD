@@ -9,6 +9,8 @@ public interface TDService {
 
     public Channel getChannel(String channel);
 
+    public Stream getStream(String channel);
+
     public StreamToken getStreamToken(String channel);
 
     public StreamPlayList getStreamPlaylist(String channel, String token, String hd);
