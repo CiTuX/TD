@@ -18,7 +18,7 @@ import ch.citux.twitchdroid.ui.adapter.FavoritesAdapter;
 import ch.citux.twitchdroid.ui.widget.EmptyView;
 import com.yixia.zi.utils.StringUtils;
 
-public class FavoritesListFragment extends TDFragment<Favorites> implements AdapterView.OnItemClickListener {
+public class FavoritesFragment extends TDFragment<Favorites> implements AdapterView.OnItemClickListener {
 
     private String channelName;
     private SharedPreferences preferences;
@@ -26,21 +26,23 @@ public class FavoritesListFragment extends TDFragment<Favorites> implements Adap
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.list, container);
+        return inflater.inflate(R.layout.list, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        adapter = new FavoritesAdapter(getActivity());
-        EmptyView emptyView = (EmptyView) getListView().getEmptyView();
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
-        if (!preferences.contains(TDConfig.SETTINGS_CHANNEL_NAME)) {
-            emptyView.setText(R.string.channel_name_empty);
+        if (getListAdapter() == null) {
+            preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            adapter = new FavoritesAdapter(getActivity());
+            setListAdapter(adapter);
+            loadData();
+            EmptyView emptyView = (EmptyView) getListView().getEmptyView();
+            if (!preferences.contains(TDConfig.SETTINGS_CHANNEL_NAME)) {
+                emptyView.setText(R.string.channel_name_empty);
+            }
         }
-        loadData();
+        getListView().setOnItemClickListener(this);
     }
 
     @Override
@@ -73,6 +75,7 @@ public class FavoritesListFragment extends TDFragment<Favorites> implements Adap
             setListAdapter(adapter);
         } else {
             adapter.setData(response.getChannels());
+            getListView().invalidate();
         }
         for (Channel channel : response.getChannels()) {
             TDTaskManager.getStatus(new ChannelCallback(this), channel.getName());
@@ -81,6 +84,10 @@ public class FavoritesListFragment extends TDFragment<Favorites> implements Adap
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Channel channel = adapter.getItem(position);
+        if (channel != null && channel.getStatus() != null) {
+            getTDActivity().showChannel(channel);
+        }
     }
 
     private class ChannelCallback extends TDBasicCallback<Channel> {

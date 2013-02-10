@@ -18,6 +18,7 @@ public class TaskGetStreamPlaylist extends TDTask<String, StreamPlayList> {
 
     @Override
     protected StreamPlayList doInBackground(String... params) {
+        StreamPlayList result = new StreamPlayList();
         if (params.length == 2) {
             StreamToken streamToken = TDServiceImpl.getInstance().getStreamToken(params[0]);
             if (streamToken.getToken() != null) {
@@ -26,11 +27,12 @@ public class TaskGetStreamPlaylist extends TDTask<String, StreamPlayList> {
                 token = HashUtils.encodeURL(hash + ":" + token);
                 Log.d("Twitch", token);
                 return TDServiceImpl.getInstance().getStreamPlaylist(params[0], token, params[1]);
+            } else {
+                result.setError(streamToken.getError());
+                return result;
             }
-            //NOT ONLINE
         }
-        StreamPlayList playList = new StreamPlayList();
-        playList.setErrorResId(R.string.error_unexpected);
-        return playList;
+        result.setErrorResId(R.string.error_unexpected);
+        return result;
     }
 }

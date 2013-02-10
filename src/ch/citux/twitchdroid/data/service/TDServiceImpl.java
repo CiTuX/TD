@@ -115,7 +115,7 @@ public class TDServiceImpl implements TDService {
                 HashMap<String, String> streams = new HashMap<String, String>();
                 List<String> qualities = Arrays.asList(StreamPlayList.SUPPORTED_QUALITIES);
                 for (Element element : elements) {
-                    Log.d(TAG, "URI: " + element.getURI() + "Name: " + element.getName());
+                    Log.d(TAG, "URI: " + element.getURI() + " Name: " + element.getName());
                     String quality = element.getName();
                     if (qualities.contains(quality)) {
                         streams.put(element.getName(), element.getURI().toString());

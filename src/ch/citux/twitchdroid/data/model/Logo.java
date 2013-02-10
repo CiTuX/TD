@@ -1,10 +1,10 @@
 package ch.citux.twitchdroid.data.model;
 
-public class Logo {
+public class Logo extends Base {
 
     public static final String HUGE = "-600x600";
     public static final String LARGE = "-300x300";
-    public static final String MEDIUM = "-150x113";
+    public static final String MEDIUM = "-150x150";
     public static final String SMALL = "-70x70";
     public static final String TINY = "-50x50";
 

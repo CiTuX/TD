@@ -3,22 +3,23 @@ package ch.citux.twitchdroid.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentTransaction;
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.config.TDConfig;
+import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.ui.dialogs.InputDialogFragment;
-import ch.citux.twitchdroid.ui.fragments.TDFragment;
+import ch.citux.twitchdroid.ui.fragments.ChannelFragment;
+import ch.citux.twitchdroid.ui.fragments.FavoritesFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
 public class TDActivity extends SherlockFragmentActivity implements InputDialogFragment.OnDoneListener {
 
-    private ArrayList<WeakReference<TDFragment>> fragments;
+    private FavoritesFragment favoritesFragment;
+    private ChannelFragment channelFragment;
     private SharedPreferences preferences;
     private MenuItem refreshItem;
     private boolean isLoading;
@@ -26,23 +27,24 @@ public class TDActivity extends SherlockFragmentActivity implements InputDialogF
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragments = new ArrayList<WeakReference<TDFragment>>();
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.main);
+
+        favoritesFragment = new FavoritesFragment();
+        channelFragment = new ChannelFragment();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.content, favoritesFragment);
+        if (findViewById(R.id.detail) != null) { //Tablet
+            transaction.add(R.id.detail, channelFragment);
+        }
+        transaction.commit();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         TDTaskManager.cancelAllTasks();
-    }
-
-    @Override
-    public void onAttachFragment(android.support.v4.app.Fragment fragment) {
-        super.onAttachFragment(fragment);
-        if (fragment instanceof TDFragment) {
-            fragments.add(new WeakReference<TDFragment>((TDFragment) fragment));
-        }
     }
 
     @Override
@@ -81,6 +83,19 @@ public class TDActivity extends SherlockFragmentActivity implements InputDialogF
         refreshData();
     }
 
+    public void showChannel(Channel channel) {
+        if (channelFragment.isAdded()) {
+            channelFragment.updateChannel(channel);
+        } else {
+            Bundle arguments = new Bundle();
+            arguments.putSerializable(ChannelFragment.CHANNEL, channel);
+            channelFragment.setArguments(arguments);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content, channelFragment).addToBackStack(ChannelFragment.class.getSimpleName()).commit();
+        }
+
+    }
+
     public void startLoading() {
         isLoading = true;
         if (refreshItem != null) {
@@ -96,11 +111,11 @@ public class TDActivity extends SherlockFragmentActivity implements InputDialogF
     }
 
     protected void refreshData() {
-        for (WeakReference<TDFragment> ref : fragments) {
-            TDFragment fragment = ref.get();
-            if (fragment != null && fragment.isAdded()) {
-                fragment.refreshData();
-            }
+        if (favoritesFragment != null && favoritesFragment.isAdded()) {
+            favoritesFragment.refreshData();
+        }
+        if (channelFragment != null && channelFragment.isAdded()) {
+            channelFragment.refreshData();
         }
     }
 }

@@ -2,7 +2,9 @@ package ch.citux.twitchdroid.data.model;
 
 import ch.citux.twitchdroid.TDApplication;
 
-public abstract class Base {
+import java.io.Serializable;
+
+public abstract class Base implements Serializable {
 
     private String error;
 

@@ -95,6 +95,7 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
     @Override
     public void onClick(View v) {
         txtInput.setText("");
+        txtInput.requestFocus();
     }
 
     @Override
