@@ -17,7 +17,7 @@ public class JustinStream {
     private boolean featured;
     private String format;
     private String geo;
-    private String id;
+    private long id;
     private String language;
     private String meta_game;
     private String name;
@@ -143,11 +143,11 @@ public class JustinStream {
         this.geo = geo;
     }
 
-    public String getId() {
-        return this.id;
+    public long getId() {
+        return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

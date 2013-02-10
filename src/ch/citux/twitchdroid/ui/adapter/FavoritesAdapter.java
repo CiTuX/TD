@@ -70,8 +70,10 @@ public class FavoritesAdapter extends BaseAdapter {
 
     public void updateChannel(Channel channel) {
         for (int i = 0; i != data.size(); i++) {
-            if (data.get(i).getName().equals(channel.getName())) {
-                data.set(i, channel);
+            Channel item = data.get(i);
+            if (item.getName().equals(channel.getName())) {
+                item.setStatus(channel.getStatus());
+                data.set(i, item);
             }
         }
         updateStatus(channel.getStatus(), holders.get(channel.getName()));
@@ -132,7 +134,7 @@ public class FavoritesAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null || !holders.containsKey(channel.getName())) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.favorites_list_item, null);
+            convertView = inflater.inflate(R.layout.list_item_favorites, null);
             holder.imgLogo = (ImageView) convertView.findViewById(R.id.imgLogo);
             holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
             holder.lblStatus = (TextView) convertView.findViewById(R.id.lblStatus);

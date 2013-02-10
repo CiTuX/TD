@@ -8,12 +8,15 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.*;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import ch.citux.twitchdroid.R;
 
 
-public class InputDialogFragment extends DialogFragment implements TextView.OnEditorActionListener, DialogInterface.OnClickListener {
+public class InputDialogFragment extends DialogFragment implements TextView.OnEditorActionListener, DialogInterface.OnClickListener, View.OnClickListener {
 
     public interface OnCancelListener {
         public void onCancel();
@@ -29,10 +32,10 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
     private static final String BUNDLE_HINT = "hint";
     private static final String BUNDLE_TEXT = "text";
 
-    private EditText mInputText;
     private OnClickListener mOnClickListener;
     private OnCancelListener mOnCancelListener;
     private OnDoneListener mOnDoneListener;
+    private EditText txtInput;
 
     private static InputDialogFragment newInstance(String title,
                                                    String hint,
@@ -60,19 +63,19 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         Bundle args = getArguments();
         final String text = args.getString(BUNDLE_TEXT);
-        mInputText = new EditText(getActivity());
-        mInputText.setHint(args.getString(BUNDLE_HINT));
-        mInputText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        mInputText.setText(text);
-        mInputText.setSingleLine();
-        mInputText.setOnEditorActionListener(this);
-        mInputText.post(new Runnable() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_input, null);
+        txtInput = (EditText) view.findViewById(R.id.txtInput);
+        txtInput.setHint(args.getString(BUNDLE_HINT));
+        txtInput.setText(text);
+        txtInput.setOnEditorActionListener(this);
+        txtInput.post(new Runnable() {
             @Override
             public void run() {
-                mInputText.setSelection(text.length());
+                txtInput.setSelection(text.length());
             }
         });
-        builder.setView(mInputText);
+        view.findViewById(R.id.btnClear).setOnClickListener(this);
+        builder.setView(view);
         builder.setTitle(args.getString(BUNDLE_TITLE));
         builder.setNeutralButton(getActivity().getString(android.R.string.ok), this);
         builder.setCancelable(true);
@@ -84,9 +87,14 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
         if (mOnClickListener != null) {
             mOnClickListener.onClick(dialog, which);
         } else {
-            mOnDoneListener.onFinishInputDialog(mInputText.getText().toString());
+            mOnDoneListener.onFinishInputDialog(txtInput.getText().toString());
             this.dismiss();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        txtInput.setText("");
     }
 
     @Override
@@ -94,7 +102,7 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
         if (mOnDoneListener != null) {
             if (EditorInfo.IME_ACTION_DONE == actionId) {
                 // Return input text to activity
-                mOnDoneListener.onFinishInputDialog(mInputText.getText().toString());
+                mOnDoneListener.onFinishInputDialog(txtInput.getText().toString());
                 this.dismiss();
                 return true;
             }
@@ -107,6 +115,10 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
         if (mOnCancelListener != null) {
             mOnCancelListener.onCancel();
         }
+    }
+
+    public void onClearText(View view) {
+        txtInput.setText("");
     }
 
     public static class InputDialogFragmentBuilder {

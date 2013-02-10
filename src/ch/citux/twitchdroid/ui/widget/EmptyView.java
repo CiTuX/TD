@@ -7,7 +7,6 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import ch.citux.twitchdroid.R;
-import com.actionbarsherlock.internal.widget.IcsProgressBar;
 
 public class EmptyView extends FrameLayout {
 
@@ -30,7 +29,7 @@ public class EmptyView extends FrameLayout {
     }
 
     private void init(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.empty, this);
+        LayoutInflater.from(context).inflate(R.layout.list_empty, this);
         progress = (ProgressBar) findViewById(R.id.progress);
         text = (TextView) findViewById(R.id.text);
     }

@@ -22,7 +22,7 @@
                  android:name=".TDApplication"
                  android:theme="@style/Theme.Sherlock.Light.DarkActionBar">
 
-        <activity android:name=".ui.HomeActivity">
+        <activity android:name=".ui.TDActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
