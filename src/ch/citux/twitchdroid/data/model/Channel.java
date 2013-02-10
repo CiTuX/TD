@@ -4,17 +4,18 @@ import java.util.ArrayList;
 
 public class Channel extends Base {
 
-    private String channel_name;
+    private long id;
     private ArrayList<Logo> logos;
-    private boolean online;
+    private String name;
+    private Status status;
     private String title;
 
-    public String getChannel_name() {
-        return channel_name;
+    public long getId() {
+        return id;
     }
 
-    public void setChannel_name(String channel_name) {
-        this.channel_name = channel_name;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getLogo(String size) {
@@ -36,12 +37,20 @@ public class Channel extends Base {
         this.logos = logos;
     }
 
-    public boolean isOnline() {
-        return online;
+    public String getName() {
+        return name;
     }
 
-    public void setOnline(boolean online) {
-        this.online = online;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getTitle() {

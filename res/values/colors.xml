@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="online">#669900</color>
-    <color name="offline">#CC0000</color>
+    <color name="status_unknown">#B2B2B2</color>
+    <color name="status_online">#669900</color>
+    <color name="status_offline">#CC0000</color>
 </resources>

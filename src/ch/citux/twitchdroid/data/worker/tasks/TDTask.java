@@ -6,6 +6,7 @@ import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.TDApplication;
 import ch.citux.twitchdroid.data.model.Base;
 import ch.citux.twitchdroid.data.worker.TDCallback;
+import ch.citux.twitchdroid.data.worker.TDTaskManager;
 
 public abstract class TDTask<Params, Result extends Base> extends AsyncTask<Params, Void, Result> {
 
@@ -37,6 +38,7 @@ public abstract class TDTask<Params, Result extends Base> extends AsyncTask<Para
             callback.onError(getString(R.string.error_connection_error_title), getString(R.string.error_connection_error_message));
         }
         callback.stopLoading();
+        TDTaskManager.removeTask(this);
     }
 
     protected String getString(int resId) {

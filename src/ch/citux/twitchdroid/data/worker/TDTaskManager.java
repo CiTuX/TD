@@ -8,34 +8,50 @@ import ch.citux.twitchdroid.data.worker.tasks.TaskGetChannel;
 import ch.citux.twitchdroid.data.worker.tasks.TaskGetFavorites;
 import ch.citux.twitchdroid.data.worker.tasks.TaskGetStreamPlaylist;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class TDTaskManager {
 
-    private static TDTask currentTask;
+    private static CopyOnWriteArrayList<TDTask> tasks = new CopyOnWriteArrayList<TDTask>();
 
-    public static void cancelTask() {
-        if (currentTask != null) {
-            currentTask.cancel(true);
+    public static void removeTask(TDTask task) {
+        removeTask(task, false);
+    }
+
+    public static void removeTask(TDTask task, boolean cancel) {
+        if (cancel) {
+            task.cancel(true);
+        }
+        tasks.remove(task);
+    }
+
+    public static void cancelAllTasks() {
+        for (TDTask task : tasks) {
+            removeTask(task, true);
         }
     }
 
     public static void getFavorites(TDCallback<Favorites> callback, String username) {
-        cancelTask();
         TaskGetFavorites task = new TaskGetFavorites(callback);
         task.execute(username);
-        currentTask = task;
+        tasks.add(task);
+    }
+
+    public static void getStatus(TDCallback<Channel> callback, String channel) {
+        TaskGetChannel task = new TaskGetChannel(callback, true);
+        task.execute(channel);
+        tasks.add(task);
     }
 
     public static void getChannel(TDCallback<Channel> callback, String channel) {
-        cancelTask();
         TaskGetChannel task = new TaskGetChannel(callback);
         task.execute(channel);
-        currentTask = task;
+        tasks.add(task);
     }
 
     public static void getStreamPlaylist(TDCallback<StreamPlayList> callback, String channel, boolean hd) {
-        cancelTask();
         TaskGetStreamPlaylist task = new TaskGetStreamPlaylist(callback);
         task.execute(channel, Boolean.toString(hd));
-        currentTask = task;
+        tasks.add(task);
     }
 }

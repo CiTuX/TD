@@ -2,6 +2,7 @@ package ch.citux.twitchdroid.ui.fragments;
 
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.data.worker.TDCallback;
+import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.util.Log;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -15,6 +16,11 @@ public abstract class TDFragment<Result> extends SherlockListFragment implements
     private boolean hasRefresh;
     private boolean isLoading;
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        TDTaskManager.cancelAllTasks();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -66,7 +72,7 @@ public abstract class TDFragment<Result> extends SherlockListFragment implements
     protected void loadData() {
     }
 
-    protected final void refreshData() {
+    protected void refreshData() {
         loadData();
     }
 

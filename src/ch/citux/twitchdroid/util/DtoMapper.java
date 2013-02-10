@@ -14,7 +14,8 @@ public class DtoMapper {
 
     public static Channel mapChannel(JustinChannel jChannel) {
         Channel channel = new Channel();
-        channel.setChannel_name(jChannel.getLogin());
+        channel.setId(jChannel.getId());
+        channel.setName(jChannel.getLogin());
         channel.setLogos(readLogos(jChannel.getImage_url_medium()));
         channel.setTitle(jChannel.getTitle());
         return channel;
@@ -22,9 +23,10 @@ public class DtoMapper {
 
     public static Channel mapChannel(TwitchChannel tChannel) {
         Channel channel = new Channel();
-        channel.setChannel_name(tChannel.getName());
+        channel.setId(tChannel.get_id());
+        channel.setName(tChannel.getName());
         channel.setLogos(readLogos(tChannel.getLogo()));
-        channel.setTitle(tChannel.getTitle());
+        channel.setTitle(tChannel.getDisplay_name());
         return channel;
     }
 
@@ -39,7 +41,7 @@ public class DtoMapper {
         if (streamElement != null) {
             stream.setId(streamElement.get_id());
             stream.setChannel(mapChannel(streamElement.getChannel()));
-            stream.setChannel_id(streamElement.getChannel_id());
+            stream.setChannelId(streamElement.getChannel_id());
             stream.setGame(streamElement.getGame());
             stream.setName(streamElement.getName());
             stream.setStatus(streamElement.getStatus());

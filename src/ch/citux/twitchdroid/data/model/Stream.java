@@ -1,13 +1,9 @@
 package ch.citux.twitchdroid.data.model;
 
-import ch.citux.twitchdroid.data.dto.TwitchChannel;
-
-import java.util.ArrayList;
-
 public class Stream extends Base {
 
     private Channel channel;
-    private long channel_id;
+    private long channelId;
     private String game;
     private long id;
     private String name;
@@ -21,12 +17,12 @@ public class Stream extends Base {
         this.channel = channel;
     }
 
-    public long getChannel_id() {
-        return channel_id;
+    public long getChannelId() {
+        return channelId;
     }
 
-    public void setChannel_id(long channel_id) {
-        this.channel_id = channel_id;
+    public void setChannelId(long channelId) {
+        this.channelId = channelId;
     }
 
     public String getGame() {
