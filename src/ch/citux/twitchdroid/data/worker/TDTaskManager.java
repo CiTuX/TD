@@ -1,5 +1,6 @@
 package ch.citux.twitchdroid.data.worker;
 
+import android.os.AsyncTask;
 import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.model.Favorites;
 import ch.citux.twitchdroid.data.model.StreamPlayList;
@@ -39,7 +40,7 @@ public class TDTaskManager {
 
     public static void getStatus(TDCallback<Channel> callback, String channel) {
         TaskGetChannel task = new TaskGetChannel(callback, true);
-        task.execute(channel);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, channel);
         tasks.add(task);
     }
 

@@ -4,6 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -23,6 +27,8 @@ public class FavoritesAdapter extends BaseAdapter {
     private HashMap<String, ViewHolder> holders;
     private LayoutInflater inflater;
     private ImageFetcher imageFetcher;
+    private Animation fadeOut;
+    private Animation fadeIn;
 
     public FavoritesAdapter(Context context) {
         init(context, new ArrayList<Channel>());
@@ -37,6 +43,20 @@ public class FavoritesAdapter extends BaseAdapter {
         this.holders = new HashMap<String, ViewHolder>();
         this.inflater = LayoutInflater.from(context);
         this.imageFetcher = new ImageFetcher(context);
+        initAnimation();
+    }
+
+    private void initAnimation() {
+        fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
+        fadeOut.setDuration(1000);
+        fadeOut.setFillAfter(true);
+
+        fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+        fadeIn.setDuration(1000);
+        fadeIn.setStartOffset(1000);
+        fadeIn.setFillAfter(true);
     }
 
     public void setData(ArrayList<Channel> data) {
@@ -62,26 +82,33 @@ public class FavoritesAdapter extends BaseAdapter {
             return;
         }
 
+        //UNKNOWN
+        int color = R.color.status_unknown;
+        boolean visibilityLbl = false;
+        boolean visibilityPrg = true;
+        int text = R.string.channel_offline;
+
         switch (status) {
-            case UNKNOWN:
-                holder.lblStatus.setText("");
-                holder.lblStatus.setVisibility(View.GONE);
-                holder.prgStatus.setVisibility(View.VISIBLE);
-                holder.statusIndicator.setBackgroundResource(R.color.status_unknown);
-                break;
             case ONLINE:
-                holder.lblStatus.setText(R.string.channel_online);
-                holder.lblStatus.setVisibility(View.VISIBLE);
-                holder.prgStatus.setVisibility(View.GONE);
-                holder.statusIndicator.setBackgroundResource(R.color.status_online);
+                text = R.string.channel_online;
+                visibilityLbl = true;
+                visibilityPrg = false;
+                color = R.color.status_online;
                 break;
             case OFFLINE:
-                holder.lblStatus.setText(R.string.channel_offline);
-                holder.lblStatus.setVisibility(View.VISIBLE);
-                holder.prgStatus.setVisibility(View.GONE);
-                holder.statusIndicator.setBackgroundResource(R.color.status_offline);
+                text = R.string.channel_offline;
+                visibilityLbl = true;
+                visibilityPrg = false;
+                color = R.color.status_offline;
                 break;
         }
+        holder.lblStatus.setText(text);
+        holder.lblStatus.setVisibility(visibilityLbl ? View.VISIBLE : View.GONE);
+        holder.lblStatus.setAnimation(visibilityLbl ? fadeIn : fadeOut);
+        holder.prgStatus.setVisibility(visibilityPrg ? View.VISIBLE : View.GONE);
+        holder.prgStatus.setAnimation(visibilityPrg ? fadeIn : fadeOut);
+        holder.statusIndicator.setBackgroundResource(color);
+
     }
 
     @Override

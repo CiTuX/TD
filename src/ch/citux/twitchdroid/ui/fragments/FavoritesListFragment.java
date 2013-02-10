@@ -28,7 +28,6 @@ public class FavoritesListFragment extends TDFragment<Favorites> implements
 
     private SharedPreferences preferences;
     private FavoritesAdapter adapter;
-    private EmptyView emptyView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +40,7 @@ public class FavoritesListFragment extends TDFragment<Favorites> implements
         addRefreshAction();
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         adapter = new FavoritesAdapter(getActivity());
-        emptyView = (EmptyView) getListView().getEmptyView();
+        EmptyView emptyView = (EmptyView) getListView().getEmptyView();
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
         if (!preferences.contains(TDConfig.SETTINGS_CHANNEL_NAME)) {
