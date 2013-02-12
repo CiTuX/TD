@@ -44,9 +44,9 @@
         <activity
                 android:name="io.vov.vitamio.activity.VideoActivity"
                 android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+                android:screenOrientation="landscape"
                 android:launchMode="singleTop"
                 android:process=":vitamio"
-                android:screenOrientation="landscape"
                 android:theme="@android:style/Theme.NoTitleBar"
                 android:windowSoftInputMode="stateAlwaysHidden"/>
 
