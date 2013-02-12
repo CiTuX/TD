@@ -34,9 +34,14 @@ public class EmptyView extends FrameLayout {
         text = (TextView) findViewById(R.id.text);
     }
 
-    private void showText() {
+    public void showText() {
         progress.setVisibility(GONE);
         text.setVisibility(VISIBLE);
+    }
+
+    public void showProgress() {
+        progress.setVisibility(VISIBLE);
+        text.setVisibility(GONE);
     }
 
     public void setText(String message) {
@@ -48,5 +53,4 @@ public class EmptyView extends FrameLayout {
         text.setText(messageId);
         showText();
     }
-
 }

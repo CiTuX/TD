@@ -1,6 +1,6 @@
 package ch.citux.twitchdroid.data.dto;
 
-public class JustinChannel {
+public class JustinChannel extends JustinBase {
 
     private String about;
     private String category;

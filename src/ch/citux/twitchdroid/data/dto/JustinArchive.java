@@ -3,7 +3,7 @@ package ch.citux.twitchdroid.data.dto;
 
 import java.util.Date;
 
-public class JustinArchives {
+public class JustinArchive extends JustinBase{
 
     private String audio_codec;
     private String broadcast_id;

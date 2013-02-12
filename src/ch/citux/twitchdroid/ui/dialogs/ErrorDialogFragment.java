@@ -43,7 +43,6 @@ public class ErrorDialogFragment extends DialogFragment {
         Builder b = new Builder(getActivity());
         b.setTitle(args.getString(BUNDLE_TITLE));
         b.setMessage(args.getString(BUNDLE_MESSAGE));
-        b.setIcon(android.R.drawable.ic_dialog_alert);
         setCancelable(true);
         b.setNeutralButton(getActivity().getString(android.R.string.ok), mOnClickListener);
         return b.create();

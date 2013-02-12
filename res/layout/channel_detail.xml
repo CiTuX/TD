@@ -12,8 +12,8 @@
 
         <ImageView
                 android:id="@+id/imgLogo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
                 android:contentDescription="@string/channel_logo"
                 android:src="@drawable/default_channel_logo_medium"/>
 
@@ -56,11 +56,28 @@
                 android:text="@string/channel_watch_stream"
                 android:visibility="gone"/>
 
+        <TextView
+                android:id="@+id/lblArchive"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnStream"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/channel_archives"
+                android:textSize="16dp"/>
+
+        <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/lblArchive"
+                android:background="@android:color/darker_gray"/>
+
+
         <ListView
                 android:id="@android:id/list"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@id/btnStream"/>
+                android:layout_below="@id/lblArchive"/>
 
     </RelativeLayout>
 

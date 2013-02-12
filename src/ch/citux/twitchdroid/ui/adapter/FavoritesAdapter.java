@@ -23,6 +23,8 @@ import java.util.HashMap;
 
 public class FavoritesAdapter extends BaseAdapter {
 
+    private static final int ANIMATION_DURATION = 300;
+
     private ArrayList<Channel> data;
     private HashMap<String, ViewHolder> holders;
     private LayoutInflater inflater;
@@ -43,19 +45,18 @@ public class FavoritesAdapter extends BaseAdapter {
         this.holders = new HashMap<String, ViewHolder>();
         this.inflater = LayoutInflater.from(context);
         this.imageFetcher = new ImageFetcher(context);
-        initAnimation();
     }
 
     private void initAnimation() {
         fadeOut = new AlphaAnimation(1, 0);
-        fadeOut.setInterpolator(new AccelerateInterpolator()); //and this
-        fadeOut.setDuration(1000);
-        fadeOut.setFillAfter(true);
+        fadeOut.setInterpolator(new AccelerateInterpolator());
+        fadeOut.setDuration(ANIMATION_DURATION);
 
         fadeIn = new AlphaAnimation(0, 1);
-        fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
-        fadeIn.setDuration(1000);
-        fadeIn.setStartOffset(1000);
+        fadeIn.setInterpolator(new DecelerateInterpolator());
+        fadeIn.setDuration(ANIMATION_DURATION);
+        fadeIn.setStartOffset(ANIMATION_DURATION);
+        fadeIn.setFillBefore(false);
         fadeIn.setFillAfter(true);
     }
 
@@ -89,6 +90,7 @@ public class FavoritesAdapter extends BaseAdapter {
         boolean visibilityLbl = false;
         boolean visibilityPrg = true;
         int text = R.string.channel_offline;
+        initAnimation();
 
         switch (status) {
             case ONLINE:
@@ -105,10 +107,9 @@ public class FavoritesAdapter extends BaseAdapter {
                 break;
         }
         holder.lblStatus.setText(text);
-        holder.lblStatus.setVisibility(visibilityLbl ? View.VISIBLE : View.GONE);
+        holder.lblStatus.setVisibility(visibilityLbl ? View.VISIBLE : View.INVISIBLE);
         holder.lblStatus.setAnimation(visibilityLbl ? fadeIn : fadeOut);
-        holder.prgStatus.setVisibility(visibilityPrg ? View.VISIBLE : View.GONE);
-        holder.prgStatus.setAnimation(visibilityPrg ? fadeIn : fadeOut);
+        holder.prgStatus.setVisibility(visibilityPrg ? View.VISIBLE : View.INVISIBLE);
         holder.statusIndicator.setBackgroundResource(color);
 
     }

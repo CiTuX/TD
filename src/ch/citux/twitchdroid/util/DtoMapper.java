@@ -1,14 +1,13 @@
 package ch.citux.twitchdroid.util;
 
-import ch.citux.twitchdroid.data.dto.JustinChannel;
-import ch.citux.twitchdroid.data.dto.TwitchChannel;
-import ch.citux.twitchdroid.data.dto.TwitchStream;
-import ch.citux.twitchdroid.data.dto.TwitchStreamElement;
+import ch.citux.twitchdroid.data.dto.*;
+import ch.citux.twitchdroid.data.model.Archive;
 import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.model.Logo;
 import ch.citux.twitchdroid.data.model.Stream;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DtoMapper {
 
@@ -28,6 +27,17 @@ public class DtoMapper {
         channel.setLogos(readLogos(tChannel.getLogo()));
         channel.setTitle(tChannel.getDisplay_name());
         return channel;
+    }
+
+    public static Archive mapArchive(JustinArchive jArchive) {
+        Archive archive = new Archive();
+        archive.setId(jArchive.getId());
+        archive.setDuration(jArchive.getLength());
+        archive.setSize(jArchive.getFile_size());
+        archive.setThumbnail(jArchive.getImage_url_medium());
+        archive.setTitle(jArchive.getTitle() == null ? "Untitled" : jArchive.getTitle());
+        archive.setUrl(jArchive.getVideo_file_url());
+        return archive;
     }
 
     public static Stream mapStream(TwitchStream tStream) {
@@ -76,4 +86,11 @@ public class DtoMapper {
         return channels;
     }
 
+    public static ArrayList<Archive> mapArchives(List<JustinArchive> jArchives) {
+        ArrayList<Archive> archives = new ArrayList<Archive>();
+        for (JustinArchive archive : jArchives) {
+            archives.add(mapArchive(archive));
+        }
+        return archives;
+    }
 }

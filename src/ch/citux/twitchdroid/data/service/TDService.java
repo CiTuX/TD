@@ -1,6 +1,5 @@
 package ch.citux.twitchdroid.data.service;
 
-import ch.citux.twitchdroid.data.dto.UsherStreamToken;
 import ch.citux.twitchdroid.data.model.*;
 
 public interface TDService {
@@ -10,6 +9,8 @@ public interface TDService {
     public Channel getChannel(String channel);
 
     public Stream getStream(String channel);
+
+    public Archives getArchives(String channel);
 
     public StreamToken getStreamToken(String channel);
 

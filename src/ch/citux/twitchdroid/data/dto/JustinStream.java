@@ -1,7 +1,7 @@
 
 package ch.citux.twitchdroid.data.dto;
 
-public class JustinStream {
+public class JustinStream extends JustinBase {
 
     private boolean abuse_reported;
     private String audio_codec;

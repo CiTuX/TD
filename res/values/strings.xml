@@ -27,11 +27,15 @@
     <string name="channel_name">Channel-Name</string>
     <string name="channel_name_empty">There\'s no Channel-Name defined.\nYou can change it under settings.</string>
     <string name="channel_stream">Stream</string>
+    <string name="channel_thumbnail">Thumbnail</string>
     <string name="channel_watch_stream">Watch Stream</string>
+    <string name="channel_archives">Archives</string>
     <string name="channel_status">Status</string>
     <string name="channel_logo">Logo</string>
     <string name="channel_online">Online</string>
     <string name="channel_offline">Offline</string>
     <string name="channel_unknown">Unknown</string>
+    <string name="channel_archives_empty">No archived videos</string>
+    <string name="channel_detail_empty">Select a channel for details</string>
 
 </resources>

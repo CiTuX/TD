@@ -1,13 +1,11 @@
 package ch.citux.twitchdroid.data.worker;
 
 import android.os.AsyncTask;
+import ch.citux.twitchdroid.data.model.Archives;
 import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.model.Favorites;
 import ch.citux.twitchdroid.data.model.StreamPlayList;
-import ch.citux.twitchdroid.data.worker.tasks.TDTask;
-import ch.citux.twitchdroid.data.worker.tasks.TaskGetChannel;
-import ch.citux.twitchdroid.data.worker.tasks.TaskGetFavorites;
-import ch.citux.twitchdroid.data.worker.tasks.TaskGetStreamPlaylist;
+import ch.citux.twitchdroid.data.worker.tasks.*;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,27 +30,38 @@ public class TDTaskManager {
         }
     }
 
-    public static void getFavorites(TDCallback<Favorites> callback, String username) {
+    public static TDTask getFavorites(TDCallback<Favorites> callback, String username) {
         TaskGetFavorites task = new TaskGetFavorites(callback);
         task.execute(username);
         tasks.add(task);
+        return task;
     }
 
-    public static void getStatus(TDCallback<Channel> callback, String channel) {
+    public static TDTask getStatus(TDCallback<Channel> callback, String channel) {
         TaskGetChannel task = new TaskGetChannel(callback, true);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, channel);
         tasks.add(task);
+        return task;
     }
 
-    public static void getChannel(TDCallback<Channel> callback, String channel) {
+    public static TDTask getChannel(TDCallback<Channel> callback, String channel) {
         TaskGetChannel task = new TaskGetChannel(callback);
         task.execute(channel);
         tasks.add(task);
+        return task;
     }
 
-    public static void getStreamPlaylist(TDCallback<StreamPlayList> callback, String channel, boolean hd) {
+    public static TDTask getArchives(TDCallback<Archives> callback, String channel) {
+        TaskGetArchives task = new TaskGetArchives(callback);
+        task.execute(channel);
+        tasks.add(task);
+        return task;
+    }
+
+    public static TDTask getStreamPlaylist(TDCallback<StreamPlayList> callback, String channel, boolean hd) {
         TaskGetStreamPlaylist task = new TaskGetStreamPlaylist(callback);
         task.execute(channel, Boolean.toString(hd));
         tasks.add(task);
+        return task;
     }
 }
