@@ -8,6 +8,9 @@ buildscript {
 }
 apply plugin: 'android'
 
+targetCompatibility = 1.6
+sourceCompatibility = 1.6
+
 repositories {
     mavenCentral()
 }
@@ -41,6 +44,21 @@ android {
         compile project(':lib/ActionBarSherlock/library')
         compile project(':lib/ZI')
         compile project(':lib/VitamioBundle')
+        compile files('lib/VitamioBundle/libs/vitamio.jar')
         compile fileTree(dir: 'libs', include: '*.jar')
     }
+}
+
+// https://gist.github.com/khernyo/4226923
+task copyNativeLibs(type: Copy) {
+	from new File(project(':lib/VitamioBundle').projectDir, 'libs')
+	into new File(buildDir, 'native-libs')
+}
+ 
+tasks.withType(Compile) { compileTask -> compileTask.dependsOn copyNativeLibs }
+ 
+clean.dependsOn 'cleanCopyNativeLibs'
+ 
+tasks.withType(com.android.build.gradle.PackageApplicationTask) { pkgTask ->
+	pkgTask.jniDir new File(buildDir, 'native-libs')
 }
