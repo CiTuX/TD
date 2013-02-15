@@ -1,6 +1,7 @@
 package ch.citux.twitchdroid.data.worker;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import ch.citux.twitchdroid.data.model.Archives;
 import ch.citux.twitchdroid.data.model.Channel;
 import ch.citux.twitchdroid.data.model.Favorites;
@@ -39,7 +40,11 @@ public class TDTaskManager {
 
     public static TDTask getStatus(TDCallback<Channel> callback, String channel) {
         TaskGetChannel task = new TaskGetChannel(callback, true);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, channel);
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, channel);
+        } else {
+            task.execute(channel);
+        }
         tasks.add(task);
         return task;
     }
