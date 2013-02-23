@@ -10,24 +10,16 @@ import android.support.v4.app.*;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import ch.citux.twitchdroid.R;
 
 
-public class InputDialogFragment extends DialogFragment implements TextView.OnEditorActionListener, DialogInterface.OnClickListener, View.OnClickListener {
-
-    public interface OnCancelListener {
-        public void onCancel();
-    }
-
-    public interface OnDoneListener {
-        void onFinishInputDialog(String inputText);
-    }
+public class InputDialogFragment extends DialogFragment implements TextView.OnEditorActionListener, DialogInterface.OnClickListener, View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String FRAGMENT_TAG = "InputDialogFragment";
-
     private static final String BUNDLE_TITLE = "title";
     private static final String BUNDLE_HINT = "hint";
     private static final String BUNDLE_TEXT = "text";
@@ -58,6 +50,17 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
         return dialogFragment;
     }
 
+    public static void dismiss(FragmentActivity activity) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Fragment prev = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.commit();
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -68,6 +71,7 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
         txtInput.setHint(args.getString(BUNDLE_HINT));
         txtInput.setText(text);
         txtInput.setOnEditorActionListener(this);
+        txtInput.setOnFocusChangeListener(this);
         txtInput.post(new Runnable() {
             @Override
             public void run() {
@@ -112,6 +116,13 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
     }
 
     @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    @Override
     public void onCancel(DialogInterface dialog) {
         if (mOnCancelListener != null) {
             mOnCancelListener.onCancel();
@@ -120,6 +131,14 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
 
     public void onClearText(View view) {
         txtInput.setText("");
+    }
+
+    public interface OnCancelListener {
+        public void onCancel();
+    }
+
+    public interface OnDoneListener {
+        void onFinishInputDialog(String inputText);
     }
 
     public static class InputDialogFragmentBuilder {
@@ -193,16 +212,5 @@ public class InputDialogFragment extends DialogFragment implements TextView.OnEd
             InputDialogFragment.newInstance(mTitle, mHint, mText, mOnClickListener, mOnCancelListener, mOnDoneListener)
                     .show(fragmentManager, FRAGMENT_TAG);
         }
-    }
-
-    public static void dismiss(FragmentActivity activity) {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        Fragment prev = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
-        }
-        fragmentTransaction.commit();
     }
 }

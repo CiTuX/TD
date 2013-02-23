@@ -14,23 +14,38 @@
             android:contentDescription="@string/channel_thumbnail"/>
 
     <TextView
-            android:id="@+id/lblDuration"
+            android:id="@+id/lblTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imgThumbnail"
-            android:layout_alignStart="@id/imgThumbnail"
-            android:layout_alignEnd="@id/imgThumbnail"
-            android:gravity="center"
+            android:layout_toRightOf="@id/imgThumbnail"
+            android:layout_alignTop="@id/imgThumbnail"
+            android:layout_marginLeft="8dp"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:textSize="16sp"/>
+
+    <TextView
+            android:id="@+id/lblDate"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/lblTitle"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/imgThumbnail"
+            android:layout_alignBottom="@+id/imgThumbnail"
+            android:gravity="bottom|left"
             android:textSize="12sp"/>
 
     <TextView
-            android:id="@+id/lblTitle"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblDuration"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_toRightOf="@id/imgThumbnail"
-            android:layout_alignTop="@id/imgThumbnail"
-            android:layout_alignBottom="@+id/lblDuration"
+            android:layout_below="@id/lblTitle"
+            android:layout_alignBottom="@+id/imgThumbnail"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="8dp"
-            android:textSize="16sp"/>
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/lblDate"
+            android:gravity="bottom|right"
+            android:textSize="12sp"/>
 
 </RelativeLayout>

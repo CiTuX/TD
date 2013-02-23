@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.data.model.Archive;
+import ch.citux.twitchdroid.util.DateUtils;
 import com.yixia.zi.utils.ImageFetcher;
 
 import java.util.ArrayList;
@@ -45,12 +46,6 @@ public class ArchiveAdapter extends BaseAdapter {
         notifyDataSetInvalidated();
     }
 
-    private String formatTime(long duration) {
-        long minutes = duration / 60;
-        long seconds = duration - (minutes * 60);
-        return String.format("%d:%02d", minutes, seconds);
-    }
-
     @Override
     public int getCount() {
         return data.size();
@@ -78,21 +73,24 @@ public class ArchiveAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.list_item_archive, null);
             holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.imgThumbnail);
-            holder.lblDuration = (TextView) convertView.findViewById(R.id.lblDuration);
             holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
+            holder.lblDate = (TextView) convertView.findViewById(R.id.lblDate);
+            holder.lblDuration = (TextView) convertView.findViewById(R.id.lblDuration);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         imageFetcher.loadImage(archive.getThumbnail(), holder.imgThumbnail, R.drawable.default_archive_thumbnail);
-        holder.lblDuration.setText(formatTime(archive.getDuration()));
         holder.lblTitle.setText(archive.getTitle());
+        holder.lblDate.setText(DateUtils.formateDate(archive.getDate()));
+        holder.lblDuration.setText(DateUtils.formatTime(archive.getDuration()));
         return convertView;
     }
 
     private class ViewHolder {
         ImageView imgThumbnail;
-        TextView lblDuration;
         TextView lblTitle;
+        TextView lblDate;
+        TextView lblDuration;
     }
 
 }

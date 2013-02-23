@@ -69,6 +69,12 @@ public class FavoritesAdapter extends BaseAdapter {
         return data;
     }
 
+    public void clear(){
+        data.clear();
+        holders.clear();
+        notifyDataSetInvalidated();
+    }
+
     public void updateChannel(Channel channel) {
         for (int i = 0; i != data.size(); i++) {
             Channel item = data.get(i);

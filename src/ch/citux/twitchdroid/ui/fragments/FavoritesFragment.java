@@ -57,6 +57,7 @@ public class FavoritesFragment extends TDFragment<Favorites> implements AdapterV
     public void refreshData() {
         if (!channelName.equals(preferences.getString(TDConfig.SETTINGS_CHANNEL_NAME, channelName))) {
             //Channel change, reload favorites
+            adapter.clear();
             loadData();
         } else {
             //Only status update

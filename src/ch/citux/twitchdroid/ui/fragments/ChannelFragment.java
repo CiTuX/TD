@@ -66,14 +66,6 @@ public class ChannelFragment extends TDFragment<Archives> implements View.OnClic
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (adapter != null) {
-            adapter.clear();
-        }
-    }
-
-    @Override
     public void loadData() {
         if (adapter != null) {
             adapter.clear();

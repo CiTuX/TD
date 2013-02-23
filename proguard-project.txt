@@ -1,4 +1,4 @@
-# To enable ProGuard in your project, edit project.properties
+ble ProGuard in your project, edit project.properties
 # to define the proguard.config property as described in that file.
 #
 # Add project specific ProGuard rules here.
@@ -18,3 +18,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+#ABS
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class com.actionbarsherlock.** { *; }
+-keep interface com.actionbarsherlock.** { *; }
+
+-keepattributes *Annotation*

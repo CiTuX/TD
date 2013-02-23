@@ -33,6 +33,7 @@ public class DtoMapper {
         Archive archive = new Archive();
         archive.setId(jArchive.getId());
         archive.setDuration(jArchive.getLength());
+        archive.setDate(jArchive.getCreated_on());
         archive.setSize(jArchive.getFile_size());
         archive.setThumbnail(jArchive.getImage_url_medium());
         archive.setTitle(jArchive.getTitle() == null ? "Untitled" : jArchive.getTitle());

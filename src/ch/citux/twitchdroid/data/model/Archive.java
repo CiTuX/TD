@@ -1,9 +1,12 @@
 package ch.citux.twitchdroid.data.model;
 
+import java.util.Date;
+
 public class Archive extends Base {
 
     private long id;
     private long duration;
+    private Date date;
     private long size;
     private String thumbnail;
     private String title;
@@ -23,6 +26,14 @@ public class Archive extends Base {
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public long getSize() {
