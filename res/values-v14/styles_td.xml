@@ -56,6 +56,8 @@
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_td</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_td</item>
         <item name="android:progressBarStyle">@style/ProgressBar.TD</item>
+        <item name="android:logo">@drawable/twitch_logo_white</item>
+        <item name="android:displayOptions">showHome|useLogo</item>
     </style>
 
     <style name="ActionBar.Transparent.TD" parent="@style/Widget.AppCompat.ActionBar">
