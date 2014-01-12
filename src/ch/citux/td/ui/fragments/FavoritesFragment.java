@@ -13,14 +13,14 @@ import org.holoeverywhere.LayoutInflater;
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Favorites;
+import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.Status;
 import ch.citux.td.data.worker.TDBasicCallback;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.FavoritesAdapter;
 import ch.citux.td.ui.widget.EmptyView;
 
-public class FavoritesFragment extends TDFragment<Favorites> implements AdapterView.OnItemClickListener {
+public class FavoritesFragment extends TDFragment<Follows> implements AdapterView.OnItemClickListener {
 
     private String channelName;
     private SharedPreferences preferences;
@@ -72,7 +72,7 @@ public class FavoritesFragment extends TDFragment<Favorites> implements AdapterV
     }
 
     @Override
-    public void onResponse(Favorites response) {
+    public void onResponse(Follows response) {
         if (adapter == null) {
             adapter = new FavoritesAdapter(getActivity(), response.getChannels());
             setListAdapter(adapter);

@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import ch.citux.td.data.model.Archives;
 import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Favorites;
+import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.worker.tasks.TDTask;
 import ch.citux.td.data.worker.tasks.TaskGetArchives;
@@ -36,7 +36,7 @@ public class TDTaskManager {
         }
     }
 
-    public static TDTask getFavorites(TDCallback<Favorites> callback, String username) {
+    public static TDTask getFavorites(TDCallback<Follows> callback, String username) {
         TaskGetFavorites task = new TaskGetFavorites(callback);
         task.execute(username);
         tasks.add(task);

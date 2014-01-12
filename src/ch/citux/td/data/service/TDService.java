@@ -2,14 +2,14 @@ package ch.citux.td.data.service;
 
 import ch.citux.td.data.model.Archives;
 import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Favorites;
+import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamToken;
 
 public interface TDService {
 
-    public Favorites getFavorites(String username);
+    public Follows getFollows(String username);
 
     public Channel getChannel(String channel);
 

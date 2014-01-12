@@ -2,7 +2,7 @@ package ch.citux.td.data.model;
 
 import java.util.ArrayList;
 
-public class Favorites extends Base {
+public class Follows extends Base {
 
     private ArrayList<Channel> channels;
 

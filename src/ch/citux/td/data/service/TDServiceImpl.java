@@ -10,20 +10,19 @@ import net.chilicat.m3u8.Element;
 import net.chilicat.m3u8.Playlist;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.dto.JustinArchive;
-import ch.citux.td.data.dto.JustinChannel;
 import ch.citux.td.data.dto.TwitchChannel;
+import ch.citux.td.data.dto.TwitchFollows;
 import ch.citux.td.data.dto.TwitchStream;
 import ch.citux.td.data.dto.UsherStreamToken;
 import ch.citux.td.data.model.Archives;
 import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Favorites;
+import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.Response;
 import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.StreamPlayList;
@@ -58,14 +57,13 @@ public class TDServiceImpl implements TDService {
     }
 
     @Override
-    public Favorites getFavorites(String username) {
-        Favorites result = new Favorites();
-        String url = buildUrl(TDConfig.URL_API_GET_FAVORITES, username);
+    public Follows getFollows(String username) {
+        Follows result = new Follows();
+        String url = buildUrl(TDConfig.URL_API_GET_FOLLOWS, username);
         Response<String> response = TDRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
-            ArrayList<JustinChannel> justinChannels = tGson.fromJson(response.getResult(), new TypeToken<ArrayList<JustinChannel>>() {
-            }.getType());
-            result.setChannels(DtoMapper.mapJustinChannels(justinChannels));
+            TwitchFollows twitchFollows = tGson.fromJson(response.getResult(), TwitchFollows.class);
+            result.setChannels(DtoMapper.mapTwitchChannels(twitchFollows.getFollows()));
         } else {
             result.setErrorResId(R.string.error_data_error_message);
         }

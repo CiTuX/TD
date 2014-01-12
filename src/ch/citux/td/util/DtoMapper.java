@@ -6,6 +6,7 @@ import java.util.List;
 import ch.citux.td.data.dto.JustinArchive;
 import ch.citux.td.data.dto.JustinChannel;
 import ch.citux.td.data.dto.TwitchChannel;
+import ch.citux.td.data.dto.TwitchChannels;
 import ch.citux.td.data.dto.TwitchStream;
 import ch.citux.td.data.dto.TwitchStreamElement;
 import ch.citux.td.data.model.Archive;
@@ -75,7 +76,7 @@ public class DtoMapper {
         return logos;
     }
 
-    public static ArrayList<Channel> mapJustinChannels(ArrayList<JustinChannel> jChannels) {
+    public static ArrayList<Channel> mapJustinChannels(List<JustinChannel> jChannels) {
         ArrayList<Channel> channels = new ArrayList<Channel>();
         for (JustinChannel jChannel : jChannels) {
             channels.add(mapChannel(jChannel));
@@ -83,10 +84,10 @@ public class DtoMapper {
         return channels;
     }
 
-    public static ArrayList<Channel> mapTwitchChannels(ArrayList<TwitchChannel> tChannels) {
+    public static ArrayList<Channel> mapTwitchChannels(List<TwitchChannels> tChannels) {
         ArrayList<Channel> channels = new ArrayList<Channel>();
-        for (TwitchChannel tChannel : tChannels) {
-            channels.add(mapChannel(tChannel));
+        for (TwitchChannels tChannel : tChannels) {
+            channels.add(mapChannel(tChannel.getChannel()));
         }
         return channels;
     }

@@ -19,7 +19,7 @@ import ch.citux.td.util.Log;
 
 public class TDRequestHandler {
 
-    private static final String TAG = "TwitchDroidRequestHandler";
+    private static final String TAG = "TDRequestHandler";
     private static final String HTTP = "http";
     private static final String HTTPS = "https";
     private static final String HEADER_ACCEPT = "Accept";

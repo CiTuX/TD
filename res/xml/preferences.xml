@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="User">
-        <EditTextPreference
-            android:id="@+id/edit_text"
-            android:dialogTitle="Username"
-            android:summary="Twitch username"
-            android:title="Username" />
-    </PreferenceCategory>
+    <EditTextPreference
+        android:id="@+id/channel_name"
+        android:dialogTitle="Username"
+        android:title="Username" />
 </PreferenceScreen>
