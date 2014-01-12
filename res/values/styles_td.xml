@@ -55,7 +55,7 @@
         <item name="backgroundSplit">@drawable/ab_bottom_solid_td</item>
         <item name="progressBarStyle">@style/ProgressBar.TD</item>
         <item name="logo">@drawable/twitch_logo_white</item>
-        <item name="displayOptions">showHome|useLogo</item>
+        <item name="displayOptions">showHome|showTitle|useLogo</item>
     </style>
 
     <style name="ActionBar.Transparent.TD" parent="@style/Widget.AppCompat.ActionBar">

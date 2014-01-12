@@ -51,13 +51,13 @@
 
     </style>
 
-    <style name="ActionBar.Solid.TD" parent="@style/Widget.AppCompat.ActionBar.Solid">
+    <style name="ActionBar.Solid.TD" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/ab_solid_td</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_td</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_td</item>
         <item name="android:progressBarStyle">@style/ProgressBar.TD</item>
         <item name="android:logo">@drawable/twitch_logo_white</item>
-        <item name="android:displayOptions">showHome|useLogo</item>
+        <item name="android:displayOptions">showHome|showTitle|useLogo</item>
     </style>
 
     <style name="ActionBar.Transparent.TD" parent="@style/Widget.AppCompat.ActionBar">

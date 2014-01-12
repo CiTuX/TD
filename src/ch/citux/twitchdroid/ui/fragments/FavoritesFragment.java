@@ -3,12 +3,12 @@ package ch.citux.twitchdroid.ui.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.holoeverywhere.LayoutInflater;
 
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.config.TDConfig;

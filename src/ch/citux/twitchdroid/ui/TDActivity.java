@@ -17,6 +17,7 @@ import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.ui.dialogs.InputDialogFragment;
 import ch.citux.twitchdroid.ui.fragments.ChannelFragment;
 import ch.citux.twitchdroid.ui.fragments.FavoritesFragment;
+import ch.citux.twitchdroid.ui.fragments.SettingsFragment;
 
 public class TDActivity extends Activity implements InputDialogFragment.OnDoneListener {
 
@@ -71,13 +72,11 @@ public class TDActivity extends Activity implements InputDialogFragment.OnDoneLi
                 }
                 return true;
             case R.id.menu_settings:
-                InputDialogFragment.InputDialogFragmentBuilder builder
-                        = new InputDialogFragment.InputDialogFragmentBuilder(this);
-                builder.setTitle(R.string.action_settings)
-                        .setHint(R.string.channel_name)
-                        .setText(preferences.getString(TDConfig.SETTINGS_CHANNEL_NAME, ""))
-                        .setOnDoneListener(this)
-                        .show();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction
+                        .replace(R.id.content, new SettingsFragment())
+                        .addToBackStack(SettingsFragment.class.getSimpleName())
+                        .commit();
                 return true;
         }
         return super.onOptionsItemSelected(item);

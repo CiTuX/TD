@@ -1,7 +1,10 @@
 package ch.citux.twitchdroid.ui.fragments;
 
-import android.app.Activity;
-import android.support.v4.app.ListFragment;
+
+import android.os.Bundle;
+
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.ListFragment;
 
 import ch.citux.twitchdroid.data.worker.TDCallback;
 import ch.citux.twitchdroid.ui.TDActivity;
@@ -19,6 +22,13 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
         } else {
             throw new IllegalStateException("TDFragment must be attached to a TDActivity.");
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // default title empty
+        getSupportActionBar().setTitle("");
     }
 
     public void startLoading() {

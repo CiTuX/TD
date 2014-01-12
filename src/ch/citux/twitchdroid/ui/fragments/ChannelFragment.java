@@ -1,9 +1,7 @@
 package ch.citux.twitchdroid.ui.fragments;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,8 +11,15 @@ import android.widget.TextView;
 
 import com.yixia.zi.utils.ImageFetcher;
 
+import org.holoeverywhere.LayoutInflater;
+
 import ch.citux.twitchdroid.R;
-import ch.citux.twitchdroid.data.model.*;
+import ch.citux.twitchdroid.data.model.Archive;
+import ch.citux.twitchdroid.data.model.Archives;
+import ch.citux.twitchdroid.data.model.Channel;
+import ch.citux.twitchdroid.data.model.Logo;
+import ch.citux.twitchdroid.data.model.Status;
+import ch.citux.twitchdroid.data.model.StreamPlayList;
 import ch.citux.twitchdroid.data.worker.TDBasicCallback;
 import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.ui.adapter.ArchiveAdapter;
