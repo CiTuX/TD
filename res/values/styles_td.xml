@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?><!-- File created by the Android Action Bar Style Generator
+
+     Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 readyState Software Ltd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <style name="Theme.TD" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarItemBackground">@drawable/selectable_background_td</item>
+        <item name="popupMenuStyle">@style/PopupMenu.TD</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.TD</item>
+        <item name="actionBarTabStyle">@style/ActionBarTabStyle.TD</item>
+        <item name="actionDropDownStyle">@style/DropDownNav.TD</item>
+        <item name="actionBarStyle">@style/ActionBar.Solid.TD</item>
+        <item name="actionModeBackground">@drawable/cab_background_top_td</item>
+        <item name="actionModeSplitBackground">@drawable/cab_background_bottom_td</item>
+        <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.TD</item>
+
+        <!-- Light.DarkActionBar specific -->
+        <item name="actionBarWidgetTheme">@style/Theme.TD.Widget</item>
+
+        <!-- Holo Colors -->
+        <item name="android:editTextStyle">@style/EditTextTD</item>
+        <item name="android:textColorHighlight">#996441a5</item>
+        <item name="android:checkboxStyle">@style/CheckBoxTD</item>
+        <item name="android:buttonStyle">@style/ButtonTD</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonTD</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarTD</item>
+        <item name="android:seekBarStyle">@style/SeekBarTD</item>
+        <item name="android:listViewStyle">@style/ListViewTD</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewTD.White</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemTD</item>
+        <item name="android:textSelectHandleLeft">@drawable/td_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/td_text_select_handle_right</item>
+        <item name="android:textSelectHandle">@drawable/td_text_select_handle_middle</item>
+
+    </style>
+
+    <style name="ActionBar.Solid.TD" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/ab_solid_td</item>
+        <item name="backgroundStacked">@drawable/ab_stacked_solid_td</item>
+        <item name="backgroundSplit">@drawable/ab_bottom_solid_td</item>
+        <item name="progressBarStyle">@style/ProgressBar.TD</item>
+    </style>
+
+    <style name="ActionBar.Transparent.TD" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="background">@drawable/ab_transparent_td</item>
+        <item name="progressBarStyle">@style/ProgressBar.TD</item>
+    </style>
+
+    <style name="PopupMenu.TD" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_td</item>
+    </style>
+
+    <style name="DropDownListView.TD" parent="@style/Widget.AppCompat.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_td</item>
+    </style>
+
+    <style name="ActionBarTabStyle.TD" parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_td</item>
+    </style>
+
+    <style name="DropDownNav.TD" parent="@style/Widget.AppCompat.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/spinner_background_ab_td</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_td</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_td</item>
+    </style>
+
+    <style name="ProgressBar.TD" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_td</item>
+    </style>
+
+    <style name="ActionButton.CloseMode.TD" parent="@style/Widget.AppCompat.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_td</item>
+    </style>
+
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.TD.Widget" parent="@style/Theme.AppCompat">
+        <item name="popupMenuStyle">@style/PopupMenu.TD</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.TD</item>
+    </style>
+
+    <style name="EditTextTD" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/td_edit_text_holo_light</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="CheckBoxTD" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/td_btn_check_holo_light</item>
+    </style>
+
+    <style name="ButtonTD" parent="android:Widget.Button">
+        <item name="android:background">@drawable/td_btn_default_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ImageButtonTD" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/td_btn_default_holo_light</item>
+    </style>
+
+    <style name="ProgressBarTD" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/td_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">
+            @drawable/td_progress_indeterminate_horizontal_holo_light
+        </item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="SeekBarTD" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/td_scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/td_scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:minHeight">13dip</item>
+        <item name="android:maxHeight">13dip</item>
+        <item name="android:thumb">@drawable/td_scrubber_control_selector_holo_light</item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
+
+    <style name="ListViewTD" parent="android:Widget.ListView">
+        <item name="android:listSelector">@drawable/td_list_selector_holo_light</item>
+    </style>
+
+    <style name="ListViewTD.White" parent="android:Widget.ListView.White">
+        <item name="android:listSelector">@drawable/td_list_selector_holo_light</item>
+    </style>
+
+    <style name="SpinnerItemTD" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+</resources>

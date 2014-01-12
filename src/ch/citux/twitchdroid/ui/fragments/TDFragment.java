@@ -1,12 +1,13 @@
 package ch.citux.twitchdroid.ui.fragments;
 
 import android.app.Activity;
+import android.support.v4.app.ListFragment;
+
 import ch.citux.twitchdroid.data.worker.TDCallback;
 import ch.citux.twitchdroid.ui.TDActivity;
 import ch.citux.twitchdroid.ui.dialogs.ErrorDialogFragment;
-import com.actionbarsherlock.app.SherlockListFragment;
 
-public abstract class TDFragment<Result> extends SherlockListFragment implements TDCallback<Result> {
+public abstract class TDFragment<Result> extends ListFragment implements TDCallback<Result> {
 
     private TDActivity activity;
 

@@ -1,3 +1,6 @@
 [submodule "lib/VitamioBundle"]
 	path = lib/VitamioBundle
 	url = git@github.com:CiTuX/VitamioBundle.git
+[submodule "lib/ZI"]
+	path = lib/ZI
+	url = git@github.com:CiTuX/ZI.git

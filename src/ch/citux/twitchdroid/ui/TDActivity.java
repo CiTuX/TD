@@ -3,7 +3,12 @@ package ch.citux.twitchdroid.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.config.TDConfig;
 import ch.citux.twitchdroid.data.model.Channel;
@@ -11,12 +16,8 @@ import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.ui.dialogs.InputDialogFragment;
 import ch.citux.twitchdroid.ui.fragments.ChannelFragment;
 import ch.citux.twitchdroid.ui.fragments.FavoritesFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
-public class TDActivity extends SherlockFragmentActivity implements InputDialogFragment.OnDoneListener {
+public class TDActivity extends FragmentActivity implements InputDialogFragment.OnDoneListener {
 
     private FavoritesFragment favoritesFragment;
     private ChannelFragment channelFragment;
@@ -28,6 +29,10 @@ public class TDActivity extends SherlockFragmentActivity implements InputDialogF
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        if (!io.vov.vitamio.LibsChecker.checkVitamioLibs(this)) {
+            return;
+        }
 
         favoritesFragment = new FavoritesFragment();
         channelFragment = new ChannelFragment();
@@ -49,7 +54,7 @@ public class TDActivity extends SherlockFragmentActivity implements InputDialogF
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings, menu);
         inflater.inflate(R.menu.refresh, menu);
         refreshItem = menu.findItem(R.id.menu_refresh);

@@ -1,7 +1,8 @@
 package ch.citux.twitchdroid.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ch.citux.twitchdroid.BuildConfig;
-import com.yixia.zi.utils.StringUtils;
 
 public class Log {
 

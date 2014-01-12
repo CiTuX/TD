@@ -10,6 +10,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.yixia.zi.utils.ImageFetcher;
+
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.data.model.*;
 import ch.citux.twitchdroid.data.worker.TDBasicCallback;
@@ -18,8 +21,6 @@ import ch.citux.twitchdroid.ui.adapter.ArchiveAdapter;
 import ch.citux.twitchdroid.ui.dialogs.ErrorDialogFragment;
 import ch.citux.twitchdroid.ui.widget.EmptyView;
 import ch.citux.twitchdroid.util.Log;
-import com.yixia.zi.utils.ImageFetcher;
-import io.vov.vitamio.activity.VideoActivity;
 
 public class ChannelFragment extends TDFragment<Archives> implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -94,9 +95,9 @@ public class ChannelFragment extends TDFragment<Archives> implements View.OnClic
     }
 
     private void playVideo(String title, Uri uri) {
-        Intent playerIntent = new Intent(Intent.ACTION_VIEW, uri, getActivity(), VideoActivity.class);
-        playerIntent.putExtra("displayName", title);
-        getActivity().startActivity(playerIntent);
+//        Intent playerIntent = new Intent(Intent.ACTION_VIEW, uri, getActivity(), VideoActivity.class);
+//        playerIntent.putExtra("displayName", title);
+//        getActivity().startActivity(playerIntent);
     }
 
     @Override

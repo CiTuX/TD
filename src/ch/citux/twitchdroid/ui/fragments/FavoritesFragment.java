@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
+import org.apache.commons.lang3.StringUtils;
+
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.config.TDConfig;
 import ch.citux.twitchdroid.data.model.Channel;
@@ -16,7 +19,6 @@ import ch.citux.twitchdroid.data.worker.TDBasicCallback;
 import ch.citux.twitchdroid.data.worker.TDTaskManager;
 import ch.citux.twitchdroid.ui.adapter.FavoritesAdapter;
 import ch.citux.twitchdroid.ui.widget.EmptyView;
-import com.yixia.zi.utils.StringUtils;
 
 public class FavoritesFragment extends TDFragment<Favorites> implements AdapterView.OnItemClickListener {
 

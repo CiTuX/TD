@@ -1,1 +1,3 @@
-include 'lib/VitamioBundle'
+include ':lib:VitamioBundle'
+include ':lib:VitamioBundle:vitamio'
+include ':lib:ZI'
