@@ -30,8 +30,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import ch.citux.twitchdroid.BuildConfig;
-import ch.citux.twitchdroid.util.Log;
+import ch.citux.td.BuildConfig;
+import ch.citux.td.util.Log;
 
 /**
  * A subclass of {@link ImageWorker} that fetches images from a URL.

@@ -35,7 +35,7 @@ import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import ch.citux.twitchdroid.BuildConfig;
+import ch.citux.td.BuildConfig;
 
 /**
  * This class holds our bitmap caches (memory and disk).

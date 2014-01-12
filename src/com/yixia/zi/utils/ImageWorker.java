@@ -28,7 +28,7 @@ import java.lang.ref.WeakReference;
 import java.util.Hashtable;
 import java.util.concurrent.RejectedExecutionException;
 
-import ch.citux.twitchdroid.BuildConfig;
+import ch.citux.td.BuildConfig;
 
 /**
  * This class wraps up completing some arbitrary long running work when loading
