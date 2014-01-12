@@ -6,6 +6,6 @@ Simple Twitch client for Android
 
 ```
 git clone git@github.com:CiTuX/TD.git TwitchDroid
-cd TwitchDroid
+cd TD
 git submodule update --init --recursive
 ```
