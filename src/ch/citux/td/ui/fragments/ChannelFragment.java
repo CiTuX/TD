@@ -1,6 +1,5 @@
 package ch.citux.td.ui.fragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +13,21 @@ import com.yixia.zi.utils.ImageFetcher;
 import org.holoeverywhere.LayoutInflater;
 
 import ch.citux.td.R;
-import ch.citux.td.data.model.Archive;
-import ch.citux.td.data.model.Archives;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Logo;
 import ch.citux.td.data.model.Status;
 import ch.citux.td.data.model.StreamPlayList;
+import ch.citux.td.data.model.Video;
+import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.TDBasicCallback;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.ArchiveAdapter;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.util.Log;
+import io.vov.vitamio.LibsChecker;
 
-public class ChannelFragment extends TDFragment<Archives> implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class ChannelFragment extends TDFragment<Videos> implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     public static final String CHANNEL = "channel";
 
@@ -99,7 +99,21 @@ public class ChannelFragment extends TDFragment<Archives> implements View.OnClic
         loadData();
     }
 
-    private void playVideo(String title, Uri uri) {
+    private void playVideo(String title, String url) {
+        if (LibsChecker.checkVitamioLibs(getActivity())) {
+            // vitamio works
+            Bundle arguments = new Bundle();
+            arguments.putString(PlayerFragment.TITLE, title);
+            arguments.putString(PlayerFragment.URL, url);
+
+            PlayerFragment playerFragment = new PlayerFragment();
+            playerFragment.setArguments(arguments);
+
+//            getActivity().getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.content, playerFragment)
+//                    .addToBackStack(playerFragment.getClass().getSimpleName())
+//                    .commit();
+        }
 //        Intent playerIntent = new Intent(Intent.ACTION_VIEW, uri, getActivity(), VideoActivity.class);
 //        playerIntent.putExtra("displayName", title);
 //        getActivity().startActivity(playerIntent);
@@ -112,21 +126,20 @@ public class ChannelFragment extends TDFragment<Archives> implements View.OnClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Archive archive = adapter.getItem(position);
-        if (archive != null) {
-            Uri uri = Uri.parse(archive.getUrl());
-            playVideo(archive.getTitle(), uri);
+        Video video = adapter.getItem(position);
+        if (video != null) {
+            playVideo(video.getTitle(), video.getUrl());
         }
     }
 
     @Override
-    public void onResponse(Archives response) {
+    public void onResponse(Videos response) {
         empty.setText(R.string.channel_archives_empty);
         if (adapter == null) {
-            adapter = new ArchiveAdapter(getActivity(), response.getArchives());
+            adapter = new ArchiveAdapter(getActivity(), response.getVideos());
             setListAdapter(adapter);
         } else {
-            adapter.setData(response.getArchives());
+            adapter.setData(response.getVideos());
         }
     }
 
@@ -142,8 +155,7 @@ public class ChannelFragment extends TDFragment<Archives> implements View.OnClic
             if (response.getStreams() != null && response.getStreams().size() > 0) {
                 String url = response.getBestStream();
                 if (url != null) {
-                    Uri uri = Uri.parse(url);
-                    playVideo(channel.getTitle(), uri);
+                    playVideo(channel.getTitle(), url);
                 }
             } else {
                 ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());

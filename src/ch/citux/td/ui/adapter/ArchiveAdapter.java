@@ -13,30 +13,30 @@ import com.yixia.zi.utils.ImageFetcher;
 import java.util.ArrayList;
 
 import ch.citux.td.R;
-import ch.citux.td.data.model.Archive;
+import ch.citux.td.data.model.Video;
 import ch.citux.td.util.DateUtils;
 
 public class ArchiveAdapter extends BaseAdapter {
 
-    private ArrayList<Archive> data;
+    private ArrayList<Video> data;
     private LayoutInflater inflater;
     private ImageFetcher imageFetcher;
 
     public ArchiveAdapter(Context context) {
-        init(context, new ArrayList<Archive>());
+        init(context, new ArrayList<Video>());
     }
 
-    public ArchiveAdapter(Context context, ArrayList<Archive> data) {
+    public ArchiveAdapter(Context context, ArrayList<Video> data) {
         init(context, data);
     }
 
-    private void init(Context context, ArrayList<Archive> data) {
+    private void init(Context context, ArrayList<Video> data) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
         this.imageFetcher = new ImageFetcher(context);
     }
 
-    public void setData(ArrayList<Archive> data) {
+    public void setData(ArrayList<Video> data) {
         if (data != null) {
             this.data = data;
             notifyDataSetChanged();
@@ -54,26 +54,22 @@ public class ArchiveAdapter extends BaseAdapter {
     }
 
     @Override
-    public Archive getItem(int position) {
+    public Video getItem(int position) {
         return data.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        Archive item = getItem(position);
-        if (item != null) {
-            return item.getId();
-        }
         return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Archive archive = data.get(position);
+        Video video = data.get(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.list_item_archive, null);
+            convertView = inflater.inflate(R.layout.list_item_videos, null);
             holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.imgThumbnail);
             holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
             holder.lblDate = (TextView) convertView.findViewById(R.id.lblDate);
@@ -81,10 +77,10 @@ public class ArchiveAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        imageFetcher.loadImage(archive.getThumbnail(), holder.imgThumbnail, R.drawable.default_archive_thumbnail);
-        holder.lblTitle.setText(archive.getTitle());
-        holder.lblDate.setText(DateUtils.formateDate(archive.getDate()));
-        holder.lblDuration.setText(DateUtils.formatTime(archive.getDuration()));
+        imageFetcher.loadImage(video.getThumbnail(), holder.imgThumbnail, R.drawable.default_archive_thumbnail);
+        holder.lblTitle.setText(video.getTitle());
+        holder.lblDate.setText(DateUtils.formateDate(video.getDate()));
+        holder.lblDuration.setText(DateUtils.formatTime(video.getDuration()));
         return convertView;
     }
 

@@ -3,27 +3,19 @@ package ch.citux.td.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.citux.td.data.dto.JustinArchive;
-import ch.citux.td.data.dto.JustinChannel;
 import ch.citux.td.data.dto.TwitchChannel;
 import ch.citux.td.data.dto.TwitchChannels;
 import ch.citux.td.data.dto.TwitchStream;
 import ch.citux.td.data.dto.TwitchStreamElement;
-import ch.citux.td.data.model.Archive;
+import ch.citux.td.data.dto.TwitchVideo;
+import ch.citux.td.data.dto.TwitchVideos;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Logo;
 import ch.citux.td.data.model.Stream;
+import ch.citux.td.data.model.Video;
 
 public class DtoMapper {
 
-    public static Channel mapChannel(JustinChannel jChannel) {
-        Channel channel = new Channel();
-        channel.setId(jChannel.getId());
-        channel.setName(jChannel.getLogin());
-        channel.setLogos(readLogos(jChannel.getImage_url_medium()));
-        channel.setTitle(jChannel.getTitle());
-        return channel;
-    }
 
     public static Channel mapChannel(TwitchChannel tChannel) {
         Channel channel = new Channel();
@@ -34,16 +26,15 @@ public class DtoMapper {
         return channel;
     }
 
-    public static Archive mapArchive(JustinArchive jArchive) {
-        Archive archive = new Archive();
-        archive.setId(jArchive.getId());
-        archive.setDuration(jArchive.getLength());
-        archive.setDate(jArchive.getCreated_on());
-        archive.setSize(jArchive.getFile_size());
-        archive.setThumbnail(jArchive.getImage_url_medium());
-        archive.setTitle(jArchive.getTitle() == null ? "Untitled" : jArchive.getTitle());
-        archive.setUrl(jArchive.getVideo_file_url());
-        return archive;
+    public static Video mapVideo(TwitchVideo tVideo) {
+        Video video = new Video();
+        video.setId(tVideo.get_id());
+        video.setDuration(tVideo.getLength());
+        video.setDate(tVideo.getRecorded_at());
+        video.setThumbnail(tVideo.getPreview());
+        video.setTitle(tVideo.getTitle() == null ? "Untitled" : tVideo.getTitle());
+        video.setUrl(tVideo.getUrl());
+        return video;
     }
 
     public static Stream mapStream(TwitchStream tStream) {
@@ -76,14 +67,6 @@ public class DtoMapper {
         return logos;
     }
 
-    public static ArrayList<Channel> mapJustinChannels(List<JustinChannel> jChannels) {
-        ArrayList<Channel> channels = new ArrayList<Channel>();
-        for (JustinChannel jChannel : jChannels) {
-            channels.add(mapChannel(jChannel));
-        }
-        return channels;
-    }
-
     public static ArrayList<Channel> mapTwitchChannels(List<TwitchChannels> tChannels) {
         ArrayList<Channel> channels = new ArrayList<Channel>();
         for (TwitchChannels tChannel : tChannels) {
@@ -92,11 +75,11 @@ public class DtoMapper {
         return channels;
     }
 
-    public static ArrayList<Archive> mapArchives(List<JustinArchive> jArchives) {
-        ArrayList<Archive> archives = new ArrayList<Archive>();
-        for (JustinArchive archive : jArchives) {
-            archives.add(mapArchive(archive));
+    public static ArrayList<Video> mapVideos(TwitchVideos tVideos) {
+        ArrayList<Video> videos = new ArrayList<Video>();
+        for (TwitchVideo video : tVideos.getVideos()) {
+            videos.add(mapVideo(video));
         }
-        return archives;
+        return videos;
     }
 }

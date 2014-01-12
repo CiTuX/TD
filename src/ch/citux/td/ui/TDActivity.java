@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,15 +12,13 @@ import android.view.MenuItem;
 import org.holoeverywhere.app.Activity;
 
 import ch.citux.td.R;
-import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.worker.TDTaskManager;
-import ch.citux.td.ui.dialogs.InputDialogFragment;
 import ch.citux.td.ui.fragments.ChannelFragment;
 import ch.citux.td.ui.fragments.FavoritesFragment;
 import ch.citux.td.ui.fragments.SettingsFragment;
 
-public class TDActivity extends Activity implements InputDialogFragment.OnDoneListener {
+public class TDActivity extends Activity {
 
     private FavoritesFragment favoritesFragment;
     private ChannelFragment channelFragment;
@@ -31,10 +30,6 @@ public class TDActivity extends Activity implements InputDialogFragment.OnDoneLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        if (!io.vov.vitamio.LibsChecker.checkVitamioLibs(this)) {
-            return;
-        }
 
         favoritesFragment = new FavoritesFragment();
         channelFragment = new ChannelFragment();
@@ -82,11 +77,6 @@ public class TDActivity extends Activity implements InputDialogFragment.OnDoneLi
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFinishInputDialog(String inputText) {
-        preferences.edit().putString(TDConfig.SETTINGS_CHANNEL_NAME, inputText).apply();
-        refreshData();
-    }
 
     public void showChannel(Channel channel) {
         if (channelFragment.isAdded()) {
@@ -104,14 +94,14 @@ public class TDActivity extends Activity implements InputDialogFragment.OnDoneLi
     public void startLoading() {
         isLoading = true;
         if (refreshItem != null) {
-            refreshItem.setActionView(R.layout.action_refresh);
+            MenuItemCompat.setActionView(refreshItem, R.layout.action_refresh);
         }
     }
 
     public void stopLoading() {
         isLoading = false;
         if (refreshItem != null) {
-            refreshItem.setActionView(null);
+            MenuItemCompat.setActionView(refreshItem, null);
         }
     }
 

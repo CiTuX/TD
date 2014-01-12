@@ -2,21 +2,20 @@ package ch.citux.td.data.model;
 
 import java.util.Date;
 
-public class Archive extends Base {
+public class Video extends Base {
 
-    private long id;
+    private String id;
     private long duration;
     private Date date;
-    private long size;
     private String thumbnail;
     private String title;
     private String url;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -34,14 +33,6 @@ public class Archive extends Base {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
     }
 
     public String getThumbnail() {

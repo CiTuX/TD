@@ -12,6 +12,8 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle(R.string.action_settings);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+
         addPreferencesFromResource(R.xml.preferences);
     }
 

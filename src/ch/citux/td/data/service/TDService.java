@@ -1,11 +1,11 @@
 package ch.citux.td.data.service;
 
-import ch.citux.td.data.model.Archives;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamToken;
+import ch.citux.td.data.model.Videos;
 
 public interface TDService {
 
@@ -15,7 +15,7 @@ public interface TDService {
 
     public Stream getStream(String channel);
 
-    public Archives getArchives(String channel);
+    public Videos getVideos(String channel);
 
     public StreamToken getStreamToken(String channel);
 
