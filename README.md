@@ -1,6 +1,6 @@
 #TwitchDroid
 
-Simple Twitch.tv client for Android
+Simple Twitch client for Android
 
 ##Setup
 
