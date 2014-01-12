@@ -1,7 +1,8 @@
 package ch.citux.twitchdroid;
 
-import android.app.Application;
 import android.content.Context;
+
+import org.holoeverywhere.app.Application;
 
 public class TDApplication extends Application {
 

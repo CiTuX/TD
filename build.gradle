@@ -4,16 +4,24 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.7.0'
+        classpath 'org.holoeverywhere:plugin:0.2.+'
     }
 }
 
+apply plugin: 'holoeverywhere'
 apply plugin: 'android'
+
+holoeverywhere {
+    addons {
+        create 'preferences'
+    }
+}
 
 android {
     compileSdkVersion 19
     buildToolsVersion "19.0.0"
 
-    sourceSets{
+    sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
@@ -22,7 +30,7 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
-        } 
+        }
     }
 
     repositories {
@@ -33,19 +41,12 @@ android {
         // Google Play Services
         compile 'com.google.android.gms:play-services:4.0.30'
 
-        // Support Libraries
-        compile 'com.android.support:support-v4:19.0.0'
-        compile 'com.android.support:appcompat-v7:19.0.0'
-        compile 'com.android.support:gridlayout-v7:19.0.0'
-        compile 'com.android.support:support-v13:19.0.0'
-
         //3th Party
         compile 'com.google.code.gson:gson:2.2.4'
         compile 'org.apache.commons:commons-lang3:3.2.1'
 
         //Projects
         compile project(':lib:VitamioBundle:vitamio')
-        compile project(':lib:ZI')
 
         //Jars
         compile files('libs/m3u8parser.jar')
@@ -53,7 +54,9 @@ android {
 }
 
 task copyNativeLibs(type: Copy) {
-    from(new File(project(':lib:VitamioBundle:vitamio').getProjectDir(), 'libs')) { include '**/*.so' }
+    from(new File(project(':lib:VitamioBundle:vitamio').getProjectDir(), 'libs')) {
+        include '**/*.so'
+    }
     into new File(buildDir, 'libs')
 }
 

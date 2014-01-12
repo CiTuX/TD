@@ -3,11 +3,12 @@ package ch.citux.twitchdroid.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import org.holoeverywhere.app.Activity;
 
 import ch.citux.twitchdroid.R;
 import ch.citux.twitchdroid.config.TDConfig;
@@ -17,7 +18,7 @@ import ch.citux.twitchdroid.ui.dialogs.InputDialogFragment;
 import ch.citux.twitchdroid.ui.fragments.ChannelFragment;
 import ch.citux.twitchdroid.ui.fragments.FavoritesFragment;
 
-public class TDActivity extends FragmentActivity implements InputDialogFragment.OnDoneListener {
+public class TDActivity extends Activity implements InputDialogFragment.OnDoneListener {
 
     private FavoritesFragment favoritesFragment;
     private ChannelFragment channelFragment;

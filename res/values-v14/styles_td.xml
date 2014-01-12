@@ -18,7 +18,7 @@
 
 <resources>
 
-    <style name="Theme.TD" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.TD" parent="@style/Holo.Theme.Light.DarkActionBar">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_td</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.TD</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.TD</item>
@@ -51,7 +51,7 @@
 
     </style>
 
-    <style name="ActionBar.Solid.TD" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <style name="ActionBar.Solid.TD" parent="@style/Widget.AppCompat.ActionBar.Solid">
         <item name="android:background">@drawable/ab_solid_td</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_td</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_td</item>

@@ -18,7 +18,7 @@
 
 <resources>
 
-    <style name="Theme.TD" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.TD" parent="@style/Holo.Theme.Light.DarkActionBar">
         <item name="actionBarItemBackground">@drawable/selectable_background_td</item>
         <item name="popupMenuStyle">@style/PopupMenu.TD</item>
         <item name="dropDownListViewStyle">@style/DropDownListView.TD</item>
