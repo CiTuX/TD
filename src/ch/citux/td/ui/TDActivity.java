@@ -24,6 +24,7 @@ public class TDActivity extends Activity {
     private ChannelFragment channelFragment;
     private SharedPreferences preferences;
     private MenuItem refreshItem;
+    private MenuItem settingsItem;
     private boolean isLoading;
 
     @Override
@@ -55,6 +56,7 @@ public class TDActivity extends Activity {
         inflater.inflate(R.menu.settings, menu);
         inflater.inflate(R.menu.refresh, menu);
         refreshItem = menu.findItem(R.id.menu_refresh);
+        settingsItem = menu.findItem(R.id.menu_settings);
         return true;
     }
 
@@ -102,6 +104,24 @@ public class TDActivity extends Activity {
         isLoading = false;
         if (refreshItem != null) {
             MenuItemCompat.setActionView(refreshItem, null);
+        }
+    }
+
+    public void showOptions() {
+        if (refreshItem != null) {
+            refreshItem.setVisible(true);
+        }
+        if (settingsItem != null) {
+            settingsItem.setVisible(true);
+        }
+    }
+
+    public void hideOptions() {
+        if (refreshItem != null) {
+            refreshItem.setVisible(false);
+        }
+        if (settingsItem != null) {
+            settingsItem.setVisible(false);
         }
     }
 

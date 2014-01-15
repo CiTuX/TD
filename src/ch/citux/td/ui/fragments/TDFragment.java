@@ -30,6 +30,14 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
         getSupportActionBar().setTitle("");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (activity != null) {
+            activity.showOptions();
+        }
+    }
+
     public void startLoading() {
         if (activity != null) {
             activity.startLoading();
