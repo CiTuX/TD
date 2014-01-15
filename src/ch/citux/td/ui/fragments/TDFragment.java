@@ -27,6 +27,7 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getSupportActionBar().setTitle("");
     }
 
     public void startLoading() {
