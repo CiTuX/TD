@@ -1,5 +1,7 @@
 package ch.citux.td.ui.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,6 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
 
     public static final String CHANNEL = "channel";
 
-    private Channel channel;
     private ArchiveAdapter adapter;
     private ImageFetcher imageFetcher;
     private EmptyView empty;
@@ -40,6 +41,8 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     private TextView lblTitle;
     private TextView lblStatus;
     private Button btnStream;
+    private Channel channel;
+    private Video video;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,6 +112,8 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
             PlayerFragment playerFragment = new PlayerFragment();
             playerFragment.setArguments(arguments);
 
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
 //            getActivity().getSupportFragmentManager().beginTransaction()
 //                    .replace(R.id.content, playerFragment)
 //                    .addToBackStack(playerFragment.getClass().getSimpleName())
@@ -127,9 +132,7 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Video video = adapter.getItem(position);
-        if (video != null) {
-            playVideo(video.getTitle(), video.getUrl());
-        }
+        TDTaskManager.getVideo(new GetVideoCallback(this), video.getId());
     }
 
     @Override
@@ -140,6 +143,21 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
             setListAdapter(adapter);
         } else {
             adapter.setData(response.getVideos());
+        }
+    }
+
+    private class GetVideoCallback extends TDBasicCallback<Video> {
+
+        protected GetVideoCallback(Object caller) {
+            super(caller);
+        }
+
+        @Override
+        public void onResponse(Video response) {
+            if (response.getUrl() != null) {
+                video = response;
+                playVideo(video.getTitle(), video.getUrl());
+            }
         }
     }
 

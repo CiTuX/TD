@@ -17,9 +17,15 @@ public class DateUtils {
     }
 
     public static String formatTime(long duration) {
-        long minutes = duration / 60;
-        long seconds = duration - (minutes * 60);
-        return String.format("%d:%02d", minutes, seconds);
+        long hours = duration / 3600;
+        long minutes = (duration % 3600) / 60;
+        long seconds = duration % 60;
+
+        if (hours > 0) {
+            return String.format("%d:%02d:%02d", hours, minutes, seconds);
+        } else {
+            return String.format("%d:%02d", minutes, seconds);
+        }
     }
 
 }

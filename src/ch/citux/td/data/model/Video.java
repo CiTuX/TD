@@ -9,6 +9,7 @@ public class Video extends Base {
     private Date date;
     private String thumbnail;
     private String title;
+    private long size;
     private String url;
 
     public String getId() {
@@ -49,6 +50,14 @@ public class Video extends Base {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 
     public String getUrl() {

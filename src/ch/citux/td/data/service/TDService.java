@@ -5,6 +5,7 @@ import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamToken;
+import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.Videos;
 
 public interface TDService {
@@ -16,6 +17,8 @@ public interface TDService {
     public Stream getStream(String channel);
 
     public Videos getVideos(String channel);
+
+    public Video getVideo(String id);
 
     public StreamToken getStreamToken(String channel);
 

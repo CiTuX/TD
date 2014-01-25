@@ -70,10 +70,12 @@ public class ArchiveAdapter extends BaseAdapter {
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.list_item_videos, null);
+            if(convertView != null){
             holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.imgThumbnail);
             holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
             holder.lblDate = (TextView) convertView.findViewById(R.id.lblDate);
             holder.lblDuration = (TextView) convertView.findViewById(R.id.lblDuration);
+            }
         } else {
             holder = (ViewHolder) convertView.getTag();
         }

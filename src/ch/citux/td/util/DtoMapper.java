@@ -3,6 +3,7 @@ package ch.citux.td.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.citux.td.data.dto.JustinArchive;
 import ch.citux.td.data.dto.TwitchChannel;
 import ch.citux.td.data.dto.TwitchChannels;
 import ch.citux.td.data.dto.TwitchStream;
@@ -28,12 +29,20 @@ public class DtoMapper {
 
     public static Video mapVideo(TwitchVideo tVideo) {
         Video video = new Video();
-        video.setId(tVideo.get_id());
+        video.setId(tVideo.get_id().split("\\D+")[1]);
         video.setDuration(tVideo.getLength());
         video.setDate(tVideo.getRecorded_at());
         video.setThumbnail(tVideo.getPreview());
         video.setTitle(tVideo.getTitle() == null ? "Untitled" : tVideo.getTitle());
         video.setUrl(tVideo.getUrl());
+        return video;
+    }
+
+    public static Video mapVideo(List<JustinArchive> jArchive) {
+        JustinArchive jVideo = jArchive.get(0); // TODO all videos
+        Video video = new Video();
+        video.setId(jVideo.getId());
+        video.setUrl(jVideo.getVideo_file_url());
         return video;
     }
 

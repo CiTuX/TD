@@ -8,12 +8,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.StreamPlayList;
+import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.tasks.TDTask;
 import ch.citux.td.data.worker.tasks.TaskGetArchives;
 import ch.citux.td.data.worker.tasks.TaskGetChannel;
 import ch.citux.td.data.worker.tasks.TaskGetFavorites;
 import ch.citux.td.data.worker.tasks.TaskGetStreamPlaylist;
+import ch.citux.td.data.worker.tasks.TaskGetVideo;
 
 public class TDTaskManager {
 
@@ -57,6 +59,13 @@ public class TDTaskManager {
     public static TDTask getChannel(TDCallback<Channel> callback, String channel) {
         TaskGetChannel task = new TaskGetChannel(callback);
         task.execute(channel);
+        tasks.add(task);
+        return task;
+    }
+
+    public static TDTask getVideo(TDCallback<Video> callback, String id) {
+        TaskGetVideo task = new TaskGetVideo(callback);
+        task.execute(id);
         tasks.add(task);
         return task;
     }
