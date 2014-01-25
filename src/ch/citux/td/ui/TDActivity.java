@@ -36,12 +36,14 @@ public class TDActivity extends Activity {
         channelFragment = new ChannelFragment();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.content, favoritesFragment);
-        if (findViewById(R.id.detail) != null) { //Tablet
-            transaction.add(R.id.detail, channelFragment);
+        if (getSupportFragmentManager().findFragmentById(R.id.content) == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.content, favoritesFragment);
+            if (findViewById(R.id.detail) != null) { //Tablet
+                transaction.add(R.id.detail, channelFragment);
+            }
+            transaction.commit();
         }
-        transaction.commit();
     }
 
     @Override

@@ -5,6 +5,7 @@
 
     <style name="ButtonTD" parent="android:Widget.Holo.Light.Button">
         <item name="android:background">@drawable/td_btn_default_holo_light</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="ImageButtonTD" parent="android:Widget.Holo.Light.ImageButton">

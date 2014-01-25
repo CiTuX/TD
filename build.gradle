@@ -3,19 +3,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.0'
-        classpath 'org.holoeverywhere:plugin:0.2.+'
+        classpath 'com.android.tools.build:gradle:0.7.+'
     }
 }
 
-apply plugin: 'holoeverywhere'
 apply plugin: 'android'
-
-holoeverywhere {
-    addons {
-        create 'preferences'
-    }
-}
 
 android {
     compileSdkVersion 19
@@ -35,11 +27,15 @@ android {
 
     repositories {
         mavenCentral()
+        maven { url 'http://192.241.191.41/repo/' }
+        maven { url 'http://192.241.191.41/snapshot/' }
     }
 
     dependencies {
-        // Google Play Services
-        compile 'com.google.android.gms:play-services:4.0.30'
+        //Holo
+        compile 'com.android.support:support-v4:19.0.+'
+        compile 'org.holoeverywhere:library:2.1.1-SNAPSHOT@aar'
+        compile 'org.holoeverywhere:addon-preferences:2.1.1-SNAPSHOT@aar'
 
         //3th Party
         compile 'com.google.code.gson:gson:2.2.4'
