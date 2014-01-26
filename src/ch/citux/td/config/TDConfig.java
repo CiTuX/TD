@@ -4,6 +4,8 @@ public class TDConfig {
 
     public static final String SETTINGS_CHANNEL_NAME = "channel_name";
 
+    public static final String MIME_FLV = "video/x-flv";
+
     public static final String TWITCH_ACCEPT = "application/vnd.twitchtv.v2+json";
     public static final String USHER_STREAM_TOKEN = "Wd75Yj9sS26Lmhve";
 

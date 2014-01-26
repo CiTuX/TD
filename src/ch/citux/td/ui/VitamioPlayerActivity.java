@@ -1,94 +1,69 @@
-package ch.citux.td.ui.fragments;
+package ch.citux.td.ui;
 
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
 
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.app.Activity;
 
 import ch.citux.td.R;
+import ch.citux.td.util.Log;
+import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.MediaPlayer;
 
-public class PlayerFragment extends Fragment implements MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnVideoSizeChangedListener, SurfaceHolder.Callback {
+public class VitamioPlayerActivity extends Activity implements MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnVideoSizeChangedListener, SurfaceHolder.Callback {
 
-    public static final String TITLE = "title";
-    public static final String URL = "url";
-
-    private static final String TAG = "PlayerFragment";
-
-    private MediaPlayer mediaPlayer;
-    private SurfaceView mPreview;
-    private SurfaceHolder holder;
-    private String title;
-    private String url;
+    private static final String TAG = "VitamioPlayerActivity";
     private int mVideoWidth;
     private int mVideoHeight;
+    private MediaPlayer mMediaPlayer;
+    private SurfaceHolder holder;
+    private String path;
     private boolean mIsVideoSizeKnown = false;
     private boolean mIsVideoReadyToBePlayed = false;
 
+    /**
+     * Called when the activity is first created.
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.player);
-        mPreview = (SurfaceView) view.findViewById(R.id.surface);
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (getArguments() != null) {
-            title = getArguments().getString(TITLE);
-            url = getArguments().getString(URL);
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        if (!LibsChecker.checkVitamioLibs(this)) {
+            return;
         }
+        setContentView(R.layout.player);
+        getSupportActionBar().hide();
 
+
+        SurfaceView mPreview = (SurfaceView) findViewById(R.id.surface);
         holder = mPreview.getHolder();
         if (holder != null) {
             holder.addCallback(this);
             holder.setFormat(PixelFormat.RGBA_8888);
+            path = getIntent().getDataString();
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        releaseMediaPlayer();
-        doCleanUp();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        releaseMediaPlayer();
-        doCleanUp();
     }
 
     private void playVideo() {
-
         doCleanUp();
         try {
             // Create a new media player and set the listeners
-            mediaPlayer = new MediaPlayer(getActivity());
-            mediaPlayer.setDataSource(url);
-            mediaPlayer.setDisplay(holder);
-            mediaPlayer.prepare();
-            mediaPlayer.setOnBufferingUpdateListener(this);
-            mediaPlayer.setOnCompletionListener(this);
-            mediaPlayer.setOnPreparedListener(this);
-            mediaPlayer.setOnVideoSizeChangedListener(this);
-            mediaPlayer.getMetadata();
-            getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+            mMediaPlayer = new MediaPlayer(this);
+            mMediaPlayer.setDataSource(path);
+            mMediaPlayer.setDisplay(holder);
+            mMediaPlayer.prepare();
+            mMediaPlayer.setOnBufferingUpdateListener(this);
+            mMediaPlayer.setOnCompletionListener(this);
+            mMediaPlayer.setOnPreparedListener(this);
+            mMediaPlayer.setOnVideoSizeChangedListener(this);
+            mMediaPlayer.getMetadata();
+            setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         } catch (Exception e) {
-            Log.e(TAG, "error: " + e.getMessage(), e);
+            Log.e(TAG, e);
         }
-
     }
 
     public void onBufferingUpdate(MediaPlayer arg0, int percent) {
@@ -137,10 +112,24 @@ public class PlayerFragment extends Fragment implements MediaPlayer.OnBufferingU
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releaseMediaPlayer();
+        doCleanUp();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseMediaPlayer();
+        doCleanUp();
+    }
+
     private void releaseMediaPlayer() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
         }
     }
 
@@ -154,6 +143,6 @@ public class PlayerFragment extends Fragment implements MediaPlayer.OnBufferingU
     private void startVideoPlayback() {
         Log.v(TAG, "startVideoPlayback");
         holder.setFixedSize(mVideoWidth, mVideoHeight);
-        mediaPlayer.start();
+        mMediaPlayer.start();
     }
 }

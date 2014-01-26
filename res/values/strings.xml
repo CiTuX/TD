@@ -3,6 +3,10 @@
     <!-- General -->
     <string name="app_name">TD</string>
 
+    <!-- VideoPlayer -->
+    <string name="mime_flv">video/x-flv</string>
+    <string name="video_host">*.justin.tv</string>
+
     <!-- ActionBarItems -->
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>

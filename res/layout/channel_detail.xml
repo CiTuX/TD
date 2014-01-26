@@ -63,9 +63,9 @@
             android:layout_below="@id/btnStream"
             android:layout_margin="8dp"
             android:text="@string/channel_archives"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
-        <FrameLayout
+        <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:layout_below="@id/lblArchive"

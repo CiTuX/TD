@@ -19,6 +19,19 @@ public class Log {
         }
     }
 
+    public static void v(String tag, String message) {
+        if (!StringUtils.isBlank(tag) && !StringUtils.isBlank(message)) {
+            android.util.Log.v(tag, message);
+        }
+    }
+
+    public static void v(Object caller, String message) {
+        String tag = caller.getClass().getSimpleName();
+        if (!StringUtils.isBlank(message)) {
+            android.util.Log.v(tag, message);
+        }
+    }
+
     public static void e(String tag, String message) {
         if (!StringUtils.isBlank(tag) && !StringUtils.isBlank(message)) {
             android.util.Log.e(tag, message);

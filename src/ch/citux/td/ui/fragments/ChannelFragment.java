@@ -15,6 +15,7 @@ import com.yixia.zi.utils.ImageFetcher;
 import org.holoeverywhere.LayoutInflater;
 
 import ch.citux.td.R;
+import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Logo;
 import ch.citux.td.data.model.Status;
@@ -27,7 +28,6 @@ import ch.citux.td.ui.adapter.ArchiveAdapter;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.util.Log;
-import io.vov.vitamio.LibsChecker;
 
 public class ChannelFragment extends TDFragment<Videos> implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -42,17 +42,18 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     private TextView lblStatus;
     private Button btnStream;
     private Channel channel;
-    private Video video;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.channel_detail, null, false);
-        empty = (EmptyView) contentView.findViewById(R.id.empty);
-        content = (ViewGroup) contentView.findViewById(R.id.content);
-        imgLogo = (ImageView) contentView.findViewById(R.id.imgLogo);
-        lblTitle = (TextView) contentView.findViewById(R.id.lblTitle);
-        lblStatus = (TextView) contentView.findViewById(R.id.lblStatus);
-        btnStream = (Button) contentView.findViewById(R.id.btnStream);
+        if (contentView != null) {
+            empty = (EmptyView) contentView.findViewById(R.id.empty);
+            content = (ViewGroup) contentView.findViewById(R.id.content);
+            imgLogo = (ImageView) contentView.findViewById(R.id.imgLogo);
+            lblTitle = (TextView) contentView.findViewById(R.id.lblTitle);
+            lblStatus = (TextView) contentView.findViewById(R.id.lblStatus);
+            btnStream = (Button) contentView.findViewById(R.id.btnStream);
+        }
         return contentView;
     }
 
@@ -72,6 +73,14 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     public void onResume() {
         super.onResume();
         refreshData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (empty != null) {
+            empty.showProgress();
+        }
     }
 
     @Override
@@ -103,25 +112,9 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     }
 
     private void playVideo(String title, String url) {
-        if (LibsChecker.checkVitamioLibs(getActivity())) {
-            // vitamio works
-            Bundle arguments = new Bundle();
-            arguments.putString(PlayerFragment.TITLE, title);
-            arguments.putString(PlayerFragment.URL, url);
-
-            PlayerFragment playerFragment = new PlayerFragment();
-            playerFragment.setArguments(arguments);
-
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-//            getActivity().getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.content, playerFragment)
-//                    .addToBackStack(playerFragment.getClass().getSimpleName())
-//                    .commit();
-        }
-//        Intent playerIntent = new Intent(Intent.ACTION_VIEW, uri, getActivity(), VideoActivity.class);
-//        playerIntent.putExtra("displayName", title);
-//        getActivity().startActivity(playerIntent);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
+        startActivity(intent);
     }
 
     @Override
@@ -155,8 +148,7 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         @Override
         public void onResponse(Video response) {
             if (response.getUrl() != null) {
-                video = response;
-                playVideo(video.getTitle(), video.getUrl());
+                playVideo(response.getTitle(), response.getUrl());
             }
         }
     }
