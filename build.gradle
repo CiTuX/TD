@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
+        classpath 'com.android.tools.build:gradle:0.8.+'
     }
 }
 
@@ -41,26 +41,7 @@ android {
         compile 'com.google.code.gson:gson:2.2.4'
         compile 'org.apache.commons:commons-lang3:3.2.1'
 
-        //Projects
-        compile project(':lib:VitamioBundle:vitamio')
-
         //Jars
         compile files('libs/m3u8parser.jar')
     }
-}
-
-task copyNativeLibs(type: Copy) {
-    from(new File(project(':lib:VitamioBundle:vitamio').getProjectDir(), 'libs')) {
-        include '**/*.so'
-    }
-    into new File(buildDir, 'libs')
-}
-
-tasks.withType(Compile) { compileTask -> compileTask.dependsOn copyNativeLibs }
-
-clean.dependsOn 'cleanCopyNativeLibs'
-
-tasks.withType(com.android.build.gradle.tasks.PackageApplication) { pkgTask ->
-    pkgTask.jniFolders = new HashSet<File>()
-    pkgTask.jniFolders.add(new File(buildDir, 'libs'))
 }
