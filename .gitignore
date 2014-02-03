@@ -30,6 +30,7 @@ local.properties
 #Gradle
 .gradle
 build
+gradle.properties
 
 #Other
 .DS_Store

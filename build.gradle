@@ -22,7 +22,7 @@ android {
 
     dependencies {
         //Holo
-        compile 'com.android.support:support-v4:19.0.+'
+        compile 'com.android.support:support-v4:19.1.+'
         compile 'org.holoeverywhere:library:2.1.1-SNAPSHOT@aar'
         compile 'org.holoeverywhere:addon-preferences:2.1.1-SNAPSHOT@aar'
 
@@ -49,6 +49,12 @@ android {
     signingConfigs {
         debug {
             storeFile file("debug.keystore")
+        }
+        release {
+            storeFile file(releaseKeystore)
+            storePassword releaseStorePW
+            keyAlias releaseKeyalias
+            keyPassword releaseKeyPW
         }
     }
 }
