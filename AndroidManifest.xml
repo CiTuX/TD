@@ -15,6 +15,7 @@
         android:name="ch.citux.td.TDApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:allowBackup="true"
         android:theme="@style/Theme.TD">
 
         <activity

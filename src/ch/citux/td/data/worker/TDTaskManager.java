@@ -1,5 +1,6 @@
 package ch.citux.td.data.worker;
 
+import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
 
@@ -45,6 +46,7 @@ public class TDTaskManager {
         return task;
     }
 
+    @TargetApi(11)
     public static TDTask getStatus(TDCallback<Channel> callback, String channel) {
         TaskGetChannel task = new TaskGetChannel(callback, true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

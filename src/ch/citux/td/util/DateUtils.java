@@ -3,6 +3,7 @@ package ch.citux.td.util;
 import android.text.format.DateFormat;
 
 import java.util.Date;
+import java.util.Locale;
 
 import ch.citux.td.TDApplication;
 
@@ -22,9 +23,9 @@ public class DateUtils {
         long seconds = duration % 60;
 
         if (hours > 0) {
-            return String.format("%d:%02d:%02d", hours, minutes, seconds);
+            return String.format(Locale.ENGLISH, "%d:%02d:%02d", hours, minutes, seconds);
         } else {
-            return String.format("%d:%02d", minutes, seconds);
+            return String.format(Locale.ENGLISH, "%d:%02d", minutes, seconds);
         }
     }
 
