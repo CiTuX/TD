@@ -119,7 +119,7 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        TDTaskManager.getStreamPlaylist(new StreamPlaylistCallback(this), channel.getName(), true);
+        TDTaskManager.getStreamPlaylist(new StreamPlaylistCallback(this), channel.getName());
     }
 
     @Override
@@ -163,7 +163,8 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         public void onResponse(StreamPlayList response) {
             Log.d(this, "Streams :" + response.getStreams().toString());
             if (response.getStreams() != null && response.getStreams().size() > 0) {
-                String url = response.getBestStream();
+                //TODO quality from settings
+                String url = response.getStream(StreamPlayList.QUALITY_MEDIUM);
                 if (url != null) {
                     playVideo(channel.getTitle(), url);
                 }

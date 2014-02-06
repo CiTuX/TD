@@ -3,10 +3,6 @@
     <!-- General -->
     <string name="app_name">TD</string>
 
-    <!-- VideoPlayer -->
-    <string name="mime_flv">video/x-flv</string>
-    <string name="video_host">*.justin.tv</string>
-
     <!-- ActionBarItems -->
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
@@ -15,8 +11,8 @@
     <!-- ErrorMessages -->
     <string name="error_unexpected">A unicorn has blocked the request, please contact the developer.</string>
     <string name="error_connection_error_title">Connexion error</string>
-    <string name="error_connection_error_message">A connexion error occurred. Please verify
-        that you are connected to an Edge, 3G or Wifi network.
+    <string name="error_connection_error_message">A connection error occurred. Please verify
+        that you are connected to an EDGE, 3G or Wifi network.
     </string>
     <string name="error_data_error_title">Incorrect data</string>
     <string name="error_data_error_message">Received data invalid</string>

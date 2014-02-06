@@ -22,6 +22,6 @@ public interface TDService {
 
     public StreamToken getStreamToken(String channel);
 
-    public StreamPlayList getStreamPlaylist(String channel, String token, String hd);
+    public StreamPlayList getStreamPlaylist(String channel, StreamToken streamToken);
 
 }

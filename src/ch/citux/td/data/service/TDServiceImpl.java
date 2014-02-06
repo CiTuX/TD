@@ -16,11 +16,11 @@ import java.util.List;
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.dto.JustinArchive;
+import ch.citux.td.data.dto.TwitchAccessToken;
 import ch.citux.td.data.dto.TwitchChannel;
 import ch.citux.td.data.dto.TwitchFollows;
 import ch.citux.td.data.dto.TwitchStream;
 import ch.citux.td.data.dto.TwitchVideos;
-import ch.citux.td.data.dto.UsherStreamToken;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.Response;
@@ -137,9 +137,10 @@ public class TDServiceImpl implements TDService {
         String url = buildUrl(TDConfig.URL_API_GET_STREAM_TOKEN, channel);
         Response<String> response = TDRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
-            UsherStreamToken streamToken = gson.<List<UsherStreamToken>>fromJson(response.getResult(), new TypeToken<List<UsherStreamToken>>() {
-            }.getType()).get(0);
-            result.setToken(streamToken.getToken());
+            TwitchAccessToken accessToken = gson.fromJson(response.getResult(), TwitchAccessToken.class);
+            result.setNauth(accessToken.getToken());
+            result.setNauthsig(accessToken.getSig());
+            result.setP((int) (Math.random() * 999999));
         } else {
             result.setErrorResId(R.string.error_data_error_message);
         }
@@ -147,9 +148,9 @@ public class TDServiceImpl implements TDService {
     }
 
     @Override
-    public StreamPlayList getStreamPlaylist(String channel, String token, String hd) {
+    public StreamPlayList getStreamPlaylist(String channel, StreamToken streamToken) {
         StreamPlayList result = new StreamPlayList();
-        String url = buildUrl(TDConfig.URL_API_GET_STREAM_PLAYLIST, channel, token, hd);
+        String url = buildUrl(TDConfig.URL_API_GET_STREAM_PLAYLIST, channel, streamToken.getP(), streamToken.getNauth(), streamToken.getNauthsig());
         Response<Playlist> response = TDRequestHandler.startPlaylistRequest(url);
         if (response.getStatus() == Response.Status.OK) {
             List<Element> elements = response.getResult().getElements();

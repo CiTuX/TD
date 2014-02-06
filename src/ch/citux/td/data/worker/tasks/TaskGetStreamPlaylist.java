@@ -2,13 +2,13 @@ package ch.citux.td.data.worker.tasks;
 
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ch.citux.td.R;
-import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamToken;
 import ch.citux.td.data.service.TDServiceImpl;
 import ch.citux.td.data.worker.TDCallback;
-import ch.citux.td.util.HashUtils;
 
 public class TaskGetStreamPlaylist extends TDTask<String, StreamPlayList> {
 
@@ -20,14 +20,11 @@ public class TaskGetStreamPlaylist extends TDTask<String, StreamPlayList> {
     @Override
     protected StreamPlayList doInBackground(String... params) {
         StreamPlayList result = new StreamPlayList();
-        if (params.length == 2) {
+        if (params.length == 1) {
             StreamToken streamToken = TDServiceImpl.getInstance().getStreamToken(params[0]);
-            if (streamToken.getToken() != null) {
-                String token = HashUtils.decodeJSON(streamToken.getToken());
-                String hash = HashUtils.encodeHmacSHA1(TDConfig.USHER_STREAM_TOKEN, token);
-                token = HashUtils.encodeURL(hash + ":" + token);
-                Log.d("Twitch", token);
-                return TDServiceImpl.getInstance().getStreamPlaylist(params[0], token, params[1]);
+            if (StringUtils.isNoneEmpty(streamToken.getNauth(), streamToken.getNauthsig())) {
+                Log.d("Twitch", streamToken.toString());
+                return TDServiceImpl.getInstance().getStreamPlaylist(params[0], streamToken);
             } else {
                 result.setError(streamToken.getError());
                 return result;

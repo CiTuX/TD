@@ -79,9 +79,9 @@ public class TDTaskManager {
         return task;
     }
 
-    public static TDTask getStreamPlaylist(TDCallback<StreamPlayList> callback, String channel, boolean hd) {
+    public static TDTask getStreamPlaylist(TDCallback<StreamPlayList> callback, String channel) {
         TaskGetStreamPlaylist task = new TaskGetStreamPlaylist(callback);
-        task.execute(channel, Boolean.toString(hd));
+        task.execute(channel);
         tasks.add(task);
         return task;
     }

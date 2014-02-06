@@ -4,27 +4,25 @@ import java.util.HashMap;
 
 public class StreamPlayList extends Base {
 
-    public static final StreamQuality QUALITY_LOW = new StreamQuality("iphonelow", "low", 0);
-    public static final StreamQuality QUALITY_HIGH = new StreamQuality("iphonehigh", "high", 1);
-    public static final StreamQuality QUALITY_240P = new StreamQuality("240p", 2);
-    public static final StreamQuality QUALITY_360P = new StreamQuality("360p", 3);
-    public static final StreamQuality QUALITY_480P = new StreamQuality("480p", 4);
-    public static final StreamQuality QUALITY_720P = new StreamQuality("720p", 5);
+    public static final StreamQuality QUALITY_MOBILE = new StreamQuality("Mobile", 1);
+    public static final StreamQuality QUALITY_LOW = new StreamQuality("Low", 2);
+    public static final StreamQuality QUALITY_MEDIUM = new StreamQuality("Medium", 3);
+    public static final StreamQuality QUALITY_HIGH = new StreamQuality("High", 4);
+    public static final StreamQuality QUALITY_SOURCE = new StreamQuality("Source", 5);
 
     public static final StreamQuality[] SUPPORTED_QUALITIES = {
+            QUALITY_MOBILE,
             QUALITY_LOW,
+            QUALITY_MEDIUM,
             QUALITY_HIGH,
-            QUALITY_240P,
-            QUALITY_360P,
-            QUALITY_480P,
-            QUALITY_720P
+            QUALITY_SOURCE
     };
 
     private HashMap<StreamQuality, String> streams;
 
     public static StreamQuality parseQuality(String name) {
         for (StreamQuality quality : SUPPORTED_QUALITIES) {
-            if (quality.getKey().equals(name)) {
+            if (quality.getName().equals(name)) {
                 return quality;
             }
         }

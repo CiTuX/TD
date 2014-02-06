@@ -75,7 +75,7 @@ public class TDRequestHandler {
                 throw new MalformedURLException();
             }
 
-            if (request.startsWith(TDConfig.URL_API_TWITCH_BASE)) {
+            if (request.startsWith(TDConfig.URL_API_TWITCH_KRAKEN_BASE)) {
                 urlConnection.addRequestProperty(HEADER_ACCEPT, TDConfig.TWITCH_ACCEPT);
             }
 
