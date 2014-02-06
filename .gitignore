@@ -26,6 +26,7 @@ pom.xml.*
 #Ant
 ant.properties
 local.properties
+project.properties
 
 #Gradle
 .gradle
@@ -35,3 +36,4 @@ gradle.properties
 #Other
 .DS_Store
 tmp
+config
