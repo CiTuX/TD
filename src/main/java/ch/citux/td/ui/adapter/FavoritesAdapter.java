@@ -24,7 +24,7 @@ import ch.citux.td.data.model.Status;
 
 public class FavoritesAdapter extends BaseAdapter {
 
-    private static final int ANIMATION_DURATION = 300;
+    private static final int ANIMATION_DURATION = 500;
 
     private ArrayList<Channel> data;
     private LayoutInflater inflater;
@@ -81,7 +81,7 @@ public class FavoritesAdapter extends BaseAdapter {
                 data.set(i, item);
             }
         }
-//        updateStatus(channel.getStatus(), holders.get(channel.getName()));
+        notifyDataSetInvalidated();
     }
 
     private void updateStatus(Status status, ViewHolder holder) {
@@ -112,9 +112,12 @@ public class FavoritesAdapter extends BaseAdapter {
         }
         holder.lblStatus.setText(text);
         holder.lblStatus.setVisibility(visibilityLbl ? View.VISIBLE : View.INVISIBLE);
-        holder.lblStatus.setAnimation(visibilityLbl ? fadeIn : fadeOut);
         holder.prgStatus.setVisibility(visibilityPrg ? View.VISIBLE : View.INVISIBLE);
         holder.statusIndicator.setBackgroundResource(color);
+        if (status == Status.UNKNOWN) {
+            holder.lblStatus.setAnimation(visibilityLbl ? fadeIn : fadeOut);
+            holder.statusIndicator.setAnimation(fadeIn);
+        }
 
     }
 
