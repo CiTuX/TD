@@ -4,10 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,8 +25,6 @@ public class FavoritesAdapter extends BaseAdapter {
     private ArrayList<Channel> data;
     private LayoutInflater inflater;
     private Picasso picasso;
-    private Animation fadeOut;
-    private Animation fadeIn;
 
     public FavoritesAdapter(Context context) {
         init(context, new ArrayList<Channel>());
@@ -44,19 +38,6 @@ public class FavoritesAdapter extends BaseAdapter {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
         this.picasso = Picasso.with(context);
-    }
-
-    private void initAnimation() {
-        fadeOut = new AlphaAnimation(1, 0);
-        fadeOut.setInterpolator(new AccelerateInterpolator());
-        fadeOut.setDuration(ANIMATION_DURATION);
-
-        fadeIn = new AlphaAnimation(0, 1);
-        fadeIn.setInterpolator(new DecelerateInterpolator());
-        fadeIn.setDuration(ANIMATION_DURATION);
-        fadeIn.setStartOffset(ANIMATION_DURATION);
-        fadeIn.setFillBefore(false);
-        fadeIn.setFillAfter(true);
     }
 
     public void setData(ArrayList<Channel> data) {
@@ -94,7 +75,6 @@ public class FavoritesAdapter extends BaseAdapter {
         boolean visibilityLbl = false;
         boolean visibilityPrg = true;
         int text = R.string.channel_offline;
-        initAnimation();
 
         switch (status) {
             case ONLINE:
@@ -114,11 +94,6 @@ public class FavoritesAdapter extends BaseAdapter {
         holder.lblStatus.setVisibility(visibilityLbl ? View.VISIBLE : View.INVISIBLE);
         holder.prgStatus.setVisibility(visibilityPrg ? View.VISIBLE : View.INVISIBLE);
         holder.statusIndicator.setBackgroundResource(color);
-        if (status == Status.UNKNOWN) {
-            holder.lblStatus.setAnimation(visibilityLbl ? fadeIn : fadeOut);
-            holder.statusIndicator.setAnimation(fadeIn);
-        }
-
     }
 
     @Override
@@ -169,5 +144,4 @@ public class FavoritesAdapter extends BaseAdapter {
         ProgressBar prgStatus;
         View statusIndicator;
     }
-
 }
