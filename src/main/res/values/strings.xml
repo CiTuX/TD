@@ -17,6 +17,8 @@
     </string>
     <string name="error_data_error_title">Incorrect data</string>
     <string name="error_data_error_message">Received data invalid</string>
+    <string name="error_no_player_title">No video player installed</string>
+    <string name="error_no_player_message">In order to play videos you need to install an external video player.</string>
 
     <!-- DialogMessages -->
     <string name="dialog_error_title">Error</string>

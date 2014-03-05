@@ -1,5 +1,6 @@
 package ch.citux.td.ui.fragments;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -110,7 +111,14 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     private void playVideo(String title, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException exception) {
+            ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
+            builder.setTitle(R.string.error_no_player_title);
+            builder.setMessage(R.string.error_no_player_message);
+            builder.show();
+        }
     }
 
     @Override

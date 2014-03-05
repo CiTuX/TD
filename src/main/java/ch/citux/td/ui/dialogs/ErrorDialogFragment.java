@@ -1,16 +1,16 @@
 
 package ch.citux.td.ui.dialogs;
 
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+
+import org.holoeverywhere.app.AlertDialog;
+import org.holoeverywhere.app.Dialog;
+import org.holoeverywhere.app.DialogFragment;
 
 import ch.citux.td.R;
 
@@ -26,11 +26,11 @@ public class ErrorDialogFragment extends DialogFragment {
     private static final String BUNDLE_TITLE = "title";
     private static final String BUNDLE_MESSAGE = "message";
 
-    private OnClickListener mOnClickListener;
+    private DialogInterface.OnClickListener mOnClickListener;
     private OnCancelListener mOnCancelListener;
 
     private static ErrorDialogFragment newInstance(String title, String message,
-                                                   OnClickListener onClickListener, OnCancelListener onCancelListener) {
+                                                   DialogInterface.OnClickListener onClickListener, OnCancelListener onCancelListener) {
         ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
         dialogFragment.mOnClickListener = onClickListener;
 
@@ -45,7 +45,7 @@ public class ErrorDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
-        Builder b = new Builder(getActivity());
+        AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle(args.getString(BUNDLE_TITLE));
         b.setMessage(args.getString(BUNDLE_MESSAGE));
         setCancelable(true);
@@ -64,7 +64,7 @@ public class ErrorDialogFragment extends DialogFragment {
         private FragmentActivity mActivity;
         private String mTitle;
         private String mMessage;
-        private OnClickListener mOnClickListener;
+        private DialogInterface.OnClickListener mOnClickListener;
         private OnCancelListener mOnCancelListener;
 
         public ErrorDialogFragmentBuilder(FragmentActivity activity) {
@@ -93,7 +93,7 @@ public class ErrorDialogFragment extends DialogFragment {
             return this;
         }
 
-        public ErrorDialogFragmentBuilder setOnClickListener(OnClickListener onClickListener) {
+        public ErrorDialogFragmentBuilder setOnClickListener(DialogInterface.OnClickListener onClickListener) {
             mOnClickListener = onClickListener;
             return this;
         }
