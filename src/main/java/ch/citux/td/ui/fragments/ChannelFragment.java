@@ -13,8 +13,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.holoeverywhere.LayoutInflater;
-
+import butterknife.InjectView;
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.Channel;
@@ -35,26 +34,18 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     public static final String CHANNEL = "channel";
 
     private ArchiveAdapter adapter;
-    private EmptyView empty;
-    private ViewGroup content;
-    private ImageView imgLogo;
-    private TextView lblTitle;
-    private TextView lblStatus;
-    private Button btnStream;
     private Channel channel;
 
+    @InjectView(R.id.empty) EmptyView empty;
+    @InjectView(R.id.content) ViewGroup content;
+    @InjectView(R.id.imgLogo) ImageView imgLogo;
+    @InjectView(R.id.lblTitle) TextView lblTitle;
+    @InjectView(R.id.lblStatus) TextView lblStatus;
+    @InjectView(R.id.btnStream) Button btnStream;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View contentView = inflater.inflate(R.layout.channel_detail, null, false);
-        if (contentView != null) {
-            empty = (EmptyView) contentView.findViewById(R.id.empty);
-            content = (ViewGroup) contentView.findViewById(R.id.content);
-            imgLogo = (ImageView) contentView.findViewById(R.id.imgLogo);
-            lblTitle = (TextView) contentView.findViewById(R.id.lblTitle);
-            lblStatus = (TextView) contentView.findViewById(R.id.lblStatus);
-            btnStream = (Button) contentView.findViewById(R.id.btnStream);
-        }
-        return contentView;
+    protected int onCreateView() {
+        return R.layout.channel_detail;
     }
 
     @Override
@@ -155,6 +146,11 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
                 playVideo(response.getTitle(), response.getUrl());
             }
         }
+
+        @Override
+        public boolean isAdded() {
+            return ChannelFragment.this.isAdded();
+        }
     }
 
     private class StreamPlaylistCallback extends TDBasicCallback<StreamPlayList> {
@@ -176,6 +172,11 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
                 ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
                 builder.setMessage("Stream offline :(").setTitle("Error").show();
             }
+        }
+
+        @Override
+        public boolean isAdded() {
+            return ChannelFragment.this.isAdded();
         }
     }
 }

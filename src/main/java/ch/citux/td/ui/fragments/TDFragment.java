@@ -2,10 +2,14 @@ package ch.citux.td.ui.fragments;
 
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 
+import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.ListFragment;
 
+import butterknife.ButterKnife;
 import ch.citux.td.data.worker.TDCallback;
 import ch.citux.td.ui.TDActivity;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
@@ -23,6 +27,15 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
             throw new IllegalStateException("TDFragment must be attached to a TDActivity.");
         }
     }
+
+    @Override
+    public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(onCreateView());
+        ButterKnife.inject(this, view);
+        return view;
+    }
+
+    protected abstract int onCreateView();
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

@@ -10,4 +10,6 @@ public interface TDCallback<Result> {
 
     public void onError(String title, String message);
 
+    public boolean isAdded();
+
 }

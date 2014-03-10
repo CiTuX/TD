@@ -30,7 +30,9 @@ public abstract class TDTask<Params, Result extends Base> extends AsyncTask<Para
         super.onPostExecute(result);
         if (result != null) {
             if (!result.hasError()) {
-                callback.onResponse(result);
+                if (callback.isAdded()) {
+                    callback.onResponse(result);
+                }
             } else {
                 callback.onError(getString(R.string.dialog_error_title), result.getError());
             }

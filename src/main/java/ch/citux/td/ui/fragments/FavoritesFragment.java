@@ -4,11 +4,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.apache.commons.lang3.StringUtils;
-import org.holoeverywhere.LayoutInflater;
 
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
@@ -27,8 +25,8 @@ public class FavoritesFragment extends TDFragment<Follows> implements AdapterVie
     private FavoritesAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.list, container, false);
+    protected int onCreateView() {
+        return R.layout.list;
     }
 
     @Override
@@ -104,6 +102,11 @@ public class FavoritesFragment extends TDFragment<Follows> implements AdapterVie
         @Override
         public void onResponse(Channel response) {
             adapter.updateChannel(response);
+        }
+
+        @Override
+        public boolean isAdded() {
+            return FavoritesFragment.this.isAdded();
         }
     }
 }
