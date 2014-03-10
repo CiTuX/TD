@@ -3,15 +3,17 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.3'
+        classpath 'com.android.tools.build:gradle:0.9.0'
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.0.1'
     }
 }
 
 apply plugin: 'android'
+apply plugin: 'hugo'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.1"
+    buildToolsVersion "19.0.3"
 
 
     repositories {
@@ -34,6 +36,7 @@ android {
         compile 'com.google.android.gms:play-services:4.2.42'
         compile 'org.apache.commons:commons-lang3:3.2.1'
         compile 'com.squareup.picasso:picasso:2.2.0'
+        compile 'com.jakewharton:butterknife:4.0.1'
 
         //Jars
         compile files('libs/m3u8parser.jar')

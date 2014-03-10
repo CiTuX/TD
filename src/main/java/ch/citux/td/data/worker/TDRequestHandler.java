@@ -16,6 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.Response;
 import ch.citux.td.util.Log;
+import hugo.weaving.DebugLog;
 
 public class TDRequestHandler {
 
@@ -24,6 +25,7 @@ public class TDRequestHandler {
     private static final String HTTPS = "https";
     private static final String HEADER_ACCEPT = "Accept";
 
+    @DebugLog
     public static Response<String> startStringRequest(String request) {
         Response.Status status;
         String result = "";
@@ -42,6 +44,7 @@ public class TDRequestHandler {
         return new Response<String>(status, result);
     }
 
+    @DebugLog
     public static Response<Playlist> startPlaylistRequest(String request) {
         Response.Status status;
         Playlist result = null;
@@ -59,8 +62,8 @@ public class TDRequestHandler {
         return new Response<Playlist>(status, result);
     }
 
+    @DebugLog
     private static Response<InputStream> startRequest(String request) {
-        Log.d(TAG, "Url :" + request);
         Response.Status status;
         InputStream result = null;
         HttpURLConnection urlConnection = null;
