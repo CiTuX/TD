@@ -36,4 +36,3 @@ gradle.properties
 #Other
 .DS_Store
 tmp
-config

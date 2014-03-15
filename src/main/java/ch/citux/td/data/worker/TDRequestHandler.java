@@ -79,7 +79,7 @@ public class TDRequestHandler {
             }
 
             if (request.startsWith(TDConfig.URL_API_TWITCH_KRAKEN_BASE)) {
-                urlConnection.addRequestProperty(HEADER_ACCEPT, TDConfig.TWITCH_ACCEPT);
+                urlConnection.addRequestProperty(HEADER_ACCEPT, TDConfig.MIME_TWITCH);
             }
 
             result = urlConnection.getInputStream();
