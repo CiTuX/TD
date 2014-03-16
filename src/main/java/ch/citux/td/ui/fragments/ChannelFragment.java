@@ -20,6 +20,7 @@ import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Logo;
 import ch.citux.td.data.model.Status;
 import ch.citux.td.data.model.StreamPlayList;
+import ch.citux.td.data.model.StreamQuality;
 import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.TDBasicCallback;
@@ -33,15 +34,15 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
 
     public static final String CHANNEL = "channel";
 
-    private ArchiveAdapter adapter;
-    private Channel channel;
-
     @InjectView(R.id.empty) EmptyView empty;
     @InjectView(R.id.content) ViewGroup content;
     @InjectView(R.id.imgLogo) ImageView imgLogo;
     @InjectView(R.id.lblTitle) TextView lblTitle;
     @InjectView(R.id.lblStatus) TextView lblStatus;
     @InjectView(R.id.btnStream) Button btnStream;
+
+    private ArchiveAdapter adapter;
+    private Channel channel;
 
     @Override
     protected int onCreateView() {
@@ -163,8 +164,9 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         public void onResponse(StreamPlayList response) {
             Log.d(this, "Streams :" + response.getStreams().toString());
             if (response.getStreams() != null && response.getStreams().size() > 0) {
-                //TODO quality from settings
-                String url = response.getStream(StreamPlayList.QUALITY_MEDIUM);
+                StreamQuality streamQuality = StreamPlayList.parseQuality(getDefaultSharedPreferences().getString(R.id.stream_quality, StreamPlayList.QUALITY_MEDIUM.getName()));
+                Log.d(this, "streamQuality: " + streamQuality.getName());
+                String url = response.getStream(streamQuality);
                 if (url != null) {
                     playVideo(channel.getTitle(), url);
                 }

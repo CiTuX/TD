@@ -17,7 +17,6 @@ import ch.citux.td.data.model.Video;
 
 public class DtoMapper {
 
-
     public static Channel mapChannel(TwitchChannel tChannel) {
         Channel channel = new Channel();
         channel.setId(tChannel.get_id());
@@ -49,11 +48,13 @@ public class DtoMapper {
     public static Stream mapStream(TwitchStream tStream) {
         Stream stream = new Stream();
         TwitchStreamElement streamElement = null;
+
         if (tStream.getStream() != null) {
             streamElement = tStream.getStream();
         } else if (tStream.getStreams() != null) {
             streamElement = tStream.getStreams().get(0);
         }
+
         if (streamElement != null) {
             stream.setId(streamElement.get_id());
             stream.setChannel(mapChannel(streamElement.getChannel()));
@@ -63,7 +64,6 @@ public class DtoMapper {
             stream.setStatus(streamElement.getStatus());
         }
         return stream;
-
     }
 
     private static ArrayList<Logo> readLogos(String hqLogo) {

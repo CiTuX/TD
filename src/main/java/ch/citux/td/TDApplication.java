@@ -18,5 +18,4 @@ public class TDApplication extends Application {
         }
         return null;
     }
-
 }

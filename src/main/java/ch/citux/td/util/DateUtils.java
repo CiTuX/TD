@@ -28,5 +28,4 @@ public class DateUtils {
             return String.format(Locale.ENGLISH, "%d:%02d", minutes, seconds);
         }
     }
-
 }
