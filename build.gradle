@@ -42,24 +42,17 @@ android {
         compile files('libs/m3u8parser.jar')
     }
 
-    signingConfigs {
-        debug {
-            storeFile file("config/debug.keystore")
-        }
-        release {
-            storeFile file(releaseKeystore)
-            storePassword releaseStorePW
-            keyAlias releaseKeyalias
-            keyPassword releaseKeyPW
-        }
-    }
-
-    buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
-        }
-        release {
-            signingConfig signingConfigs.release
+    if (hasProperty('debugKeystore') && hasProperty('releaseKeystore')) {
+        signingConfigs {
+            debug {
+                storeFile file(debugKeystore)
+            }
+            release {
+                storeFile file(releaseKeystore)
+                storePassword releaseStorePW
+                keyAlias releaseKeyalias
+                keyPassword releaseKeyPW
+            }
         }
     }
 }
