@@ -1,16 +1,16 @@
 package ch.citux.td.data.model;
 
-import java.util.ArrayList;
+import android.util.SparseArray;
 
 public class Follows extends Base {
 
-    private ArrayList<Channel> channels;
+    private SparseArray<Channel> channels;
 
-    public ArrayList<Channel> getChannels() {
+    public SparseArray<Channel> getChannels() {
         return channels;
     }
 
-    public void setChannels(ArrayList<Channel> channels) {
+    public void setChannels(SparseArray<Channel> channels) {
         this.channels = channels;
     }
 }

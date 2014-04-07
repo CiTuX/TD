@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Channel extends Base {
 
-    private long id;
+    private int id;
     private ArrayList<Logo> logos;
     private String name;
     private Status status;
     private String title;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

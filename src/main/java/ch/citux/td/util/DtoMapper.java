@@ -1,5 +1,7 @@
 package ch.citux.td.util;
 
+import android.util.SparseArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,10 +78,11 @@ public class DtoMapper {
         return logos;
     }
 
-    public static ArrayList<Channel> mapTwitchChannels(List<TwitchChannels> tChannels) {
-        ArrayList<Channel> channels = new ArrayList<Channel>();
+    public static SparseArray<Channel> mapTwitchChannels(List<TwitchChannels> tChannels) {
+        SparseArray<Channel> channels = new SparseArray<Channel>();
         for (TwitchChannels tChannel : tChannels) {
-            channels.add(mapChannel(tChannel.getChannel()));
+            Channel channel = mapChannel(tChannel.getChannel());
+            channels.put(channel.getId(), channel);
         }
         return channels;
     }

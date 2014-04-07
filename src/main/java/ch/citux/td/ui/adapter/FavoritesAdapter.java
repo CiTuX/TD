@@ -1,6 +1,7 @@
 package ch.citux.td.ui.adapter;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
 import ch.citux.td.R;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Logo;
@@ -20,33 +19,31 @@ import ch.citux.td.data.model.Status;
 
 public class FavoritesAdapter extends BaseAdapter {
 
-    private static final int ANIMATION_DURATION = 500;
-
-    private ArrayList<Channel> data;
+    private SparseArray<Channel> data;
     private LayoutInflater inflater;
     private Picasso picasso;
 
     public FavoritesAdapter(Context context) {
-        init(context, new ArrayList<Channel>());
+        init(context, new SparseArray<Channel>());
     }
 
-    public FavoritesAdapter(Context context, ArrayList<Channel> data) {
+    public FavoritesAdapter(Context context, SparseArray<Channel> data) {
         init(context, data);
     }
 
-    private void init(Context context, ArrayList<Channel> data) {
+    private void init(Context context, SparseArray<Channel> data) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
         this.picasso = Picasso.with(context);
     }
 
-    public void setData(ArrayList<Channel> data) {
-        this.data = data;
-        notifyDataSetChanged();
+    public SparseArray<Channel> getData() {
+        return data;
     }
 
-    public ArrayList<Channel> getData() {
-        return data;
+    public void setData(SparseArray<Channel> data) {
+        this.data = data;
+        notifyDataSetChanged();
     }
 
     public void clear() {
@@ -55,14 +52,15 @@ public class FavoritesAdapter extends BaseAdapter {
     }
 
     public void updateChannel(Channel channel) {
-        for (int i = 0; i != data.size(); i++) {
-            Channel item = data.get(i);
-            if (item.getName().equals(channel.getName())) {
-                item.setStatus(channel.getStatus());
-                data.set(i, item);
-            }
+        updateChannel(channel.getId(), channel.getStatus());
+    }
+
+    public void updateChannel(int id, Status status) {
+        Channel channel = data.get(id);
+        if (channel != null) {
+            channel.setStatus(status);
+            notifyDataSetChanged();
         }
-        notifyDataSetInvalidated();
     }
 
     private void updateStatus(Status status, ViewHolder holder) {
@@ -103,12 +101,12 @@ public class FavoritesAdapter extends BaseAdapter {
 
     @Override
     public Channel getItem(int position) {
-        return data.get(position);
+        return data.valueAt(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).getId();
+        return data.keyAt(position);
     }
 
     @Override

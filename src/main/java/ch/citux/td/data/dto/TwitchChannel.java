@@ -5,7 +5,7 @@ import java.util.List;
 
 public class TwitchChannel {
 
-    private long _id;
+    private int _id;
     private String background;
     private String banner;
     private Date created_at;
@@ -20,11 +20,11 @@ public class TwitchChannel {
     private String url;
     private String video_banner;
 
-    public long get_id() {
+    public int get_id() {
         return _id;
     }
 
-    public void set_id(long _id) {
+    public void set_id(int _id) {
         this._id = _id;
     }
 

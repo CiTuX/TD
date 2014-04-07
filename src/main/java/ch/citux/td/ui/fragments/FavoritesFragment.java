@@ -63,10 +63,11 @@ public class FavoritesFragment extends TDFragment<Follows> implements AdapterVie
             loadData();
         } else {
             //Only status update
-            for (Channel channel : adapter.getData()) {
+            for (int i = 0; i < adapter.getData().size(); i++) {
+                Channel channel = adapter.getData().valueAt(i);
                 channel.setStatus(Status.UNKNOWN);
                 adapter.updateChannel(channel);
-                TDTaskManager.getStatus(new ChannelCallback(this), channel.getName());
+                TDTaskManager.getStatus(new ChannelCallback(channel.getId(), this), channel.getName());
             }
         }
     }
@@ -78,10 +79,10 @@ public class FavoritesFragment extends TDFragment<Follows> implements AdapterVie
             setListAdapter(adapter);
         } else {
             adapter.setData(response.getChannels());
-            getListView().invalidate();
         }
-        for (Channel channel : response.getChannels()) {
-            TDTaskManager.getStatus(new ChannelCallback(this), channel.getName());
+        for (int i = 0; i < response.getChannels().size(); i++) {
+            Channel channel = response.getChannels().valueAt(i);
+            TDTaskManager.getStatus(new ChannelCallback(channel.getId(), this), channel.getName());
         }
     }
 
@@ -95,13 +96,16 @@ public class FavoritesFragment extends TDFragment<Follows> implements AdapterVie
 
     private class ChannelCallback extends TDBasicCallback<Channel> {
 
-        protected ChannelCallback(Object caller) {
+        private int id;
+
+        protected ChannelCallback(int id, Object caller) {
             super(caller);
+            this.id = id;
         }
 
         @Override
         public void onResponse(Channel response) {
-            adapter.updateChannel(response);
+            adapter.updateChannel(id, response.getStatus());
         }
 
         @Override
