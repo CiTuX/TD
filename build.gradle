@@ -33,7 +33,7 @@ android {
 
         //3th Party
         compile 'com.google.code.gson:gson:2.2.4'
-        compile 'com.google.android.gms:play-services:4.2.42'
+        compile 'com.google.android.gms:play-services:4.3.23'
         compile 'org.apache.commons:commons-lang3:3.2.1'
         compile 'com.squareup.picasso:picasso:2.2.0'
         compile 'com.jakewharton:butterknife:4.0.1'
