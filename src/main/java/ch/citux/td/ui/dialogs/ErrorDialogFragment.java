@@ -1,3 +1,21 @@
+/*
+ * Copyright 2013-2014 Paul Stöhr
+ * 
+ * This file is part of TD.
+ * 
+ * TD is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package ch.citux.td.ui.dialogs;
 
@@ -17,15 +35,9 @@ import ch.citux.td.R;
 
 public class ErrorDialogFragment extends DialogFragment {
 
-    public interface OnCancelListener {
-        public void onCancel();
-    }
-
     private static final String FRAGMENT_TAG = "ErrorDialogFragment";
-
     private static final String BUNDLE_TITLE = "title";
     private static final String BUNDLE_MESSAGE = "message";
-
     private DialogInterface.OnClickListener mOnClickListener;
     private OnCancelListener mOnCancelListener;
 
@@ -40,6 +52,17 @@ public class ErrorDialogFragment extends DialogFragment {
         dialogFragment.setArguments(args);
 
         return dialogFragment;
+    }
+
+    public static void dismiss(FragmentActivity activity) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Fragment prev = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
+        if (prev != null) {
+            fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -58,6 +81,10 @@ public class ErrorDialogFragment extends DialogFragment {
         if (mOnCancelListener != null) {
             mOnCancelListener.onCancel();
         }
+    }
+
+    public interface OnCancelListener {
+        public void onCancel();
     }
 
     public static class ErrorDialogFragmentBuilder {
@@ -116,16 +143,5 @@ public class ErrorDialogFragment extends DialogFragment {
             ErrorDialogFragment.newInstance(mTitle, mMessage, mOnClickListener, mOnCancelListener)
                     .show(fragmentManager, FRAGMENT_TAG);
         }
-    }
-
-    public static void dismiss(FragmentActivity activity) {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        Fragment prev = fragmentManager.findFragmentByTag(FRAGMENT_TAG);
-        if (prev != null) {
-            fragmentTransaction.remove(prev);
-        }
-        fragmentTransaction.commit();
     }
 }
