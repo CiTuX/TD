@@ -52,18 +52,12 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
 
     public static final String CHANNEL = "channel";
 
-    @InjectView(R.id.empty)
-    EmptyView empty;
-    @InjectView(R.id.content)
-    ViewGroup content;
-    @InjectView(R.id.imgLogo)
-    ImageView imgLogo;
-    @InjectView(R.id.lblTitle)
-    TextView lblTitle;
-    @InjectView(R.id.lblStatus)
-    TextView lblStatus;
-    @InjectView(R.id.btnStream)
-    Button btnStream;
+    @InjectView(R.id.empty) EmptyView empty;
+    @InjectView(R.id.content) ViewGroup content;
+    @InjectView(R.id.imgLogo) ImageView imgLogo;
+    @InjectView(R.id.lblTitle) TextView lblTitle;
+    @InjectView(R.id.lblStatus) TextView lblStatus;
+    @InjectView(R.id.btnStream) Button btnStream;
 
     private ArchiveAdapter adapter;
     private Channel channel;

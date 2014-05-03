@@ -51,10 +51,13 @@ public class FavoritesFragment extends TDFragment<Follows> implements AdapterVie
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        adapter = new FavoritesAdapter(getActivity());
 
-        setListAdapter(adapter);
-        loadData();
+        if (adapter == null || adapter.getCount() == 0) {
+            adapter = new FavoritesAdapter(getActivity());
+
+            setListAdapter(adapter);
+            loadData();
+        }
 
         if (!preferences.contains(TDConfig.SETTINGS_CHANNEL_NAME) || preferences.getString(TDConfig.SETTINGS_CHANNEL_NAME, "").equals("")) {
             EmptyView emptyView = (EmptyView) getListView().getEmptyView();

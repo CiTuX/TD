@@ -42,6 +42,11 @@ android {
         compile files('libs/m3u8parser.jar')
     }
 
+    lintOptions {
+        //ButterKnife
+        disable 'InvalidPackage'
+    }
+
     if (hasProperty('debugKeystore') && hasProperty('releaseKeystore')) {
         signingConfigs {
             debug {

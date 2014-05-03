@@ -20,7 +20,6 @@ package ch.citux.td.ui.adapter;
 
 import android.content.Context;
 import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -29,6 +28,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import org.holoeverywhere.LayoutInflater;
 
 import ch.citux.td.R;
 import ch.citux.td.data.model.Channel;
@@ -133,7 +134,7 @@ public class FavoritesAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.list_item_favorites, null);
+            convertView = inflater.inflate(R.layout.list_item_favorites);
             if (convertView != null) {
                 holder.imgLogo = (ImageView) convertView.findViewById(R.id.imgLogo);
                 holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);

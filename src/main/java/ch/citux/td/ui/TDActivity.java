@@ -263,8 +263,8 @@ public class TDActivity extends Activity {
 //                                            teardown();
                                             }
                                         }
-                                    });
-
+                                    }
+                            );
                 } catch (Exception e) {
                     Log.e(this.getClass(), e);
                 }
