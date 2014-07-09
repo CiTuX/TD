@@ -19,13 +19,15 @@
     <string name="error_data_error_message">Received data invalid</string>
     <string name="error_stream_offline">Stream offline :(</string>
     <string name="error_no_player_title">No video player installed</string>
-    <string name="error_no_player_message">In order to play videos you need to install an external video player.</string>
+    <string name="error_no_player_message">In order to play videos you need
+        to install an external video player, like VLC or MX Player.</string>
 
     <!-- DialogMessages -->
     <string name="dialog_error_title">Error</string>
     <string name="dialog_button_retry">Retry</string>
     <string name="dialog_progress_title">Loading</string>
     <string name="dialog_progress_message">Loading in progress…</string>
+    <string name="dialog_username_title">Username</string>
     <string name="dialog_stream_quality_title">Live-stream quality</string>
     <string name="dialog_stream_quality_default_value">Medium</string>
     <string-array name="dialog_stream_quality_entries">
@@ -37,7 +39,7 @@
 
     <!-- Channel -->
     <string name="channel_name">Channel-Name</string>
-    <string name="channel_name_empty">No username defined</string>
+    <string name="channel_name_empty">No username defined\n<b>[Settings → Username]</b></string>
     <string name="channel_stream">Stream</string>
     <string name="channel_thumbnail">Thumbnail</string>
     <string name="channel_watch_stream">Watch Stream</string>

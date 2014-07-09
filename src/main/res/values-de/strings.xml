@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General -->
+    <string name="app_name">TD</string>
+
+    <!-- ActionBarItems -->
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_clear">Löschen</string>
+    <string name="action_route" />
+
+    <!-- ErrorMessages -->
+    <string name="error_unexpected">Ein Einhorn hat den Request blockiert, bitte kontaktiere den Entwickler.</string>
+    <string name="error_connection_error_title">Verbindungsproblem</string>
+    <string name="error_connection_error_message">Es ist ein Verbindungsproblem aufgetreten.
+        Bitte überprüfe, ob du mit dem Internet verbunden bist.</string>
+    <string name="error_data_error_title">Inkorrekte Daten</string>
+    <string name="error_data_error_message">Die empfangenen Daten sind korrupt</string>
+    <string name="error_stream_offline">Stream offline :(</string>
+    <string name="error_no_player_title">Kein Player vorhanden</string>
+    <string name="error_no_player_message">Damit du Videos abspielen kannst,
+        brauchst du einen Player, wie z.B. VLC oder MX Player.</string>
+
+    <!-- DialogMessages -->
+    <string name="dialog_error_title">Fehler</string>
+    <string name="dialog_button_retry">Nochmals</string>
+    <string name="dialog_progress_title">Laden</string>
+    <string name="dialog_progress_message">Wird geladen…</string>
+    <string name="dialog_username_title">Benutzername</string>
+    <string name="dialog_stream_quality_title">Live-Stream Qualität</string>
+    <string name="dialog_stream_quality_default_value">Medium</string>
+    <string-array name="dialog_stream_quality_entries">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+        <item>Source</item>
+    </string-array>
+
+    <!-- Channel -->
+    <string name="channel_name">Kanal</string>
+    <string name="channel_name_empty">Kein Benutzername definiert\n<b>[Einstellungen → Benutzername]</b></string>
+    <string name="channel_stream">Stream</string>
+    <string name="channel_thumbnail">Thumbnail</string>
+    <string name="channel_watch_stream">Stream anschauen</string>
+    <string name="channel_archives">Archiv</string>
+    <string name="channel_status">Status</string>
+    <string name="channel_logo">Logo</string>
+    <string name="channel_online">Online</string>
+    <string name="channel_offline">Offline</string>
+    <string name="channel_unknown">Unbekannt</string>
+    <string name="channel_archives_empty">Keine archivierten Videos</string>
+    <string name="channel_detail_empty">Channel für Details auswählen</string>
+
+</resources>
