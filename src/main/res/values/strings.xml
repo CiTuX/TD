@@ -17,6 +17,7 @@
     </string>
     <string name="error_data_error_title">Incorrect data</string>
     <string name="error_data_error_message">Received data invalid</string>
+    <string name="error_stream_offline">Stream offline :(</string>
     <string name="error_no_player_title">No video player installed</string>
     <string name="error_no_player_message">In order to play videos you need to install an external video player.</string>
 
@@ -28,7 +29,6 @@
     <string name="dialog_stream_quality_title">Live-stream quality</string>
     <string name="dialog_stream_quality_default_value">Medium</string>
     <string-array name="dialog_stream_quality_entries">
-        <item>Mobile</item>
         <item>Low</item>
         <item>Medium</item>
         <item>High</item>

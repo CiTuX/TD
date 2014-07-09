@@ -119,6 +119,7 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     }
 
     private void playVideo(String title, String url) {
+        Log.d(this, "Playing '" + title + "' from " + url);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
         try {
@@ -187,11 +188,11 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
                 String url = response.getStream(streamQuality);
                 if (url != null) {
                     playVideo(channel.getTitle(), url);
+                    return;
                 }
-            } else {
-                ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
-                builder.setMessage("Stream offline :(").setTitle("Error").show();
             }
+            ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
+            builder.setMessage(R.string.error_stream_offline).setTitle(R.string.dialog_error_title).show();
         }
 
         @Override

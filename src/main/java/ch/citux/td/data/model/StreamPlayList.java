@@ -18,6 +18,8 @@
  */
 package ch.citux.td.data.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 
 public class StreamPlayList extends Base {
@@ -48,7 +50,11 @@ public class StreamPlayList extends Base {
     }
 
     public String getStream(StreamQuality quality) {
-        return streams.get(quality);
+        String url = streams.get(quality);
+        if (StringUtils.isEmpty(url)) {
+            url = getBestStream();
+        }
+        return url;
     }
 
     public String getBestStream() {
