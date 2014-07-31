@@ -30,31 +30,33 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.data.model.Video;
+import ch.citux.td.data.model.Stream;
 import ch.citux.td.util.FormatUtils;
 
-public class ArchiveAdapter extends BaseAdapter {
+public class SearchAdapter extends BaseAdapter {
 
-    private ArrayList<Video> data;
+    private ArrayList<Stream> data;
     private LayoutInflater inflater;
     private Picasso picasso;
 
-    public ArchiveAdapter(Context context) {
-        init(context, new ArrayList<Video>());
+    public SearchAdapter(Context context) {
+        init(context, new ArrayList<Stream>());
     }
 
-    public ArchiveAdapter(Context context, ArrayList<Video> data) {
+    public SearchAdapter(Context context, ArrayList<Stream> data) {
         init(context, data);
     }
 
-    private void init(Context context, ArrayList<Video> data) {
+    private void init(Context context, ArrayList<Stream> data) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
         this.picasso = Picasso.with(context);
     }
 
-    public void setData(ArrayList<Video> data) {
+    public void setData(ArrayList<Stream> data) {
         if (data != null) {
             this.data = data;
             notifyDataSetChanged();
@@ -75,7 +77,7 @@ public class ArchiveAdapter extends BaseAdapter {
     }
 
     @Override
-    public Video getItem(int position) {
+    public Stream getItem(int position) {
         return data.get(position);
     }
 
@@ -86,32 +88,31 @@ public class ArchiveAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Video video = data.get(position);
+        Stream stream = data.get(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.list_item_videos, null);
+            convertView = inflater.inflate(R.layout.list_item_streams, null);
             if (convertView != null) {
-                holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.imgThumbnail);
-                holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
-                holder.lblDate = (TextView) convertView.findViewById(R.id.lblDate);
-                holder.lblDuration = (TextView) convertView.findViewById(R.id.lblDuration);
+                ButterKnife.inject(holder, convertView);
             }
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        picasso.load(video.getThumbnail()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
-        holder.lblTitle.setText(video.getTitle());
-        holder.lblDate.setText(FormatUtils.formateDate(video.getDate()));
-        holder.lblDuration.setText(FormatUtils.formatTime(video.getDuration()));
+        picasso.load(stream.getThumbnail()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
+        holder.lblTitle.setText(stream.getStatus());
+        holder.lblTitle.setSelected(true);
+        holder.lblChannel.setText(stream.getChannel().getName());
+        holder.lblGame.setText(stream.getGame());
+        holder.lblViewers.setText(FormatUtils.formatNumber(stream.getViewers()));
         return convertView;
     }
 
-    private class ViewHolder {
-        ImageView imgThumbnail;
-        TextView lblTitle;
-        TextView lblDate;
-        TextView lblDuration;
+    static class ViewHolder {
+        @InjectView(R.id.imgThumbnail) ImageView imgThumbnail;
+        @InjectView(R.id.lblTitle) TextView lblTitle;
+        @InjectView(R.id.lblChannel) TextView lblChannel;
+        @InjectView(R.id.lblGame) TextView lblGame;
+        @InjectView(R.id.lblViewers) TextView lblViewers;
     }
-
 }

@@ -16,28 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.dto;
+package ch.citux.td.data.worker.tasks;
 
-import java.util.List;
+import ch.citux.td.R;
+import ch.citux.td.data.model.SearchStreams;
+import ch.citux.td.data.service.TDServiceImpl;
+import ch.citux.td.data.worker.TDCallback;
 
-public class TwitchChannels {
+public class TaskSearchStreams extends TDTask<String, SearchStreams> {
 
-    private TwitchChannel channel;
-    private List<TwitchChannel> channels;
 
-    public TwitchChannel getChannel() {
-        return channel;
+    public TaskSearchStreams(TDCallback<SearchStreams> callback) {
+        super(callback);
     }
 
-    public void setChannel(TwitchChannel channel) {
-        this.channel = channel;
-    }
-
-    public List<TwitchChannel> getChannels() {
-        return channels;
-    }
-
-    public void setChannels(List<TwitchChannel> channels) {
-        this.channels = channels;
+    @Override
+    protected SearchStreams doInBackground(String... params) {
+        if (params.length == 2) {
+            return TDServiceImpl.getInstance().searchStreams(params[0], params[1]);
+        }
+        SearchStreams searchStreams = new SearchStreams();
+        searchStreams.setErrorResId(R.string.error_unexpected);
+        return searchStreams;
     }
 }

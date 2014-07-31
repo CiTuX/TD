@@ -18,9 +18,6 @@
  */
 package ch.citux.td.ui.fragments;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,20 +30,15 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Logo;
 import ch.citux.td.data.model.Status;
-import ch.citux.td.data.model.StreamPlayList;
-import ch.citux.td.data.model.StreamQuality;
 import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.Videos;
-import ch.citux.td.data.worker.TDBasicCallback;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.ArchiveAdapter;
-import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.EmptyView;
-import ch.citux.td.util.Log;
+import ch.citux.td.util.VideoPlayer;
 
 public class ChannelFragment extends TDFragment<Videos> implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -118,29 +110,15 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         loadData();
     }
 
-    private void playVideo(String title, String url) {
-        Log.d(this, "Playing '" + title + "' from " + url);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException exception) {
-            ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
-            builder.setTitle(R.string.error_no_player_title);
-            builder.setMessage(R.string.error_no_player_message);
-            builder.show();
-        }
-    }
-
     @Override
     public void onClick(View v) {
-        TDTaskManager.getStreamPlaylist(new StreamPlaylistCallback(this), channel.getName());
+        TDTaskManager.getStreamPlaylist(new VideoPlayer.StreamPlaylistCallback(this, channel.getTitle()), channel.getName());
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Video video = adapter.getItem(position);
-        TDTaskManager.getVideo(new GetVideoCallback(this), video.getId());
+        TDTaskManager.getVideo(new VideoPlayer.GetVideoCallback(this), video.getId());
     }
 
     @Override
@@ -151,53 +129,6 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
             setListAdapter(adapter);
         } else {
             adapter.setData(response.getVideos());
-        }
-    }
-
-    private class GetVideoCallback extends TDBasicCallback<Video> {
-
-        protected GetVideoCallback(Object caller) {
-            super(caller);
-        }
-
-        @Override
-        public void onResponse(Video response) {
-            if (response.getUrl() != null) {
-                playVideo(response.getTitle(), response.getUrl());
-            }
-        }
-
-        @Override
-        public boolean isAdded() {
-            return ChannelFragment.this.isAdded();
-        }
-    }
-
-    private class StreamPlaylistCallback extends TDBasicCallback<StreamPlayList> {
-
-        protected StreamPlaylistCallback(Object caller) {
-            super(caller);
-        }
-
-        @Override
-        public void onResponse(StreamPlayList response) {
-            Log.d(this, "Streams :" + response.getStreams().toString());
-            if (response.getStreams() != null && response.getStreams().size() > 0) {
-                StreamQuality streamQuality = StreamPlayList.parseQuality(getDefaultSharedPreferences().getString(R.id.stream_quality, StreamPlayList.QUALITY_MEDIUM.getName()));
-                Log.d(this, "streamQuality: " + streamQuality.getName());
-                String url = response.getStream(streamQuality);
-                if (url != null) {
-                    playVideo(channel.getTitle(), url);
-                    return;
-                }
-            }
-            ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
-            builder.setMessage(R.string.error_stream_offline).setTitle(R.string.dialog_error_title).show();
-        }
-
-        @Override
-        public boolean isAdded() {
-            return ChannelFragment.this.isAdded();
         }
     }
 }

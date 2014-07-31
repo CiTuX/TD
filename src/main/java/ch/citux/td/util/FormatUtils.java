@@ -20,12 +20,13 @@ package ch.citux.td.util;
 
 import android.text.format.DateFormat;
 
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import ch.citux.td.TDApplication;
 
-public class DateUtils {
+public class FormatUtils {
 
     public static String formateDate(Date date) {
         StringBuilder result = new StringBuilder();
@@ -45,5 +46,9 @@ public class DateUtils {
         } else {
             return String.format(Locale.ENGLISH, "%d:%02d", minutes, seconds);
         }
+    }
+
+    public static String formatNumber(long number) {
+        return NumberFormat.getInstance().format(number);
     }
 }

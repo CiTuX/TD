@@ -16,28 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.dto;
 
-import java.util.List;
+package ch.citux.td.data.model;
 
-public class TwitchChannels {
+import java.util.ArrayList;
 
-    private TwitchChannel channel;
-    private List<TwitchChannel> channels;
+public class SearchChannels extends Base {
 
-    public TwitchChannel getChannel() {
-        return channel;
+    private ArrayList<Channel> result;
+
+    public ArrayList<Channel> getResult() {
+        return result;
     }
 
-    public void setChannel(TwitchChannel channel) {
-        this.channel = channel;
-    }
-
-    public List<TwitchChannel> getChannels() {
-        return channels;
-    }
-
-    public void setChannels(List<TwitchChannel> channels) {
-        this.channels = channels;
+    public void setResult(ArrayList<Channel> result) {
+        this.result = result;
     }
 }

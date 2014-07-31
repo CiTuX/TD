@@ -1,18 +1,18 @@
 /*
  * Copyright 2013-2014 Paul Stöhr
- * 
+ *
  * This file is part of TD.
- * 
+ *
  * TD is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,6 +22,7 @@ package ch.citux.td.ui.fragments;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
@@ -56,17 +57,15 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
     protected abstract int onCreateView();
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getSupportActionBar().setTitle("");
+    public void onResume() {
+        super.onResume();
+        refreshData();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (activity != null) {
-            activity.showOptions();
-        }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getSupportActionBar().setTitle("");
     }
 
     public void startLoading() {
@@ -87,8 +86,13 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
         builder.setTitle(title).setMessage(message).show();
     }
 
-    public void loadData() {
+    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener){
+        if(getListView() != null){
+            getListView().setOnItemClickListener(onItemClickListener);
+        }
     }
+
+    public abstract void loadData();
 
     public void refreshData() {
         loadData();

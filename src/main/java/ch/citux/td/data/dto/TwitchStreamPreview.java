@@ -18,26 +18,42 @@
  */
 package ch.citux.td.data.dto;
 
-import java.util.List;
+public class TwitchStreamPreview {
 
-public class TwitchChannels {
+    private String small;
+    private String medium;
+    private String large;
+    private String template;
 
-    private TwitchChannel channel;
-    private List<TwitchChannel> channels;
-
-    public TwitchChannel getChannel() {
-        return channel;
+    public String getSmall() {
+        return small;
     }
 
-    public void setChannel(TwitchChannel channel) {
-        this.channel = channel;
+    public void setSmall(String small) {
+        this.small = small;
     }
 
-    public List<TwitchChannel> getChannels() {
-        return channels;
+    public String getMedium() {
+        return medium;
     }
 
-    public void setChannels(List<TwitchChannel> channels) {
-        this.channels = channels;
+    public void setMedium(String medium) {
+        this.medium = medium;
+    }
+
+    public String getLarge() {
+        return large;
+    }
+
+    public void setLarge(String large) {
+        this.large = large;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
     }
 }

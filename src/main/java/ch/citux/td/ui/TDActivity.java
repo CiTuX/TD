@@ -1,57 +1,62 @@
 /*
  * Copyright 2013-2014 Paul Stöhr
- * 
+ *
  * This file is part of TD.
- * 
+ *
  * TD is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package ch.citux.td.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.widget.LinearLayout;
+
+import java.lang.reflect.Field;
 
 import ch.citux.td.R;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.fragments.ChannelFragment;
 import ch.citux.td.ui.fragments.FavoritesFragment;
+import ch.citux.td.ui.fragments.SearchFragment;
 import ch.citux.td.ui.fragments.SettingsFragment;
+import ch.citux.td.util.Log;
 
-public class TDActivity extends Activity {
+public class TDActivity extends Activity implements View.OnFocusChangeListener {
 
     private FavoritesFragment favoritesFragment;
     private ChannelFragment channelFragment;
+    private SearchFragment searchFragment;
 
     private MenuItem settingsItem;
-    private boolean isLoading;
     private MenuItem refreshItem;
-
-    //Casting
-//    private MediaRouter mediaRouter;
-//    private MediaRouteSelector mediaRouteSelector;
-//    private MediaRouter.Callback mediaRouterCallback;
-//    private CastDevice castDevice;
-//    private Cast.Listener castClientListener;
-//    private GoogleApiClient apiClient;
-//    private GoogleApiClient.ConnectionCallbacks connectionCallbacks;
-//    private GoogleApiClient.OnConnectionFailedListener connectionFailedListener;
+    private MenuItem searchItem;
+    private SearchView searchView;
+    private boolean isLoading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,14 +65,6 @@ public class TDActivity extends Activity {
 
         favoritesFragment = new FavoritesFragment();
         channelFragment = new ChannelFragment();
-//        mediaRouter = MediaRouter.getInstance(getApplicationContext());
-//        mediaRouteSelector = new MediaRouteSelector.Builder()
-//                .addControlCategory(CastMediaControlIntent.categoryForCast(TDConfig.CAST_APPLICATION_ID))
-//                .build();
-//        mediaRouterCallback = new TDMediaRouterCallback();
-//        castClientListener = new TDCastListener();
-//        connectionCallbacks = new ConnectionCallbacks();
-//        connectionFailedListener = new ConnectionFailedListener();
 
         if (getSupportFragmentManager().findFragmentById(R.id.content) == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -79,17 +76,28 @@ public class TDActivity extends Activity {
         }
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        mediaRouter.addCallback(mediaRouteSelector, mediaRouterCallback, MediaRouter.CALLBACK_FLAG_PERFORM_ACTIVE_SCAN);
-//    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            if (searchFragment == null) {
+                searchFragment = new SearchFragment();
+            }
+            searchFragment.setQuery(query);
+            searchFragment.loadData();
+
+            if (getSupportFragmentManager().findFragmentById(R.id.content) != searchFragment) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.content, searchFragment);
+                transaction.commit();
+            }
+            Log.d(this, query);
+        }
+    }
 
     @Override
     public void onPause() {
-//        if (isFinishing()) {
-//            mediaRouter.removeCallback(mediaRouterCallback);
-//        }
         TDTaskManager.cancelAllTasks();
         super.onPause();
     }
@@ -98,13 +106,34 @@ public class TDActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+
         refreshItem = menu.findItem(R.id.menu_refresh);
         settingsItem = menu.findItem(R.id.menu_settings);
+        searchItem = menu.findItem(R.id.menu_search);
 
-//        MenuItem mediaRouteMenuItem = menu.findItem(R.id.menu_media_route);
-//        MediaRouteActionProvider mediaRouteActionProvider = (MediaRouteActionProvider) MenuItemCompat.getActionProvider(mediaRouteMenuItem);
-//        mediaRouteActionProvider.setRouteSelector(mediaRouteSelector);
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextFocusChangeListener(this);
 
+        //Replace the system icons for higher resolution
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            try {
+                Field searchField = SearchView.class.getDeclaredField("mSearchButton");
+                searchField.setAccessible(true);
+                ImageView searchBtn = (ImageView) searchField.get(searchView);
+                searchBtn.setImageResource(R.drawable.ic_action_search);
+                searchField = SearchView.class.getDeclaredField("mSearchPlate");
+                searchField.setAccessible(true);
+                LinearLayout searchPlate = (LinearLayout) searchField.get(searchView);
+                ((ImageView) searchPlate.getChildAt(1)).setImageResource(R.drawable.abc_ic_clear);
+            } catch (NoSuchFieldException e) {
+                Log.e(getClass(), e);
+            } catch (IllegalAccessException e) {
+                Log.e(getClass(), e);
+            }
+        }
         return true;
     }
 
@@ -117,8 +146,8 @@ public class TDActivity extends Activity {
                 }
                 return true;
             case R.id.menu_settings:
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction
+                getSupportFragmentManager()
+                        .beginTransaction()
                         .replace(R.id.content, new SettingsFragment())
                         .addToBackStack(SettingsFragment.class.getSimpleName())
                         .commit();
@@ -155,21 +184,27 @@ public class TDActivity extends Activity {
         }
     }
 
-    public void showOptions() {
+    public void showActionItems() {
         if (refreshItem != null) {
             refreshItem.setVisible(true);
         }
         if (settingsItem != null) {
             settingsItem.setVisible(true);
         }
+        if(searchItem != null){
+            searchItem.setVisible(true);
+        }
     }
 
-    public void hideOptions() {
+    public void hideActionItems() {
         if (refreshItem != null) {
             refreshItem.setVisible(false);
         }
         if (settingsItem != null) {
             settingsItem.setVisible(false);
+        }
+        if(searchItem != null){
+            searchItem.setVisible(false);
         }
     }
 
@@ -180,94 +215,29 @@ public class TDActivity extends Activity {
         if (channelFragment != null && channelFragment.isAdded()) {
             channelFragment.refreshData();
         }
+        if(searchFragment != null && searchFragment.isAdded()){
+            searchFragment.refreshData();
+        }
     }
 
-//    private class TDMediaRouterCallback extends MediaRouter.Callback {
-//
-//        @Override
-//        public void onRouteSelected(MediaRouter router, MediaRouter.RouteInfo info) {
-//            castDevice = CastDevice.getFromBundle(info.getExtras());
-//            String routeId = info.getId();
-//
-//            Cast.CastOptions.Builder apiOptionsBuilder = Cast.CastOptions.builder(castDevice, castClientListener);
-//
-//            apiClient = new GoogleApiClient.Builder(TDActivity.this)
-//                    .addApi(Cast.API, apiOptionsBuilder.build())
-//                    .addConnectionCallbacks(connectionCallbacks)
-//                    .addOnConnectionFailedListener(connectionFailedListener)
-//                    .build();
-//            apiClient.connect();
-//        }
-//
-//        @Override
-//        public void onRouteUnselected(MediaRouter router, MediaRouter.RouteInfo info) {
-////            teardown();
-//            castDevice = null;
-//        }
-//    }
+    @Override
+    public void onFocusChange(View view, boolean queryTextFocused) {
+        if (queryTextFocused) {
+            if (settingsItem != null) {
+                settingsItem.setVisible(false);
+            }
+        } else {
+            MenuItemCompat.collapseActionView(searchItem);
 
-//    private class TDCastListener extends Cast.Listener {
-//        @Override
-//        public void onApplicationStatusChanged() {
-//            super.onApplicationStatusChanged();
-//        }
-//
-//        @Override
-//        public void onApplicationDisconnected(int statusCode) {
-//            super.onApplicationDisconnected(statusCode);
-//        }
-//
-//        @Override
-//        public void onVolumeChanged() {
-//            super.onVolumeChanged();
-//        }
-//    }
-//
-//    private class ConnectionCallbacks implements GoogleApiClient.ConnectionCallbacks {
-//
-//        private boolean waitingForReconnect;
-//
-//        @Override
-//        public void onConnected(Bundle connectionHint) {
-//            if (waitingForReconnect) {
-//                waitingForReconnect = false;
-////                reconnectChannels();
-//            } else {
-//                try {
-//                    Cast.CastApi.launchApplication(apiClient, TDConfig.CAST_APPLICATION_ID, false)
-//                            .setResultCallback(
-//                                    new ResultCallback<Cast.ApplicationConnectionResult>() {
-//                                        @Override
-//                                        public void onResult(Cast.ApplicationConnectionResult result) {
-//                                            Status status = result.getStatus();
-//                                            if (status.isSuccess()) {
-//                                                ApplicationMetadata applicationMetadata = result.getApplicationMetadata();
-//                                                String sessionId = result.getSessionId();
-//                                                String applicationStatus = result.getApplicationStatus();
-//                                                boolean wasLaunched = result.getWasLaunched();
-//                                            } else {
-////                                            teardown();
-//                                            }
-//                                        }
-//                                    }
-//                            );
-//                } catch (Exception e) {
-//                    Log.e(this.getClass(), e);
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onConnectionSuspended(int cause) {
-//            waitingForReconnect = true;
-//        }
-//    }
-//
-//    private class ConnectionFailedListener implements GoogleApiClient.OnConnectionFailedListener {
-//
-//        @Override
-//        public void onConnectionFailed(ConnectionResult result) {
-////            teardown();
-//        }
-//    }
+            if (settingsItem != null) {
+                settingsItem.setVisible(true);
+            }
+
+            if (getSupportFragmentManager().findFragmentById(R.id.content) == searchFragment) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.content, favoritesFragment);
+                transaction.commit();
+            }
+        }
+    }
 }

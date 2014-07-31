@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013-2014 Paul Stöhr
+  ~
+  ~ This file is part of TD.
+  ~
+  ~ TD is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
     <!-- General -->
     <string name="app_name">TD</string>
@@ -7,6 +26,8 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
     <string name="action_clear">Clear</string>
+    <string name="action_search">Search</string>
+    <string name="action_search_hint">Search stream</string>
     <string name="action_route" />
 
     <!-- ErrorMessages -->
@@ -31,6 +52,7 @@
     <string name="dialog_stream_quality_title">Live-stream quality</string>
     <string name="dialog_stream_quality_default_value">Medium</string>
     <string-array name="dialog_stream_quality_entries">
+        <item>Mobile</item>
         <item>Low</item>
         <item>Medium</item>
         <item>High</item>
@@ -51,5 +73,11 @@
     <string name="channel_unknown">Unknown</string>
     <string name="channel_archives_empty">No archived videos</string>
     <string name="channel_detail_empty">Select a channel for details</string>
+
+    <!-- Stream -->
+    <string name="stream_viewers">Viewers</string>
+
+    <!-- Search -->
+    <string name="search_no_result">No streams found</string>
 
 </resources>

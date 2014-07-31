@@ -1,18 +1,18 @@
 /*
  * Copyright 2013-2014 Paul Stöhr
- * 
+ *
  * This file is part of TD.
- * 
+ *
  * TD is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,6 +26,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Follows;
+import ch.citux.td.data.model.SearchChannels;
+import ch.citux.td.data.model.SearchStreams;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.Videos;
@@ -35,6 +37,8 @@ import ch.citux.td.data.worker.tasks.TaskGetChannel;
 import ch.citux.td.data.worker.tasks.TaskGetFavorites;
 import ch.citux.td.data.worker.tasks.TaskGetStreamPlaylist;
 import ch.citux.td.data.worker.tasks.TaskGetVideo;
+import ch.citux.td.data.worker.tasks.TaskSearchChannels;
+import ch.citux.td.data.worker.tasks.TaskSearchStreams;
 
 public class TDTaskManager {
 
@@ -100,6 +104,20 @@ public class TDTaskManager {
     public static TDTask getStreamPlaylist(TDCallback<StreamPlayList> callback, String channel) {
         TaskGetStreamPlaylist task = new TaskGetStreamPlaylist(callback);
         task.execute(channel);
+        tasks.add(task);
+        return task;
+    }
+
+    public static TDTask searchStreams(TDCallback<SearchStreams> callback, String query, int offset) {
+        TaskSearchStreams task = new TaskSearchStreams(callback);
+        task.execute(query, String.valueOf(offset));
+        tasks.add(task);
+        return task;
+    }
+
+    public static TDTask searchChannels(TDCallback<SearchChannels> callback, String query, int offset) {
+        TaskSearchChannels task = new TaskSearchChannels(callback);
+        task.execute(query, String.valueOf(offset));
         tasks.add(task);
         return task;
     }
