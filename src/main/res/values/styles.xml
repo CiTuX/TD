@@ -96,7 +96,7 @@
         <item name="popupMenuStyle">@style/PopupMenu.TD</item>
         <item name="dropDownListViewStyle">@style/DropDownListView.TD</item>
         <item name="searchViewSearchIcon">@drawable/ic_action_search</item>
-        <!--<item name="searchViewCloseIcon">@drawable/ic_action_remove</item>-->
+        <item name="android:textColorHint">@android:color/white</item>
     </style>
 
     <style name="EditTextTD" parent="android:Widget.EditText">

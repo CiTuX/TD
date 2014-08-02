@@ -71,6 +71,7 @@
     <style name="Theme.TD.Widget" parent="@style/Theme.AppCompat">
         <item name="android:popupMenuStyle">@style/PopupMenu.TD</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.TD</item>
+        <item name="android:textColorHint">@android:color/white</item>
     </style>
 
 </resources>
