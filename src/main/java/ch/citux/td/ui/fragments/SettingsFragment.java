@@ -40,17 +40,23 @@ public class SettingsFragment extends PreferenceFragment {
         }
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.preferences);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         getSupportActionBar().setTitle(R.string.action_settings);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         if (activity != null) {
             activity.hideActionItems();
         }
-
-        addPreferencesFromResource(R.xml.preferences);
     }
 
     @Override

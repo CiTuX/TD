@@ -39,13 +39,16 @@ public class VideoPlayer {
         Log.d(TAG, "Playing '" + title + "' from " + url);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
-        try {
-            fragment.startActivity(intent);
-        } catch (ActivityNotFoundException exception) {
-            ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(fragment.getActivity());
-            builder.setTitle(R.string.error_no_player_title);
-            builder.setMessage(R.string.error_no_player_message);
-            builder.show();
+
+        if (intent.getData() != null) {
+            try {
+                fragment.startActivity(intent);
+            } catch (ActivityNotFoundException exception) {
+                ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(fragment.getActivity());
+                builder.setTitle(R.string.error_no_player_title);
+                builder.setMessage(R.string.error_no_player_message);
+                builder.show();
+            }
         }
     }
 

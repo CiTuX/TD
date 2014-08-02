@@ -24,7 +24,7 @@
     android:minWidth="56dp">
 
     <ProgressBar
-        style="?android:attr/progressBarStyle"
+        style="@style/Holo.ProgressBar.Small"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center" />

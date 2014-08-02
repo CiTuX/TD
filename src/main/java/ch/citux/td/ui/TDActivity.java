@@ -66,7 +66,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         favoritesFragment = new FavoritesFragment();
         channelFragment = new ChannelFragment();
 
-        if (getSupportFragmentManager().findFragmentById(R.id.content) == null) {
+        if (getSupportFragmentManager().findFragmentById(R.id.content) == null && !favoritesFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.content, favoritesFragment);
             if (findViewById(R.id.detail) != null) { //Tablet
