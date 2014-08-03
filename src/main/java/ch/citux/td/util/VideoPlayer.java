@@ -88,14 +88,16 @@ public class VideoPlayer {
 
         @Override
         public void onResponse(StreamPlayList response) {
-            Log.d(this, "Streams :" + response.getStreams().toString());
-            if (response.getStreams() != null && response.getStreams().size() > 0) {
-                StreamQuality streamQuality = StreamPlayList.parseQuality(fragment.getDefaultSharedPreferences().getString(R.id.stream_quality, StreamPlayList.QUALITY_MEDIUM.getName()));
-                Log.d(this, "streamQuality: " + streamQuality.getName());
-                String url = response.getStream(streamQuality);
-                if (url != null) {
-                    playVideo(fragment, title, url);
-                    return;
+            if (response != null && response.getStreams() != null) {
+                Log.d(this, "Streams :" + response.getStreams().toString());
+                if (response.getStreams() != null && response.getStreams().size() > 0) {
+                    StreamQuality streamQuality = StreamPlayList.parseQuality(fragment.getDefaultSharedPreferences().getString(R.id.stream_quality, StreamPlayList.QUALITY_MEDIUM.getName()));
+                    Log.d(this, "streamQuality: " + streamQuality.getName());
+                    String url = response.getStream(streamQuality);
+                    if (url != null) {
+                        playVideo(fragment, title, url);
+                        return;
+                    }
                 }
             }
             ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(fragment.getActivity());

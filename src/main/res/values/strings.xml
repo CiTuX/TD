@@ -61,7 +61,7 @@
 
     <!-- Channel -->
     <string name="channel_name">Channel-Name</string>
-    <string name="channel_name_empty">No username defined\n<b>[Settings → Username]</b></string>
+    <string name="channel_name_empty">No username defined\n\n<b>[Settings → Username]</b></string>
     <string name="channel_stream">Stream</string>
     <string name="channel_thumbnail">Thumbnail</string>
     <string name="channel_watch_stream">Watch Stream</string>
