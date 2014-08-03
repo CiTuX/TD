@@ -60,7 +60,7 @@ public class TDRequestHandler {
 
     private static SSLContext sslContext;
 
-    private static void init() throws CertificateException, NoSuchAlgorithmException, IOException, KeyManagementException, KeyStoreException {
+    private static void init() throws CertificateException, NoSuchAlgorithmException, IOException, KeyManagementException, KeyStoreException, IllegalStateException {
         if (sslContext == null) {
             KeyStore keyStore = KeyStore.getInstance(BKS);
             keyStore.load(TDApplication.getContext().getResources().openRawResource(R.raw.certs), null);
@@ -148,6 +148,10 @@ public class TDRequestHandler {
             Log.e(TAG, e);
             status = Response.Status.ERROR_CONNECTION;
         } catch (CertificateException e) {
+            Log.e(TAG, e);
+            status = Response.Status.ERROR_CONNECTION;
+        } catch (IllegalStateException e) {
+            sslContext = null; //SSLContext is not initialized.
             Log.e(TAG, e);
             status = Response.Status.ERROR_CONNECTION;
         }
