@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright 2013-2014 Paul Stöhr
   ~
   ~ This file is part of TD.
@@ -18,9 +19,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp">
 
     <ImageView
         android:id="@+id/imgThumbnail"
@@ -29,7 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:scaleType="center"
-        android:contentDescription="@string/channel_thumbnail" />
+        android:contentDescription="@string/channel_thumbnail"/>
 
     <TextView
         android:id="@+id/lblTitle"
@@ -40,8 +41,7 @@
         android:layout_marginLeft="8dp"
         android:includeFontPadding="false"
         android:lines="2"
-        android:textSize="16sp" />
-
+        android:textSize="16sp"/>
 
     <ImageView
         android:id="@+id/imgChannel"
@@ -52,7 +52,7 @@
         android:layout_toRightOf="@id/imgThumbnail"
         android:layout_alignBottom="@id/imgThumbnail"
         android:contentDescription="@string/channel_name"
-        android:src="@drawable/ic_channel" />
+        android:src="@drawable/ic_channel"/>
 
     <TextView
         android:id="@+id/lblChannel"
@@ -63,13 +63,14 @@
         android:layout_toRightOf="@id/imgChannel"
         android:layout_toLeftOf="@+id/imgGame"
         android:layout_alignBottom="@id/imgChannel"
-        android:minWidth="64dp"
+        android:minWidth="72dp"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
-        android:gravity="bottom|left"
+        android:lines="1"
         android:singleLine="true"
-        android:textSize="14sp" />
+        android:gravity="bottom|left"
+        android:textSize="14sp"/>
 
     <ImageView
         android:id="@+id/imgGame"
@@ -80,11 +81,11 @@
         android:layout_toLeftOf="@+id/lblGame"
         android:layout_alignBottom="@id/lblChannel"
         android:contentDescription="@string/stream_viewers"
-        android:src="@drawable/ic_game" />
+        android:src="@drawable/ic_game"/>
 
     <TextView
         android:id="@+id/lblGame"
-        android:layout_width="72dp"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginLeft="2dp"
@@ -92,22 +93,22 @@
         android:layout_toLeftOf="@+id/lblViewers"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:lines="1"
         android:singleLine="true"
         android:gravity="bottom|left"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/lblViewers"
-        android:layout_width="48dp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="2dp"
         android:layout_toLeftOf="@+id/imgViewers"
         android:layout_alignBottom="@id/imgThumbnail"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
         android:gravity="bottom|right"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <ImageView
         android:id="@+id/imgViewers"
@@ -119,6 +120,6 @@
         android:layout_alignBottom="@id/lblViewers"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/stream_viewers"
-        android:src="@drawable/ic_watching_now" />
+        android:src="@drawable/ic_watching_now"/>
 
 </RelativeLayout>

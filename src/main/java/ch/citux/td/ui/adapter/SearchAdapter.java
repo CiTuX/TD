@@ -19,6 +19,7 @@
 package ch.citux.td.ui.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +93,7 @@ public class SearchAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.list_item_streams, null);
+            convertView = inflater.inflate(R.layout.list_item_streams, parent, false);
             if (convertView != null) {
                 ButterKnife.inject(holder, convertView);
             }
@@ -101,11 +102,17 @@ public class SearchAdapter extends BaseAdapter {
         }
         picasso.load(stream.getThumbnail()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
         holder.lblTitle.setText(stream.getStatus());
-        holder.lblTitle.setSelected(true);
-        holder.lblChannel.setText(stream.getChannel().getName());
-        holder.lblGame.setText(stream.getGame());
-        holder.lblViewers.setText(FormatUtils.formatNumber(stream.getViewers()));
+        setupMarquee(holder.lblChannel, stream.getChannel().getName());
+        setupMarquee(holder.lblGame, FormatUtils.formatGame(stream.getGame()));
+        setupMarquee(holder.lblViewers, FormatUtils.formatNumber(stream.getViewers()));
         return convertView;
+    }
+
+    private void setupMarquee(TextView textView, String text) {
+        textView.setText(text);
+        textView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        textView.setSingleLine();
+        textView.setSelected(true);
     }
 
     static class ViewHolder {

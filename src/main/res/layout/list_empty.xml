@@ -19,14 +19,14 @@
   -->
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent">
 
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/text"
@@ -36,6 +36,14 @@
         android:padding="8dp"
         android:gravity="center"
         android:textSize="20sp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:visibility="gone"/>
 
 </merge>

@@ -20,6 +20,8 @@ package ch.citux.td.util;
 
 import android.text.format.DateFormat;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -27,6 +29,8 @@ import java.util.Locale;
 import ch.citux.td.TDApplication;
 
 public class FormatUtils {
+
+    private static final String EMPTY_GAME_PLACEHOLDER = "-";
 
     public static String formateDate(Date date) {
         StringBuilder result = new StringBuilder();
@@ -50,5 +54,9 @@ public class FormatUtils {
 
     public static String formatNumber(long number) {
         return NumberFormat.getInstance().format(number);
+    }
+
+    public static String formatGame(String game) {
+        return StringUtils.isEmpty(game) ? EMPTY_GAME_PLACEHOLDER : game;
     }
 }
