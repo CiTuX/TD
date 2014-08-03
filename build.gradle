@@ -34,6 +34,7 @@ repositories {
     mavenCentral()
     maven { url 'http://192.241.191.41/repo/' }
     maven { url 'http://192.241.191.41/snapshot/' }
+    flatDir { dirs 'libs' }
 }
 
 dependencies {
@@ -48,7 +49,10 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.jakewharton:butterknife:5.1.1'
 
-    //Jars
+    //AARs
+    compile(name: 'vitamio-4.2.0-SNAPSHOT', ext: 'aar')
+
+    //JARs
     compile files('libs/m3u8parser.jar')
 }
 

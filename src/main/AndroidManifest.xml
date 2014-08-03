@@ -39,7 +39,7 @@
         <activity
             android:name=".ui.TDActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="nosensor">
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

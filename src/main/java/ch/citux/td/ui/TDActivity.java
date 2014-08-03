@@ -60,13 +60,16 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
     private MenuItem refreshItem;
     private MenuItem searchItem;
     private boolean isLoading;
+    private boolean isTablet;
+    private boolean hasUsername;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        boolean hasUsername = !PreferenceManager.getDefaultSharedPreferences(this).getString(TDConfig.SETTINGS_CHANNEL_NAME, "").equals("");
+        hasUsername = !PreferenceManager.getDefaultSharedPreferences(this).getString(TDConfig.SETTINGS_CHANNEL_NAME, "").equals("");
+        isTablet = findViewById(R.id.detail) != null;
 
         Bundle args = new Bundle();
         args.putBoolean(TDConfig.SETTINGS_CHANNEL_NAME, hasUsername);
@@ -82,7 +85,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (getSupportFragmentManager().findFragmentById(R.id.content) == null && !favoritesFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.content, favoritesFragment);
-            if (findViewById(R.id.detail) != null) { //Tablet
+            if (isTablet) {
                 transaction.add(R.id.detail, channelFragment);
             }
             transaction.commit();
@@ -101,12 +104,9 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             searchFragment.loadData();
 
             if (getSupportFragmentManager().findFragmentById(R.id.content) != searchFragment) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.content, searchFragment);
-                if (findViewById(R.id.detail) != null) { //Tablet
-                    transaction.replace(R.id.detail, videoFragment);
-                }
-                transaction.commit();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.content, searchFragment);
+                fragmentTransaction.commit();
             }
             Log.d(this, query);
         }
@@ -180,8 +180,27 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             arguments.putSerializable(ChannelFragment.CHANNEL, channel);
             channelFragment.setArguments(arguments);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.content, channelFragment).addToBackStack(ChannelFragment.class.getSimpleName()).commit();
+            transaction.replace(R.id.content, channelFragment);
+            transaction.addToBackStack(ChannelFragment.class.getSimpleName());
+            transaction.commit();
         }
+    }
+
+    public void showVideo(String title, String url) {
+        Bundle args = new Bundle();
+        args.putString(VideoFragment.URL, url);
+
+        videoFragment.setArguments(args);
+        if (videoFragment.isAdded()) {
+            videoFragment.playVideo();
+        } else {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(isTablet ? R.id.detail : R.id.content, videoFragment);
+            transaction.addToBackStack(VideoFragment.class.getSimpleName());
+            transaction.commit();
+        }
+        MenuItemCompat.collapseActionView(searchItem);
+        getSupportActionBar().setTitle(title);
     }
 
     public void startLoading() {

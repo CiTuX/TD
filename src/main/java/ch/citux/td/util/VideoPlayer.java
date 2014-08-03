@@ -30,6 +30,7 @@ import ch.citux.td.data.model.Video;
 import ch.citux.td.data.worker.TDBasicCallback;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.fragments.TDFragment;
+import io.vov.vitamio.LibsChecker;
 
 public class VideoPlayer {
 
@@ -37,17 +38,25 @@ public class VideoPlayer {
 
     public static void playVideo(TDFragment fragment, String title, String url) {
         Log.d(TAG, "Playing '" + title + "' from " + url);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
 
-        if (intent.getData() != null) {
-            try {
-                fragment.startActivity(intent);
-            } catch (ActivityNotFoundException exception) {
-                ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(fragment.getActivity());
-                builder.setTitle(R.string.error_no_player_title);
-                builder.setMessage(R.string.error_no_player_message);
-                builder.show();
+        if (LibsChecker.checkVitamioLibs(fragment.getActivity())) { //built-in Player
+            Log.d(TAG, "internal");
+            fragment.getTDActivity().showVideo(title, url);
+        } else { //external Player
+            Log.d(TAG, "external");
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
+
+            if (intent.getData() != null) {
+                try {
+                    fragment.startActivity(intent);
+                } catch (ActivityNotFoundException exception) {
+                    ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(fragment.getActivity());
+                    builder.setTitle(R.string.error_no_player_title);
+                    builder.setMessage(R.string.error_no_player_message);
+                    builder.show();
+                }
             }
         }
     }

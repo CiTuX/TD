@@ -44,7 +44,6 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
 
     public static final String CHANNEL = "channel";
 
-    @InjectView(R.id.empty) EmptyView empty;
     @InjectView(R.id.content) ViewGroup content;
     @InjectView(R.id.imgLogo) ImageView imgLogo;
     @InjectView(R.id.lblTitle) TextView lblTitle;
@@ -66,9 +65,9 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
             updateChannel((Channel) getArguments().get(CHANNEL));
         } else {
             if (hasUsername) {
-                empty.setText(R.string.channel_detail_empty);
+                emptyView.setText(R.string.channel_detail_empty);
             } else {
-                empty.setImage(R.drawable.ic_glitchicon_black);
+                emptyView.setImage(R.drawable.ic_glitchicon_black);
             }
         }
         btnStream.setOnClickListener(this);
@@ -83,13 +82,13 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         }
     }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if (channel != null && empty != null) {
-//            empty.showProgress();
-//        }
-//    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (channel != null && emptyView != null) {
+            emptyView.showProgress();
+        }
+    }
 
     @Override
     public void loadData() {
@@ -108,11 +107,11 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         lblStatus.setText(channel.getStatus().getText());
         btnStream.setVisibility(channel.getStatus() == Status.ONLINE ? View.VISIBLE : View.GONE);
 
-        empty.showProgress();
-        empty.setVisibility(View.GONE);
+        emptyView.showProgress();
+        emptyView.setVisibility(View.GONE);
         content.setVisibility(View.VISIBLE);
 
-        getListView().setEmptyView(empty);
+        getListView().setEmptyView(emptyView);
         loadData();
     }
 
@@ -129,7 +128,7 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
 
     @Override
     public void onResponse(Videos response) {
-        empty.setText(R.string.channel_archives_empty);
+        emptyView.setText(R.string.channel_archives_empty);
         if (adapter == null) {
             adapter = new ArchiveAdapter(getActivity(), response.getVideos());
             setListAdapter(adapter);
