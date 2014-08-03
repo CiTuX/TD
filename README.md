@@ -1,8 +1,9 @@
-#TD
+##TD
+![TD Header](https://raw.githubusercontent.com/CiTuX/TD/master/artwork/Feature%20Graphic.png "TD")
 
 Simple Twitch client for Android
 
-https://play.google.com/store/apps/details?id=ch.citux.td
+<https://play.google.com/store/apps/details?id=ch.citux.td>
 
 ##Setup
 
