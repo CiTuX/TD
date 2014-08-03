@@ -29,13 +29,27 @@ import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.ListFragment;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.Optional;
+import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.worker.TDCallback;
 import ch.citux.td.ui.TDActivity;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
+import ch.citux.td.ui.widget.EmptyView;
 
 public abstract class TDFragment<Result> extends ListFragment implements TDCallback<Result> {
 
     private TDActivity activity;
+    protected boolean hasUsername;
+    @Optional @InjectView(android.R.id.empty) EmptyView emptyView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            hasUsername = getArguments().getBoolean(TDConfig.SETTINGS_CHANNEL_NAME);
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -68,15 +82,26 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
         getSupportActionBar().setTitle("");
     }
 
+    @Override
+    protected EmptyView getEmptyView() {
+        return emptyView;
+    }
+
     public void startLoading() {
         if (activity != null) {
             activity.startLoading();
+            if (emptyView != null) {
+                emptyView.showProgress();
+            }
         }
     }
 
     public void stopLoading() {
         if (activity != null) {
             activity.stopLoading();
+        }
+        if (emptyView != null) {
+            emptyView.showText();
         }
     }
 
@@ -86,8 +111,8 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
         builder.setTitle(title).setMessage(message).show();
     }
 
-    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener){
-        if(getListView() != null){
+    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        if (getListView() != null) {
             getListView().setOnItemClickListener(onItemClickListener);
         }
     }

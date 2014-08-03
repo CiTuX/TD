@@ -65,7 +65,11 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         if (getArguments() != null && getArguments().containsKey(CHANNEL)) {
             updateChannel((Channel) getArguments().get(CHANNEL));
         } else {
-            empty.setText(R.string.channel_detail_empty);
+            if (hasUsername) {
+                empty.setText(R.string.channel_detail_empty);
+            } else {
+                empty.setImage(R.drawable.ic_glitchicon_black);
+            }
         }
         btnStream.setOnClickListener(this);
         getListView().setOnItemClickListener(this);
@@ -74,16 +78,18 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
-        refreshData();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (empty != null) {
-            empty.showProgress();
+        if (channel != null) {
+            refreshData();
         }
     }
+
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (channel != null && empty != null) {
+//            empty.showProgress();
+//        }
+//    }
 
     @Override
     public void loadData() {

@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
@@ -38,12 +39,14 @@ import org.holoeverywhere.widget.LinearLayout;
 import java.lang.reflect.Field;
 
 import ch.citux.td.R;
+import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.fragments.ChannelFragment;
 import ch.citux.td.ui.fragments.FavoritesFragment;
 import ch.citux.td.ui.fragments.SearchFragment;
 import ch.citux.td.ui.fragments.SettingsFragment;
+import ch.citux.td.ui.fragments.VideoFragment;
 import ch.citux.td.util.Log;
 
 public class TDActivity extends Activity implements View.OnFocusChangeListener {
@@ -51,11 +54,11 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
     private FavoritesFragment favoritesFragment;
     private ChannelFragment channelFragment;
     private SearchFragment searchFragment;
+    private VideoFragment videoFragment;
 
     private MenuItem settingsItem;
     private MenuItem refreshItem;
     private MenuItem searchItem;
-    private SearchView searchView;
     private boolean isLoading;
 
     @Override
@@ -63,8 +66,18 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        boolean hasUsername = !PreferenceManager.getDefaultSharedPreferences(this).getString(TDConfig.SETTINGS_CHANNEL_NAME, "").equals("");
+
+        Bundle args = new Bundle();
+        args.putBoolean(TDConfig.SETTINGS_CHANNEL_NAME, hasUsername);
+
         favoritesFragment = new FavoritesFragment();
+        favoritesFragment.setArguments(args);
+
         channelFragment = new ChannelFragment();
+        channelFragment.setArguments(args);
+
+        videoFragment = new VideoFragment();
 
         if (getSupportFragmentManager().findFragmentById(R.id.content) == null && !favoritesFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -90,6 +103,9 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             if (getSupportFragmentManager().findFragmentById(R.id.content) != searchFragment) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.content, searchFragment);
+                if (findViewById(R.id.detail) != null) { //Tablet
+                    transaction.replace(R.id.detail, videoFragment);
+                }
                 transaction.commit();
             }
             Log.d(this, query);
@@ -113,7 +129,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextFocusChangeListener(this);
 
@@ -156,7 +172,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         return super.onOptionsItemSelected(item);
     }
 
-
     public void showChannel(Channel channel) {
         if (channelFragment.isAdded()) {
             channelFragment.updateChannel(channel);
@@ -167,7 +182,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.content, channelFragment).addToBackStack(ChannelFragment.class.getSimpleName()).commit();
         }
-
     }
 
     public void startLoading() {
@@ -191,7 +205,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (settingsItem != null) {
             settingsItem.setVisible(true);
         }
-        if(searchItem != null){
+        if (searchItem != null) {
             searchItem.setVisible(true);
         }
     }
@@ -203,7 +217,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (settingsItem != null) {
             settingsItem.setVisible(false);
         }
-        if(searchItem != null){
+        if (searchItem != null) {
             searchItem.setVisible(false);
         }
     }
@@ -215,7 +229,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (channelFragment != null && channelFragment.isAdded()) {
             channelFragment.refreshData();
         }
-        if(searchFragment != null && searchFragment.isAdded()){
+        if (searchFragment != null && searchFragment.isAdded()) {
             searchFragment.refreshData();
         }
     }

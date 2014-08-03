@@ -59,7 +59,7 @@ public class FavoritesFragment extends TDFragment<Follows> implements AdapterVie
             loadData();
         }
 
-        if (!preferences.contains(TDConfig.SETTINGS_CHANNEL_NAME) || preferences.getString(TDConfig.SETTINGS_CHANNEL_NAME, "").equals("")) {
+        if (!hasUsername) {
             EmptyView emptyView = (EmptyView) getListView().getEmptyView();
             if (emptyView != null) {
                 emptyView.setText(R.string.channel_name_empty);
