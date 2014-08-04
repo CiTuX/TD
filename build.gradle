@@ -71,20 +71,26 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file(debugKeystore)
+        if (project.hasProperty('debugKeystore')) {
+            debug {
+                storeFile file(debugKeystore)
+            }
         }
-        release {
-            storeFile file(releaseKeystore)
-            storePassword releaseStorePW
-            keyAlias releaseKeyalias
-            keyPassword releaseKeyPW
+        if (project.hasProperty('releaseKeystore')) {
+            release {
+                storeFile file(releaseKeystore)
+                storePassword releaseStorePW
+                keyAlias releaseKeyalias
+                keyPassword releaseKeyPW
+            }
         }
     }
 
-    buildTypes {
-        release {
-            signingConfig signingConfigs.release
+    if (project.hasProperty('releaseKeystore')) {
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
