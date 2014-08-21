@@ -32,8 +32,8 @@ apply plugin: 'hugo'
 
 repositories {
     mavenCentral()
-    maven { url 'http://192.241.191.41/repo/' }
-    maven { url 'http://192.241.191.41/snapshot/' }
+    maven { url 'http://holoeverywhere.cf/repo' }
+    maven { url 'http://holoeverywhere.cf/snapshot/' }
     flatDir { dirs 'libs' }
 }
 
