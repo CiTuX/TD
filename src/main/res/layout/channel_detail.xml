@@ -18,90 +18,92 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
-    <RelativeLayout
-        android:id="@+id/content"
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/channel_logo"
+        android:src="@drawable/default_channel_logo_medium"/>
+
+    <TextView
+        android:id="@+id/lblTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_toEndOf="@+id/imgLogo"
+        android:layout_toRightOf="@+id/imgLogo"
+        android:layout_alignTop="@+id/imgLogo"
+        android:textSize="24sp"
+        android:textIsSelectable="false"
+        android:singleLine="true"/>
+
+    <TextView
+        android:id="@+id/lblStatusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toEndOf="@+id/imgLogo"
+        android:layout_toRightOf="@+id/imgLogo"
+        android:layout_below="@+id/lblTitle"
+        android:text="@string/channel_status"/>
+
+    <TextView
+        android:id="@+id/lblStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/lblStatusLabel"
+        android:layout_toRightOf="@+id/lblStatusLabel"
+        android:layout_below="@+id/lblTitle"/>
+
+    <Button
+        android:id="@+id/btnStream"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_below="@+id/imgLogo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/channel_watch_stream"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/lblArchive"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnStream"
+        android:layout_margin="8dp"
+        android:text="@string/channel_archives"
+        android:textSize="16sp"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:minHeight="1dp"
+        android:layout_below="@id/lblArchive"
+        android:visibility="visible"
+        android:background="@android:color/darker_gray"/>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_below="@id/divider"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_height="match_parent"/>
 
-        <ImageView
-            android:id="@+id/imgLogo"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/channel_logo"
-            android:src="@drawable/default_channel_logo_medium"/>
+    <ch.citux.td.ui.widget.EmptyView
+        android:id="@android:id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/lblArchive"/>
 
-        <TextView
-            android:id="@+id/lblTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_toRightOf="@+id/imgLogo"
-            android:layout_alignTop="@+id/imgLogo"
-            android:textSize="24sp"
-            android:textIsSelectable="false"
-            android:singleLine="true"/>
-
-        <TextView
-            android:id="@+id/lblStatusLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_toRightOf="@+id/imgLogo"
-            android:layout_below="@+id/lblTitle"
-            android:text="@string/channel_status"/>
-
-        <TextView
-            android:id="@+id/lblStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/lblStatusLabel"
-            android:layout_below="@+id/lblTitle"/>
-
-        <Button
-            android:id="@+id/btnStream"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_below="@+id/imgLogo"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:text="@string/channel_watch_stream"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/lblArchive"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/btnStream"
-            android:layout_margin="8dp"
-            android:text="@string/channel_archives"
-            android:textSize="16sp"/>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/lblArchive"
-            android:background="@android:color/darker_gray"/>
-
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@id/lblArchive"/>
-
-        <ch.citux.td.ui.widget.EmptyView
-            android:id="@android:id/empty"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@id/lblArchive"/>
-
-    </RelativeLayout>
-
-</FrameLayout>
+</RelativeLayout>

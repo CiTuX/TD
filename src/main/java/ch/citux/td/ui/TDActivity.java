@@ -41,6 +41,7 @@ import java.lang.reflect.Field;
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.Channel;
+import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.fragments.ChannelFragment;
 import ch.citux.td.ui.fragments.FavoritesFragment;
@@ -145,9 +146,9 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
                 LinearLayout searchPlate = (LinearLayout) searchField.get(searchView);
                 ((ImageView) searchPlate.getChildAt(1)).setImageResource(R.drawable.abc_ic_clear);
             } catch (NoSuchFieldException e) {
-                Log.e(getClass(), e);
+                Log.e(this, e);
             } catch (IllegalAccessException e) {
-                Log.e(getClass(), e);
+                Log.e(this, e);
             }
         }
         return true;
@@ -186,10 +187,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         }
     }
 
-    public void showVideo(String title, String url) {
-        Bundle args = new Bundle();
-        args.putString(VideoFragment.URL, url);
-
+    public void showVideo(Bundle args) {
         videoFragment.setArguments(args);
         if (videoFragment.isAdded()) {
             videoFragment.playVideo();
@@ -200,7 +198,12 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             transaction.commit();
         }
         MenuItemCompat.collapseActionView(searchItem);
-        getSupportActionBar().setTitle(title);
+    }
+
+    public void showPlaylist(VideoPlaylist playlist) {
+        if (channelFragment.isAdded()) {
+            channelFragment.showPlaylist(playlist);
+        }
     }
 
     public void startLoading() {
@@ -251,6 +254,10 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (searchFragment != null && searchFragment.isAdded()) {
             searchFragment.refreshData();
         }
+    }
+
+    public boolean isTablet() {
+        return isTablet;
     }
 
     @Override

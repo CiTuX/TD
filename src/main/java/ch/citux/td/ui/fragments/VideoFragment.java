@@ -18,10 +18,13 @@
  */
 package ch.citux.td.ui.fragments;
 
+import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
@@ -29,17 +32,22 @@ import org.holoeverywhere.app.Fragment;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.citux.td.R;
+import ch.citux.td.ui.TDActivity;
 import ch.citux.td.ui.widget.EmptyView;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 
-public class VideoFragment extends Fragment {
+public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedListener {
 
+    public static final String PLAYLIST = "playlist";
+    public static final String TITLE = "title";
     public static final String URL = "url";
 
-    @InjectView(R.id.videoView) VideoView videoView;
     @InjectView(android.R.id.empty) EmptyView emptyView;
+    @InjectView(R.id.videoView) VideoView videoView;
+    @InjectView(R.id.player) View player;
+    @InjectView(R.id.chat) View chat;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,26 +59,70 @@ public class VideoFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        super.setRetainInstance(true);
 
-        emptyView.setImage(R.drawable.ic_glitchicon_white);
-        videoView.setMediaController(new MediaController(getActivity()));
+        if (((TDActivity) getActivity()).isTablet()) {
+            emptyView.setImage(R.drawable.ic_glitchicon_white);
+        }
+
+        MediaController mediaController = new MediaController(getActivity());
+        videoView.setMediaController(mediaController);
+        videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 1);
+        videoView.setOnPreparedListener(this);
+
+        onOrientationChange(getResources().getConfiguration().orientation);
 
         playVideo();
     }
 
-    public void playVideo() {
-        if (!getArguments().getString(URL).equals("")) {
-            emptyView.setVisibility(View.GONE);
-            videoView.setVisibility(View.VISIBLE);
-            videoView.setVideoURI(Uri.parse(getArguments().getString(URL)));
-            videoView.requestFocus();
-            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    // optional need Vitamio 4.0
-                    mediaPlayer.setPlaybackSpeed(1.0f);
-                }
-            });
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().show();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        onOrientationChange(newConfig.orientation);
+    }
+
+    private void onOrientationChange(int orientation) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getSupportActionBar().hide();
+            videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_STRETCH, 1.77f);
+            chat.setVisibility(View.GONE);
+        } else {
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getSupportActionBar().show();
+            videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 1.77f);
+            chat.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void playVideo() {
+
+        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        if (getArguments() != null && (!getArguments().containsKey(URL) || !getArguments().containsKey(PLAYLIST))) {
+            getSupportActionBar().setTitle(getArguments().getString(TITLE));
+
+            if (getArguments().containsKey(URL)) {
+                videoView.setVideoURI(Uri.parse(getArguments().getString(URL)));
+            }
+            if (getArguments().containsKey(PLAYLIST)) {
+                videoView.setVideoPlaylist(getArguments().getStringArray(PLAYLIST));
+            }
+            videoView.start();
+        }
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        emptyView.setVisibility(View.GONE);
+        player.setVisibility(View.VISIBLE);
     }
 }

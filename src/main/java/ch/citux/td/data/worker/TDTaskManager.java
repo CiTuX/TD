@@ -29,14 +29,14 @@ import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.SearchChannels;
 import ch.citux.td.data.model.SearchStreams;
 import ch.citux.td.data.model.StreamPlayList;
-import ch.citux.td.data.model.Video;
+import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.tasks.TDTask;
 import ch.citux.td.data.worker.tasks.TaskGetArchives;
 import ch.citux.td.data.worker.tasks.TaskGetChannel;
 import ch.citux.td.data.worker.tasks.TaskGetFavorites;
 import ch.citux.td.data.worker.tasks.TaskGetStreamPlaylist;
-import ch.citux.td.data.worker.tasks.TaskGetVideo;
+import ch.citux.td.data.worker.tasks.TaskGetVideoPlaylist;
 import ch.citux.td.data.worker.tasks.TaskSearchChannels;
 import ch.citux.td.data.worker.tasks.TaskSearchStreams;
 
@@ -87,8 +87,8 @@ public class TDTaskManager {
         return task;
     }
 
-    public static TDTask getVideo(TDCallback<Video> callback, String id) {
-        TaskGetVideo task = new TaskGetVideo(callback);
+    public static TDTask getVideoPlaylist(TDCallback<VideoPlaylist> callback, String id) {
+        TaskGetVideoPlaylist task = new TaskGetVideoPlaylist(callback);
         task.execute(id);
         tasks.add(task);
         return task;

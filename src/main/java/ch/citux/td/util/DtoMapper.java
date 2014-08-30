@@ -36,6 +36,7 @@ import ch.citux.td.data.model.SearchChannels;
 import ch.citux.td.data.model.SearchStreams;
 import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.Video;
+import ch.citux.td.data.model.VideoPlaylist;
 
 public class DtoMapper {
 
@@ -64,12 +65,25 @@ public class DtoMapper {
         return video;
     }
 
-    public static Video mapVideo(List<JustinArchive> jArchive) {
-        JustinArchive jVideo = jArchive.get(0); // TODO all videos
-        Video video = new Video();
-        video.setId(jVideo.getId());
-        video.setUrl(jVideo.getVideo_file_url());
-        return video;
+    public static VideoPlaylist mapVideo(List<JustinArchive> jArchive) {
+        VideoPlaylist playlist = new VideoPlaylist();
+        ArrayList<Video> videos = new ArrayList<Video>();
+        String title = "";
+        Video video;
+
+        for (JustinArchive archive : jArchive) {
+            title = archive.getTitle();
+            video = new Video();
+            video.setTitle(title);
+            video.setUrl(archive.getVideo_file_url());
+            video.setDuration(archive.getLength());
+            video.setDate(archive.getCreated_on());
+            videos.add(video);
+        }
+        playlist.setTitle(title);
+        playlist.setVideos(videos);
+
+        return playlist;
     }
 
     public static Stream mapStream(TwitchStreamElement streamElement) {

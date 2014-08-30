@@ -36,7 +36,7 @@ import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.FavoritesAdapter;
 import ch.citux.td.ui.widget.EmptyView;
 
-public class FavoritesFragment extends TDFragment<Follows> implements AdapterView.OnItemClickListener {
+public class FavoritesFragment extends TDListFragment<Follows> implements AdapterView.OnItemClickListener {
 
     private String channelName;
     private SharedPreferences preferences;

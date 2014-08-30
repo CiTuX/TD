@@ -32,7 +32,7 @@ import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.util.Log;
 import ch.citux.td.util.VideoPlayer;
 
-public class SearchFragment extends TDFragment<SearchStreams> implements AdapterView.OnItemClickListener {
+public class SearchFragment extends TDListFragment<SearchStreams> implements AdapterView.OnItemClickListener {
 
     public static final String QUERY = "query";
     public static final String OFFSET = "offset";

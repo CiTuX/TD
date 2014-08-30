@@ -22,12 +22,16 @@
     <EditTextPreference
         android:id="@+id/channel_name"
         android:dialogTitle="@string/dialog_username_title"
-        android:title="@string/dialog_username_title" />
+        android:title="@string/dialog_username_title"/>
     <ListPreference
         android:id="@+id/stream_quality"
         android:defaultValue="@string/dialog_stream_quality_default_value"
         android:dialogTitle="@string/dialog_stream_quality_title"
         android:entries="@array/dialog_stream_quality_entries"
         android:entryValues="@array/dialog_stream_quality_entries"
-        android:title="@string/dialog_stream_quality_title" />
+        android:title="@string/dialog_stream_quality_title"/>
+    <CheckBoxPreference
+        android:id="@+id/internal_player"
+        android:defaultValue="false"
+        android:title="@string/preference_internal_player"/>
 </PreferenceScreen>

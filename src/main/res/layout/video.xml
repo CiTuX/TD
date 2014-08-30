@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2013-2014 Paul Stöhr
   ~
   ~ This file is part of TD.
@@ -23,20 +22,36 @@
              android:layout_height="match_parent"
              android:background="@android:color/black">
 
-    <io.vov.vitamio.widget.CenterLayout
+    <LinearLayout
+        android:id="@+id/player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="invisible"
         android:orientation="vertical">
 
-        <io.vov.vitamio.widget.VideoView
-            android:id="@+id/videoView"
+        <io.vov.vitamio.widget.CenterLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:visibility="gone"/>
+            android:layout_weight="1"
+            android:background="@android:color/black">
 
-    </io.vov.vitamio.widget.CenterLayout>
+            <io.vov.vitamio.widget.VideoView
+                android:id="@+id/videoView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"/>
+
+        </io.vov.vitamio.widget.CenterLayout>
+
+        <FrameLayout
+            android:id="@+id/chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:minHeight="16dp"
+            android:background="@color/background_holo_light"/>
+
+    </LinearLayout>
 
     <ch.citux.td.ui.widget.EmptyView
         android:id="@android:id/empty"

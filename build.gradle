@@ -17,12 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.+'
+        classpath 'com.android.tools.build:gradle:0.12.2'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
     }
 }
@@ -32,7 +34,7 @@ apply plugin: 'hugo'
 
 repositories {
     mavenCentral()
-    maven { url 'http://holoeverywhere.cf/repo' }
+    maven { url 'http://holoeverywhere.cf/repo/' }
     maven { url 'http://holoeverywhere.cf/snapshot/' }
     flatDir { dirs 'libs' }
 }
@@ -53,7 +55,7 @@ dependencies {
     compile(name: 'vitamio-4.2.0-SNAPSHOT', ext: 'aar')
 
     //JARs
-    compile files('libs/m3u8parser.jar')
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 android {

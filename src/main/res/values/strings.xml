@@ -42,6 +42,7 @@
     <string name="error_no_player_title">No video player installed</string>
     <string name="error_no_player_message">In order to play videos you need
         to install an external video player, like VLC or MX Player.</string>
+    <string name="error_internal_player">Unable to use internal Player</string>
 
     <!-- DialogMessages -->
     <string name="dialog_error_title">Error</string>
@@ -49,6 +50,7 @@
     <string name="dialog_progress_title">Loading</string>
     <string name="dialog_progress_message">Loading in progress…</string>
     <string name="dialog_username_title">Username</string>
+    <string name="dialog_playlist_title">Video Playlist</string>
     <string name="dialog_stream_quality_title">Live-stream quality</string>
     <string name="dialog_stream_quality_default_value">Medium</string>
     <string-array name="dialog_stream_quality_entries">
@@ -79,5 +81,12 @@
 
     <!-- Search -->
     <string name="search_no_result">No streams found</string>
+
+    <!-- Playlist -->
+    <string name="playlist_part"><u>PART</u></string>
+    <string name="playlist_slash">/</string>
+
+    <!-- Settings -->
+    <string name="preference_internal_player">Use the internal Player</string>
 
 </resources>

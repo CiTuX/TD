@@ -80,6 +80,10 @@ public class Log {
         }
     }
 
+    public static void e(Object caller, Exception exception) {
+        e(caller.getClass(), exception);
+    }
+
     public static void e(Class caller, Exception exception) {
         String tag = caller.getSimpleName();
         if (exception != null && !StringUtils.isBlank(exception.getMessage())) {

@@ -22,11 +22,10 @@ package ch.citux.td.ui.fragments;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.ListFragment;
+import org.holoeverywhere.app.Fragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -37,7 +36,7 @@ import ch.citux.td.ui.TDActivity;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.EmptyView;
 
-public abstract class TDFragment<Result> extends ListFragment implements TDCallback<Result> {
+public abstract class TDFragment<Result> extends Fragment implements TDBase, TDCallback<Result> {
 
     private TDActivity activity;
     protected boolean hasUsername;
@@ -82,7 +81,6 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
         getSupportActionBar().setTitle("");
     }
 
-    @Override
     protected EmptyView getEmptyView() {
         return emptyView;
     }
@@ -109,12 +107,6 @@ public abstract class TDFragment<Result> extends ListFragment implements TDCallb
     public void onError(String title, String message) {
         ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
         builder.setTitle(title).setMessage(message).show();
-    }
-
-    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
-        if (getListView() != null) {
-            getListView().setOnItemClickListener(onItemClickListener);
-        }
     }
 
     public abstract void loadData();

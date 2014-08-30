@@ -18,7 +18,7 @@
  */
 package ch.citux.td.data.worker;
 
-import ch.citux.td.ui.fragments.TDFragment;
+import ch.citux.td.ui.fragments.TDListFragment;
 
 public abstract class TDBasicCallback<Result> implements TDCallback<Result> {
 
@@ -30,22 +30,22 @@ public abstract class TDBasicCallback<Result> implements TDCallback<Result> {
 
     @Override
     public void startLoading() {
-        if (caller instanceof TDFragment) {
-            ((TDFragment) caller).startLoading();
+        if (caller instanceof TDListFragment) {
+            ((TDListFragment) caller).startLoading();
         }
     }
 
     @Override
     public void stopLoading() {
-        if (caller instanceof TDFragment) {
-            ((TDFragment) caller).stopLoading();
+        if (caller instanceof TDListFragment) {
+            ((TDListFragment) caller).stopLoading();
         }
     }
 
     @Override
     public void onError(String title, String message) {
-        if (caller instanceof TDFragment) {
-            ((TDFragment) caller).onError(title, message);
+        if (caller instanceof TDListFragment) {
+            ((TDListFragment) caller).onError(title, message);
         }
     }
 }

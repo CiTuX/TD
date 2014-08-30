@@ -86,11 +86,11 @@ public class ArchiveAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Video video = data.get(position);
+        Video video = getItem(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.list_item_videos, null);
+            convertView = inflater.inflate(R.layout.list_item_videos, parent, false);
             if (convertView != null) {
                 holder.imgThumbnail = (ImageView) convertView.findViewById(R.id.imgThumbnail);
                 holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);
@@ -100,7 +100,7 @@ public class ArchiveAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        picasso.load(video.getThumbnail()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
+        picasso.load(video.getThumbnail()).fit().placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
         holder.lblTitle.setText(video.getTitle());
         holder.lblDate.setText(FormatUtils.formateDate(video.getDate()));
         holder.lblDuration.setText(FormatUtils.formatTime(video.getDuration()));
@@ -113,5 +113,4 @@ public class ArchiveAdapter extends BaseAdapter {
         TextView lblDate;
         TextView lblDuration;
     }
-
 }

@@ -50,7 +50,7 @@ import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamQuality;
 import ch.citux.td.data.model.StreamToken;
-import ch.citux.td.data.model.Video;
+import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.TDRequestHandler;
 import ch.citux.td.util.DtoMapper;
@@ -159,8 +159,8 @@ public class TDServiceImpl implements TDService {
     }
 
     @Override
-    public Video getVideo(String id) {
-        Video result = new Video();
+    public VideoPlaylist getVideoPlaylist(String id) {
+        VideoPlaylist result = new VideoPlaylist();
         String url = buildUrl(TDConfig.URL_API_GET_VIDEO, id);
         Response<String> response = TDRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {

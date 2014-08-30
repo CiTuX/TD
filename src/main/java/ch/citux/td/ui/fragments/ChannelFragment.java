@@ -19,30 +19,31 @@
 package ch.citux.td.ui.fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.holoeverywhere.app.Fragment;
+
 import butterknife.InjectView;
 import ch.citux.td.R;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Logo;
 import ch.citux.td.data.model.Status;
-import ch.citux.td.data.model.Video;
-import ch.citux.td.data.model.Videos;
+import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.worker.TDTaskManager;
-import ch.citux.td.ui.adapter.ArchiveAdapter;
-import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.util.VideoPlayer;
 
-public class ChannelFragment extends TDFragment<Videos> implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class ChannelFragment extends TDFragment<Void> implements View.OnClickListener {
 
     public static final String CHANNEL = "channel";
+    public static final String PLAYLIST = "playlist";
 
     @InjectView(R.id.content) ViewGroup content;
     @InjectView(R.id.imgLogo) ImageView imgLogo;
@@ -50,8 +51,9 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     @InjectView(R.id.lblStatus) TextView lblStatus;
     @InjectView(R.id.btnStream) Button btnStream;
 
-    private ArchiveAdapter adapter;
     private Channel channel;
+    private ChannelVideosFragment videosFragment;
+    private ChannelPlaylistFragment playlistFragment;
 
     @Override
     protected int onCreateView() {
@@ -61,6 +63,7 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         if (getArguments() != null && getArguments().containsKey(CHANNEL)) {
             updateChannel((Channel) getArguments().get(CHANNEL));
         } else {
@@ -71,7 +74,6 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
             }
         }
         btnStream.setOnClickListener(this);
-        getListView().setOnItemClickListener(this);
     }
 
     @Override
@@ -90,16 +92,6 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         }
     }
 
-    @Override
-    public void loadData() {
-        if (adapter != null) {
-            adapter.clear();
-        }
-        if (channel != null) {
-            TDTaskManager.getArchives(this, channel.getName());
-        }
-    }
-
     public void updateChannel(final Channel channel) {
         this.channel = channel;
         Picasso.with(getActivity()).load(channel.getLogo(Logo.LARGE)).placeholder(R.drawable.default_channel_logo_medium).into(imgLogo);
@@ -111,8 +103,44 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
         emptyView.setVisibility(View.GONE);
         content.setVisibility(View.VISIBLE);
 
-        getListView().setEmptyView(emptyView);
-        loadData();
+        Bundle args = new Bundle();
+        args.putSerializable(CHANNEL, channel);
+        videosFragment = Fragment.instantiate(ChannelVideosFragment.class, args);
+        setFragment(videosFragment, false);
+    }
+
+    public void showPlaylist(final VideoPlaylist playlist) {
+        if (playlist != null && playlist.getVideos() != null) {
+            Bundle args = new Bundle();
+            args.putSerializable(PLAYLIST, playlist);
+            playlistFragment = Fragment.instantiate(ChannelPlaylistFragment.class, args);
+            setFragment(playlistFragment, true);
+        }
+    }
+
+    private void setFragment(Fragment fragment, boolean backstack) {
+        if (fragment != null) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            if (fragmentManager != null) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                if (backstack) {
+                    transaction.addToBackStack(null);
+                }
+
+                Fragment currentFragment = (Fragment) fragmentManager.findFragmentById(R.id.container);
+                if (currentFragment == null) {
+                    transaction.add(R.id.container, fragment);
+                } else {
+                    if (!currentFragment.equals(fragment)) {
+                        transaction.replace(R.id.container, fragment);
+                    } else {
+                        ((TDBase) fragment).loadData();
+                    }
+                }
+                transaction.commit();
+            }
+        }
     }
 
     @Override
@@ -121,19 +149,13 @@ public class ChannelFragment extends TDFragment<Videos> implements View.OnClickL
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Video video = adapter.getItem(position);
-        TDTaskManager.getVideo(new VideoPlayer.GetVideoCallback(this), video.getId());
+    public void loadData() {
+        if (videosFragment != null) {
+            videosFragment.loadData();
+        }
     }
 
     @Override
-    public void onResponse(Videos response) {
-        emptyView.setText(R.string.channel_archives_empty);
-        if (adapter == null) {
-            adapter = new ArchiveAdapter(getActivity(), response.getVideos());
-            setListAdapter(adapter);
-        } else {
-            adapter.setData(response.getVideos());
-        }
+    public void onResponse(Void response) {
     }
 }

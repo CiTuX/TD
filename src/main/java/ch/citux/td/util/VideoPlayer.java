@@ -19,29 +19,68 @@
 package ch.citux.td.util;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+
+import org.holoeverywhere.widget.Toast;
+
+import java.util.ArrayList;
 
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamQuality;
 import ch.citux.td.data.model.Video;
+import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.worker.TDBasicCallback;
+import ch.citux.td.ui.TDActivity;
+import ch.citux.td.ui.adapter.PlaylistAdapter;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
-import ch.citux.td.ui.fragments.TDFragment;
+import ch.citux.td.ui.fragments.TDBase;
+import ch.citux.td.ui.fragments.VideoFragment;
 import io.vov.vitamio.LibsChecker;
 
 public class VideoPlayer {
 
     private static final String TAG = "VideoPlayer";
 
-    public static void playVideo(TDFragment fragment, String title, String url) {
+    public static void playVideo(TDActivity activity, VideoPlaylist playlist) {
+        Log.d(TAG, "Playing Playlist'" + playlist.getTitle() + "' with " + playlist.getVideos().size() + " parts");
+
+        if (useInternPlayer(activity)) { //built-in Player
+            Bundle args = new Bundle();
+            args.putString(VideoFragment.TITLE, playlist.getTitle());
+            args.putStringArray(VideoFragment.PLAYLIST, getPlaylistUrls(playlist));
+            playVideoIntern(activity, args);
+        } else {
+            activity.showPlaylist(playlist);
+        }
+    }
+
+    private static String[] getPlaylistUrls(VideoPlaylist playlist) {
+        if (playlist != null && playlist.getVideos() != null) {
+            ArrayList<Video> videos = playlist.getVideos();
+            String[] urls = new String[videos.size()];
+            for (int i = 0; i < videos.size(); i++) {
+                urls[i] = videos.get(i).getUrl();
+            }
+            return urls;
+        }
+        return null;
+    }
+
+    public static void playVideo(TDActivity activity, String title, String url) {
         Log.d(TAG, "Playing '" + title + "' from " + url);
 
-        if (LibsChecker.checkVitamioLibs(fragment.getActivity())) { //built-in Player
+        if (useInternPlayer(activity)) { //built-in Player
             Log.d(TAG, "internal");
-            fragment.getTDActivity().showVideo(title, url);
+            Bundle args = new Bundle();
+            args.putString(VideoFragment.TITLE, title);
+            args.putString(VideoFragment.URL, url);
+            playVideoIntern(activity, args);
         } else { //external Player
             Log.d(TAG, "external");
 
@@ -50,9 +89,9 @@ public class VideoPlayer {
 
             if (intent.getData() != null) {
                 try {
-                    fragment.startActivity(intent);
+                    activity.startActivity(intent);
                 } catch (ActivityNotFoundException exception) {
-                    ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(fragment.getActivity());
+                    ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(activity);
                     builder.setTitle(R.string.error_no_player_title);
                     builder.setMessage(R.string.error_no_player_message);
                     builder.show();
@@ -61,20 +100,44 @@ public class VideoPlayer {
         }
     }
 
+    private static void playVideoIntern(TDActivity activity, Bundle args) {
+        activity.showVideo(args);
+    }
 
-    public static class GetVideoCallback extends TDBasicCallback<Video> {
+    private static void playVideoExtern(Context context, Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, TDConfig.MIME_FLV);
+        context.startActivity(intent);
+    }
 
-        private TDFragment fragment;
+    public static boolean useInternPlayer(TDActivity activity) {
+        try {
+            return activity != null && activity.getDefaultSharedPreferences().getBoolean(R.id.internal_player, false) && LibsChecker.checkVitamioLibs(activity);
+        } catch (Throwable throwable) {
+            Log.e(TAG, "Cannot Use internal Player");
+            Toast.makeText(activity, R.string.error_internal_player, android.widget.Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 
-        public GetVideoCallback(TDFragment caller) {
+    public static class GetVideoCallback extends TDBasicCallback<VideoPlaylist> implements DialogInterface.OnClickListener {
+
+        private TDBase fragment;
+        private TDActivity activity;
+        private PlaylistAdapter adapter;
+
+        public GetVideoCallback(TDBase caller) {
             super(caller);
             fragment = caller;
+            activity = caller.getTDActivity();
         }
 
         @Override
-        public void onResponse(Video response) {
-            if (response.getUrl() != null) {
-                playVideo(fragment, response.getTitle(), response.getUrl());
+        public void onResponse(VideoPlaylist response) {
+            ArrayList<Video> videos = response.getVideos();
+            if (videos != null && videos.size() > 0) {
+                adapter = new PlaylistAdapter(activity, videos);
+                playVideo(activity, response);
             }
         }
 
@@ -82,16 +145,26 @@ public class VideoPlayer {
         public boolean isAdded() {
             return fragment.isAdded();
         }
+
+        @Override
+        public void onClick(DialogInterface dialogInterface, int position) {
+            Video video = adapter.getItem(position);
+            if (video != null && video.getUrl() != null && fragment != null && activity != null) {
+                playVideoExtern(activity, Uri.parse(video.getUrl()));
+            }
+        }
     }
 
     public static class StreamPlaylistCallback extends TDBasicCallback<StreamPlayList> {
 
-        private TDFragment fragment;
+        private TDBase fragment;
+        private TDActivity activity;
         private String title;
 
-        public StreamPlaylistCallback(TDFragment caller, String title) {
+        public StreamPlaylistCallback(TDBase caller, String title) {
             super(caller);
             this.fragment = caller;
+            this.activity = caller.getTDActivity();
             this.title = title;
         }
 
@@ -104,12 +177,12 @@ public class VideoPlayer {
                     Log.d(this, "streamQuality: " + streamQuality.getName());
                     String url = response.getStream(streamQuality);
                     if (url != null) {
-                        playVideo(fragment, title, url);
+                        playVideo(activity, title, url);
                         return;
                     }
                 }
             }
-            ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(fragment.getActivity());
+            ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(activity);
             builder.setMessage(R.string.error_stream_offline).setTitle(R.string.dialog_error_title).show();
         }
 
