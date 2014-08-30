@@ -25,8 +25,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import org.holoeverywhere.widget.Toast;
-
 import java.util.ArrayList;
 
 import ch.citux.td.R;
@@ -41,7 +39,6 @@ import ch.citux.td.ui.adapter.PlaylistAdapter;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.fragments.TDBase;
 import ch.citux.td.ui.fragments.VideoFragment;
-import io.vov.vitamio.LibsChecker;
 
 public class VideoPlayer {
 
@@ -111,13 +108,14 @@ public class VideoPlayer {
     }
 
     public static boolean useInternPlayer(TDActivity activity) {
-        try {
-            return activity != null && activity.getDefaultSharedPreferences().getBoolean(R.id.internal_player, false) && LibsChecker.checkVitamioLibs(activity);
-        } catch (Throwable throwable) {
-            Log.e(TAG, "Cannot Use internal Player");
-            Toast.makeText(activity, R.string.error_internal_player, android.widget.Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        try {
+//            return activity != null && activity.getDefaultSharedPreferences().getBoolean(R.id.internal_player, false) && LibsChecker.checkVitamioLibs(activity);
+//        } catch (Throwable throwable) {
+//            Log.e(TAG, "Cannot Use internal Player");
+//            Toast.makeText(activity, R.string.error_internal_player, android.widget.Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
+        return false;
     }
 
     public static class GetVideoCallback extends TDBasicCallback<VideoPlaylist> implements DialogInterface.OnClickListener {

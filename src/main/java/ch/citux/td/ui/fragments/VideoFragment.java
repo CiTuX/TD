@@ -19,8 +19,6 @@
 package ch.citux.td.ui.fragments;
 
 import android.content.res.Configuration;
-import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,18 +32,15 @@ import butterknife.InjectView;
 import ch.citux.td.R;
 import ch.citux.td.ui.TDActivity;
 import ch.citux.td.ui.widget.EmptyView;
-import io.vov.vitamio.MediaPlayer;
-import io.vov.vitamio.widget.MediaController;
-import io.vov.vitamio.widget.VideoView;
 
-public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedListener {
+public class VideoFragment extends Fragment {//implements MediaPlayer.OnPreparedListener {
 
     public static final String PLAYLIST = "playlist";
     public static final String TITLE = "title";
     public static final String URL = "url";
 
     @InjectView(android.R.id.empty) EmptyView emptyView;
-    @InjectView(R.id.videoView) VideoView videoView;
+    //    @InjectView(R.id.videoView) VideoView videoView;
     @InjectView(R.id.player) View player;
     @InjectView(R.id.chat) View chat;
 
@@ -65,14 +60,14 @@ public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedLis
             emptyView.setImage(R.drawable.ic_glitchicon_white);
         }
 
-        MediaController mediaController = new MediaController(getActivity());
-        videoView.setMediaController(mediaController);
-        videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 1);
-        videoView.setOnPreparedListener(this);
-
-        onOrientationChange(getResources().getConfiguration().orientation);
-
-        playVideo();
+//        MediaController mediaController = new MediaController(getActivity());
+//        videoView.setMediaController(mediaController);
+//        videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 1);
+//        videoView.setOnPreparedListener(this);
+//
+//        onOrientationChange(getResources().getConfiguration().orientation);
+//
+//        playVideo();
     }
 
     @Override
@@ -83,46 +78,47 @@ public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedLis
         getSupportActionBar().show();
     }
 
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        onOrientationChange(newConfig.orientation);
+//        onOrientationChange(newConfig.orientation);
     }
 
     private void onOrientationChange(int orientation) {
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getSupportActionBar().hide();
-            videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_STRETCH, 1.77f);
-            chat.setVisibility(View.GONE);
-        } else {
-            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getSupportActionBar().show();
-            videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 1.77f);
-            chat.setVisibility(View.VISIBLE);
-        }
+//        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getSupportActionBar().hide();
+//            videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_STRETCH, 1.77f);
+//            chat.setVisibility(View.GONE);
+//        } else {
+//            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getSupportActionBar().show();
+//            videoView.setVideoLayout(VideoView.VIDEO_LAYOUT_SCALE, 1.77f);
+//            chat.setVisibility(View.VISIBLE);
+//        }
     }
 
     public void playVideo() {
 
-        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        if (getArguments() != null && (!getArguments().containsKey(URL) || !getArguments().containsKey(PLAYLIST))) {
-            getSupportActionBar().setTitle(getArguments().getString(TITLE));
-
-            if (getArguments().containsKey(URL)) {
-                videoView.setVideoURI(Uri.parse(getArguments().getString(URL)));
-            }
-            if (getArguments().containsKey(PLAYLIST)) {
-                videoView.setVideoPlaylist(getArguments().getStringArray(PLAYLIST));
-            }
-            videoView.start();
-        }
+//        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+//        if (getArguments() != null && (!getArguments().containsKey(URL) || !getArguments().containsKey(PLAYLIST))) {
+//            getSupportActionBar().setTitle(getArguments().getString(TITLE));
+//
+//            if (getArguments().containsKey(URL)) {
+//                videoView.setVideoURI(Uri.parse(getArguments().getString(URL)));
+//            }
+//            if (getArguments().containsKey(PLAYLIST)) {
+//                videoView.setVideoPlaylist(getArguments().getStringArray(PLAYLIST));
+//            }
+//            videoView.start();
+//        }
     }
 
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        emptyView.setVisibility(View.GONE);
-        player.setVisibility(View.VISIBLE);
-    }
+//    @Override
+//    public void onPrepared(MediaPlayer mp) {
+//        emptyView.setVisibility(View.GONE);
+//        player.setVisibility(View.VISIBLE);
+//    }
 }

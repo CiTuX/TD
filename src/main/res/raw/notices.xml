@@ -61,10 +61,10 @@
         <copyright>Copyright 2002-2011 The Apache Software Foundation</copyright>
         <license>Apache Software License 2.0</license>
     </notice>
-    <notice>
-        <name>Vitamio</name>
-        <url>http://www.vitamio.org</url>
-        <copyright>Copyright (C) 2011-2014 Vitamio</copyright>
-        <license>Vitamio License</license>
-    </notice>
+    <!--<notice>-->
+        <!--<name>Vitamio</name>-->
+        <!--<url>http://www.vitamio.org</url>-->
+        <!--<copyright>Copyright (C) 2011-2014 Vitamio</copyright>-->
+        <!--<license>Vitamio License</license>-->
+    <!--</notice>-->
 </notices>
