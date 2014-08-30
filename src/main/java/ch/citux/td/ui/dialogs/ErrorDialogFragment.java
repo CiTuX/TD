@@ -95,9 +95,10 @@ public class ErrorDialogFragment extends DialogFragment {
         private OnCancelListener mOnCancelListener;
 
         public ErrorDialogFragmentBuilder(FragmentActivity activity) {
-            mActivity = activity;
-
-            mTitle = activity.getString(R.string.dialog_error_title);
+            if (activity != null) {
+                mActivity = activity;
+                mTitle = activity.getString(R.string.dialog_error_title);
+            }
         }
 
         public ErrorDialogFragmentBuilder setTitle(int resId) {

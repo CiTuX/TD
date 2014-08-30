@@ -96,7 +96,7 @@ public class SearchFragment extends TDListFragment<SearchStreams> implements Ada
         if (emptyView != null) {
             emptyView.showText();
         }
-        Log.d(this, "SearchResult: " + response.getResult().size());
+        Log.d(this, "SearchResult: " + response.getResult());
     }
 
     public void setQuery(String query) {
