@@ -88,5 +88,6 @@
 
     <!-- Settings -->
     <string name="preference_internal_player">Use the internal Player</string>
+    <string name="preference_licenses">Open Source Licenses</string>
 
 </resources>

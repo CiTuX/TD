@@ -19,6 +19,8 @@
 
 
 
+
+
 buildscript {
     repositories {
         mavenCentral()
@@ -50,6 +52,9 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.2.1'
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.jakewharton:butterknife:5.1.1'
+    compile('de.psdev.licensesdialog:licensesdialog:1.5.0') {
+        exclude module: 'support-v4'
+    }
 
     //AARs
     compile(name: 'vitamio-4.2.0-SNAPSHOT', ext: 'aar')

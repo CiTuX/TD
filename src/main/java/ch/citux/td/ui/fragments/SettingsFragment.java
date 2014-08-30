@@ -21,12 +21,16 @@ package ch.citux.td.ui.fragments;
 import android.os.Bundle;
 
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.PreferenceFragment;
 
 import ch.citux.td.R;
+import ch.citux.td.license.GnuGeneralPublicLicense30;
 import ch.citux.td.ui.TDActivity;
+import de.psdev.licensesdialog.LicenseResolver;
+import de.psdev.licensesdialog.LicensesDialog;
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
     private TDActivity activity;
 
@@ -43,7 +47,9 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LicenseResolver.registerLicense(new GnuGeneralPublicLicense30());
         addPreferencesFromResource(R.xml.preferences);
+        findPreference(R.id.license_dialog).setOnPreferenceClickListener(this);
     }
 
     @Override
@@ -65,5 +71,11 @@ public class SettingsFragment extends PreferenceFragment {
         if (activity != null) {
             activity.showActionItems();
         }
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        new LicensesDialog(getActivity(), R.raw.notices, false, true).show();
+        return true;
     }
 }
