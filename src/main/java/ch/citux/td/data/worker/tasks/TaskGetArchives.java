@@ -23,7 +23,7 @@ import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.service.TDServiceImpl;
 import ch.citux.td.data.worker.TDCallback;
 
-public class TaskGetArchives extends TDTask<String, Videos> {
+public class TaskGetArchives extends TDTask<Object, Videos> {
 
 
     public TaskGetArchives(TDCallback<Videos> callback) {
@@ -31,9 +31,9 @@ public class TaskGetArchives extends TDTask<String, Videos> {
     }
 
     @Override
-    protected Videos doInBackground(String... params) {
-        if (params.length == 1) {
-            return TDServiceImpl.getInstance().getVideos(params[0]);
+    protected Videos doInBackground(Object... params) {
+        if (params.length == 2) {
+            return TDServiceImpl.getInstance().getVideos(params[0].toString(), (Integer) params[1]);
         }
         Videos videos = new Videos();
         videos.setErrorResId(R.string.error_unexpected);

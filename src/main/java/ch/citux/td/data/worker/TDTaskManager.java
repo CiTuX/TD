@@ -94,9 +94,9 @@ public class TDTaskManager {
         return task;
     }
 
-    public static TDTask getArchives(TDCallback<Videos> callback, String channel) {
+    public static TDTask getArchives(TDCallback<Videos> callback, String channel, int offset) {
         TaskGetArchives task = new TaskGetArchives(callback);
-        task.execute(channel);
+        task.execute(channel, offset);
         tasks.add(task);
         return task;
     }

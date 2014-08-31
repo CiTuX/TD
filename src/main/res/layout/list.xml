@@ -22,21 +22,15 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <ListView
+    <ch.citux.td.ui.widget.ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:drawSelectorOnTop="false"/>
 
-    <io.vov.vitamio.widget.CenterLayout
+    <ch.citux.td.ui.widget.EmptyView
+        android:id="@android:id/empty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ch.citux.td.ui.widget.EmptyView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </io.vov.vitamio.widget.CenterLayout>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

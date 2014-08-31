@@ -56,7 +56,11 @@ public class ArchiveAdapter extends BaseAdapter {
 
     public void setData(ArrayList<Video> data) {
         if (data != null) {
-            this.data = data;
+            if (getCount() == 0) {
+                this.data = data;
+            } else {
+                this.data.addAll(data);
+            }
             notifyDataSetChanged();
         }
     }

@@ -28,12 +28,14 @@ import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.ArchiveAdapter;
+import ch.citux.td.ui.widget.ListView;
 import ch.citux.td.util.VideoPlayer;
 
-public class ChannelVideosFragment extends TDListFragment<Videos> implements AdapterView.OnItemClickListener {
+public class ChannelVideosFragment extends TDListFragment<Videos> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
 
-    private Channel channel;
     private ArchiveAdapter adapter;
+    private Channel channel;
+    private int offset;
 
     @Override
     protected int onCreateView() {
@@ -49,6 +51,7 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
         }
 
         setOnItemClickListener(this);
+        setOnLastItemVisibleListener(this);
     }
 
     public void setChannel(Channel channel) {
@@ -56,12 +59,17 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
     }
 
     @Override
-    public void loadData() {
+    public void refreshData() {
         if (adapter != null) {
             adapter.clear();
         }
+        loadData();
+    }
+
+    @Override
+    public void loadData() {
         if (channel != null) {
-            TDTaskManager.getArchives(this, channel.getName());
+            TDTaskManager.getArchives(this, channel.getName(), offset);
         }
     }
 
@@ -80,5 +88,11 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
         } else {
             adapter.setData(response.getVideos());
         }
+    }
+
+    @Override
+    public void onLastItemVisible() {
+        offset += 10;
+        loadData();
     }
 }

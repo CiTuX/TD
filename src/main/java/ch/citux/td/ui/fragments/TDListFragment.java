@@ -36,6 +36,7 @@ import ch.citux.td.data.worker.TDCallback;
 import ch.citux.td.ui.TDActivity;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.EmptyView;
+import ch.citux.td.ui.widget.ListView;
 
 public abstract class TDListFragment<Result> extends ListFragment implements TDBase, TDCallback<Result> {
 
@@ -83,6 +84,11 @@ public abstract class TDListFragment<Result> extends ListFragment implements TDB
     }
 
     @Override
+    public ListView getListView() {
+        return (ListView) super.getListView();
+    }
+
+    @Override
     protected EmptyView getEmptyView() {
         return emptyView;
     }
@@ -114,6 +120,12 @@ public abstract class TDListFragment<Result> extends ListFragment implements TDB
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
         if (getListView() != null) {
             getListView().setOnItemClickListener(onItemClickListener);
+        }
+    }
+
+    public void setOnLastItemVisibleListener(ListView.OnLastItemVisibleListener onLastItemVisibleListener) {
+        if (getListView() != null) {
+            getListView().setOnLastItemVisibleListener(onLastItemVisibleListener);
         }
     }
 

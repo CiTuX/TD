@@ -143,9 +143,9 @@ public class TDServiceImpl implements TDService {
     }
 
     @Override
-    public Videos getVideos(String channel) {
+    public Videos getVideos(String channel, int offset) {
         Videos result = new Videos();
-        String url = buildUrl(TDConfig.URL_API_GET_VIDEOS, channel, 10);
+        String url = buildUrl(TDConfig.URL_API_GET_VIDEOS, channel, offset);
         Response<String> response = TDRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
             TwitchVideos videos = gson.fromJson(response.getResult(), TwitchVideos.class);

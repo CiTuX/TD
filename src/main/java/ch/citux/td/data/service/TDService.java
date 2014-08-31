@@ -36,7 +36,7 @@ public interface TDService {
 
     public Stream getStream(String channel);
 
-    public Videos getVideos(String channel);
+    public Videos getVideos(String channel, int offset);
 
     public VideoPlaylist getVideoPlaylist(String id);
 
