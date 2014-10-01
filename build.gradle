@@ -17,14 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
+        classpath 'com.android.tools.build:gradle:0.13.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
     }
 }
@@ -46,7 +44,7 @@ dependencies {
     compile 'org.holoeverywhere:addon-preferences:2.1.1-SNAPSHOT@aar'
 
     //3th Party
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.google.code.gson:gson:2.3'
     compile 'org.apache.commons:commons-lang3:3.2.1'
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.jakewharton:butterknife:5.1.1'
@@ -62,7 +60,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 20
+    compileSdkVersion 19
     buildToolsVersion "20.0.0"
 
     lintOptions {
@@ -72,7 +70,7 @@ android {
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 20
+        targetSdkVersion 19
     }
 
     signingConfigs {
