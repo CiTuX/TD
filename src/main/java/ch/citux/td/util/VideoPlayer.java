@@ -70,28 +70,30 @@ public class VideoPlayer {
     }
 
     public static void playVideo(TDActivity activity, String title, String url) {
-        Log.d(TAG, "Playing '" + title + "' from " + url);
+        if (activity != null) {
+            Log.d(TAG, "Playing '" + title + "' from " + url);
 
-        if (useInternPlayer(activity)) { //built-in Player
-            Log.d(TAG, "internal");
-            Bundle args = new Bundle();
-            args.putString(VideoFragment.TITLE, title);
-            args.putString(VideoFragment.URL, url);
-            playVideoIntern(activity, args);
-        } else { //external Player
-            Log.d(TAG, "external");
+            if (useInternPlayer(activity)) { //built-in Player
+                Log.d(TAG, "internal");
+                Bundle args = new Bundle();
+                args.putString(VideoFragment.TITLE, title);
+                args.putString(VideoFragment.URL, url);
+                playVideoIntern(activity, args);
+            } else { //external Player
+                Log.d(TAG, "external");
 
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(url), TDConfig.MIME_FLV);
 
-            if (intent.getData() != null) {
-                try {
-                    activity.startActivity(intent);
-                } catch (ActivityNotFoundException exception) {
-                    ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(activity);
-                    builder.setTitle(R.string.error_no_player_title);
-                    builder.setMessage(R.string.error_no_player_message);
-                    builder.show();
+                if (intent.getData() != null) {
+                    try {
+                        activity.startActivity(intent);
+                    } catch (ActivityNotFoundException exception) {
+                        ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(activity);
+                        builder.setTitle(R.string.error_no_player_title);
+                        builder.setMessage(R.string.error_no_player_message);
+                        builder.show();
+                    }
                 }
             }
         }

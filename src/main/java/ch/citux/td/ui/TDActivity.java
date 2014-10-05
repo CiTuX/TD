@@ -89,7 +89,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             if (isTablet) {
                 transaction.add(R.id.detail, channelFragment);
             }
-            transaction.commit();
+            transaction.commitAllowingStateLoss();
         }
     }
 

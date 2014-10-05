@@ -28,8 +28,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -39,6 +42,7 @@ import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
@@ -58,15 +62,13 @@ public class TDRequestHandler {
     private static final String BKS = "BKS";
     private static final String HEADER_ACCEPT = "Accept";
 
-    private static SSLContext sslContext;
+    private static SSLSocketFactory sslSocketFactory;
 
     private static void init() throws CertificateException, NoSuchAlgorithmException, IOException, KeyManagementException, KeyStoreException, IllegalStateException {
-        if (sslContext == null) {
+        if (sslSocketFactory == null) {
             KeyStore keyStore = KeyStore.getInstance(BKS);
             keyStore.load(TDApplication.getContext().getResources().openRawResource(R.raw.certs), null);
-
-            sslContext = SSLContext.getInstance(TLS);
-            sslContext.init(null, new TrustManager[]{new TrustManager(keyStore)}, null);
+            sslSocketFactory = new TDSocketFactory(keyStore);
         }
     }
 
@@ -120,7 +122,8 @@ public class TDRequestHandler {
             } else if (url.getProtocol().equals(HTTPS)) {
                 init();
                 HttpsURLConnection sslConnection = (HttpsURLConnection) url.openConnection();
-                sslConnection.setSSLSocketFactory(sslContext.getSocketFactory());
+                if (sslConnection != null && sslSocketFactory != null)
+                    sslConnection.setSSLSocketFactory(sslSocketFactory);
                 urlConnection = sslConnection;
             } else {
                 throw new MalformedURLException();
@@ -151,7 +154,7 @@ public class TDRequestHandler {
             Log.e(TAG, e);
             status = Response.Status.ERROR_CONNECTION;
         } catch (IllegalStateException e) {
-            sslContext = null; //SSLContext is not initialized.
+            sslSocketFactory = null; //SSLContext is not initialized.
             Log.e(TAG, e);
             status = Response.Status.ERROR_CONNECTION;
         }
@@ -203,6 +206,64 @@ public class TDRequestHandler {
         @Override
         public X509Certificate[] getAcceptedIssuers() {
             return acceptedIssuers;
+        }
+    }
+
+    public static class TDSocketFactory extends SSLSocketFactory {
+
+        private SSLContext sslContext;
+
+        public TDSocketFactory(KeyStore keyStore) {
+            try {
+                sslContext = SSLContext.getInstance(TLS);
+                sslContext.init(null, new TrustManager[]{new TrustManager(keyStore)}, null);
+            } catch (NoSuchAlgorithmException e) {
+                Log.e(this, e);
+            } catch (KeyStoreException e) {
+                Log.e(this, e);
+            } catch (KeyManagementException e) {
+                Log.e(this, e);
+            }
+        }
+
+        @Override
+        public String[] getDefaultCipherSuites() {
+            return sslContext.getSocketFactory().getDefaultCipherSuites();
+        }
+
+        @Override
+        public String[] getSupportedCipherSuites() {
+            return sslContext.getSocketFactory().getSupportedCipherSuites();
+        }
+
+        @Override
+        public Socket createSocket() throws IOException {
+            return sslContext.getSocketFactory().createSocket();
+        }
+
+        @Override
+        public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+            return sslContext.getSocketFactory().createSocket(host, port);
+        }
+
+        @Override
+        public Socket createSocket(InetAddress host, int port) throws IOException {
+            return sslContext.getSocketFactory().createSocket(host, port);
+        }
+
+        @Override
+        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+            return sslContext.getSocketFactory().createSocket(host, port, localHost, localPort);
+        }
+
+        @Override
+        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+            return sslContext.getSocketFactory().createSocket(address, port, localAddress, localPort);
+        }
+
+        @Override
+        public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+            return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
         }
     }
 }
