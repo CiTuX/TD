@@ -20,6 +20,7 @@ package ch.citux.td.data.service;
 
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Follows;
+import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.SearchChannels;
 import ch.citux.td.data.model.SearchStreams;
 import ch.citux.td.data.model.Stream;
@@ -47,4 +48,6 @@ public interface TDService {
     public SearchStreams searchStreams(String query, String offset);
 
     public SearchChannels searchChannels(String query, String offset);
+
+    public TopGames getTopGames(String offset);
 }

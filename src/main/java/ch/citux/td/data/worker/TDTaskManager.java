@@ -29,6 +29,7 @@ import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.SearchChannels;
 import ch.citux.td.data.model.SearchStreams;
 import ch.citux.td.data.model.StreamPlayList;
+import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.tasks.TDTask;
@@ -36,6 +37,7 @@ import ch.citux.td.data.worker.tasks.TaskGetArchives;
 import ch.citux.td.data.worker.tasks.TaskGetChannel;
 import ch.citux.td.data.worker.tasks.TaskGetFavorites;
 import ch.citux.td.data.worker.tasks.TaskGetStreamPlaylist;
+import ch.citux.td.data.worker.tasks.TaskGetTopGames;
 import ch.citux.td.data.worker.tasks.TaskGetVideoPlaylist;
 import ch.citux.td.data.worker.tasks.TaskSearchChannels;
 import ch.citux.td.data.worker.tasks.TaskSearchStreams;
@@ -118,6 +120,13 @@ public class TDTaskManager {
     public static TDTask searchChannels(TDCallback<SearchChannels> callback, String query, int offset) {
         TaskSearchChannels task = new TaskSearchChannels(callback);
         task.execute(query, String.valueOf(offset));
+        tasks.add(task);
+        return task;
+    }
+
+    public static TDTask getTopGames(TDCallback<TopGames> callback, int offset) {
+        TaskGetTopGames task = new TaskGetTopGames(callback);
+        task.execute(String.valueOf(offset));
         tasks.add(task);
         return task;
     }

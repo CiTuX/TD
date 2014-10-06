@@ -39,10 +39,12 @@ import ch.citux.td.data.dto.TwitchAccessToken;
 import ch.citux.td.data.dto.TwitchChannel;
 import ch.citux.td.data.dto.TwitchChannels;
 import ch.citux.td.data.dto.TwitchFollows;
+import ch.citux.td.data.dto.TwitchGames;
 import ch.citux.td.data.dto.TwitchStream;
 import ch.citux.td.data.dto.TwitchVideos;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Follows;
+import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.Response;
 import ch.citux.td.data.model.SearchChannels;
 import ch.citux.td.data.model.SearchStreams;
@@ -243,6 +245,20 @@ public class TDServiceImpl implements TDService {
             if (searchStreams != null) {
                 result = (DtoMapper.mapSearchChannels(searchStreams));
             }
+        } else {
+            result.setErrorResId(R.string.error_data_error_message);
+        }
+        return result;
+    }
+
+    @Override
+    public TopGames getTopGames(String offset) {
+        TopGames result = new TopGames();
+        String url = buildUrl(TDConfig.URL_API_GET_TOP_GAMES, offset);
+        Response<String> response = TDRequestHandler.startStringRequest(url);
+        if (response.getStatus() == Response.Status.OK) {
+            TwitchGames twitchGames = gson.fromJson(response.getResult(), TwitchGames.class);
+            result = DtoMapper.mapGames(twitchGames);
         } else {
             result.setErrorResId(R.string.error_data_error_message);
         }

@@ -36,6 +36,7 @@ public class TDConfig {
     public static final String URL_API_GET_STREAM = URL_API_TWITCH_KRAKEN_BASE + "streams/{0}";
     public static final String URL_API_SEARCH_STREAMS = URL_API_TWITCH_KRAKEN_BASE + "search/streams?limit=20&q={0}&offset={1}";
     public static final String URL_API_SEARCH_CHANNELS = URL_API_TWITCH_KRAKEN_BASE + "search/channels?limit=20&q={0}&offset={1}";
+    public static final String URL_API_GET_TOP_GAMES = URL_API_TWITCH_KRAKEN_BASE + "games/top?limit=20&offset={0}";
 
     public static final String URL_API_TWITCH_API_BASE = "https://api.twitch.tv/api/";
     public static final String URL_API_GET_STREAM_TOKEN = URL_API_TWITCH_API_BASE + "channels/{0}/access_token";

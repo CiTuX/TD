@@ -26,24 +26,38 @@ import java.util.List;
 import ch.citux.td.data.dto.JustinArchive;
 import ch.citux.td.data.dto.TwitchChannel;
 import ch.citux.td.data.dto.TwitchChannels;
+import ch.citux.td.data.dto.TwitchGame;
+import ch.citux.td.data.dto.TwitchGames;
+import ch.citux.td.data.dto.TwitchGamesElement;
 import ch.citux.td.data.dto.TwitchStream;
 import ch.citux.td.data.dto.TwitchStreamElement;
 import ch.citux.td.data.dto.TwitchVideo;
 import ch.citux.td.data.dto.TwitchVideos;
 import ch.citux.td.data.model.Channel;
+import ch.citux.td.data.model.Game;
 import ch.citux.td.data.model.Logo;
 import ch.citux.td.data.model.SearchChannels;
 import ch.citux.td.data.model.SearchStreams;
 import ch.citux.td.data.model.Stream;
+import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.VideoPlaylist;
 
 public class DtoMapper {
 
     private static final String PREVIEW_WIDTH_KEY = "{width}";
-    private static final String PREVIEW_WIDTH_SIZE = "320";
     private static final String PREVIEW_HEIGHT_KEY = "{height}";
-    private static final String PREVIEW_HEIGHT_SIZE = "240";
+
+    private static final int PREVIEW_WIDTH_SIZE = 320;
+    private static final int PREVIEW_HEIGHT_SIZE = 240;
+    private static final int BOX_WIDTH_SIZE = 272;
+    private static final int BOX_HEIGHT_SIZE = 380;
+
+    private static String makeImageURL(String template, int width, int height) {
+        return template
+                .replace(PREVIEW_WIDTH_KEY, String.valueOf(width))
+                .replace(PREVIEW_HEIGHT_KEY, String.valueOf(height));
+    }
 
     public static Channel mapChannel(TwitchChannel tChannel) {
         Channel channel = new Channel();
@@ -97,13 +111,7 @@ public class DtoMapper {
             stream.setName(streamElement.getName());
             stream.setStatus(streamElement.getChannel().getStatus());
             stream.setViewers(streamElement.getViewers());
-
-            String thumbnailUrl = streamElement
-                    .getPreview()
-                    .getTemplate()
-                    .replace(PREVIEW_WIDTH_KEY, PREVIEW_WIDTH_SIZE)
-                    .replace(PREVIEW_HEIGHT_KEY, PREVIEW_HEIGHT_SIZE);
-            stream.setThumbnail(thumbnailUrl);
+            stream.setThumbnail(makeImageURL(streamElement.getPreview().getTemplate(), PREVIEW_WIDTH_SIZE, PREVIEW_HEIGHT_SIZE));
         }
         return stream;
     }
@@ -153,5 +161,30 @@ public class DtoMapper {
         }
         searchChannels.setResult(channels);
         return searchChannels;
+    }
+
+    public static Game mapGame(TwitchGamesElement tGamesElement) {
+        Game game = new Game();
+        if (tGamesElement != null && tGamesElement.getGame() != null) {
+            TwitchGame tGame = tGamesElement.getGame();
+            game.setName(tGame.getName());
+            game.setChannels(tGamesElement.getChannels());
+            game.setViewers(tGamesElement.getViewers());
+            game.setBox(makeImageURL(tGame.getLogo().getTemplate(), BOX_WIDTH_SIZE, BOX_HEIGHT_SIZE));
+        }
+        return game;
+    }
+
+    public static TopGames mapGames(TwitchGames tGames) {
+        TopGames games = new TopGames();
+        if (tGames != null) {
+            ArrayList<Game> top = new ArrayList<Game>();
+            for (TwitchGamesElement tGame : tGames.getTop()) {
+                top.add(mapGame(tGame));
+            }
+            games.setGames(top);
+            games.setTotal(tGames.get_total());
+        }
+        return games;
     }
 }
