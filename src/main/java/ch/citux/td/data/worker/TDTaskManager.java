@@ -124,9 +124,9 @@ public class TDTaskManager {
         return task;
     }
 
-    public static TDTask getTopGames(TDCallback<TopGames> callback, int offset) {
+    public static TDTask getTopGames(TDCallback<TopGames> callback, int limit, int offset) {
         TaskGetTopGames task = new TaskGetTopGames(callback);
-        task.execute(String.valueOf(offset));
+        task.execute(String.valueOf(limit), String.valueOf(offset));
         tasks.add(task);
         return task;
     }

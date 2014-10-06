@@ -19,6 +19,7 @@
 package ch.citux.td.ui.fragments;
 
 import android.os.Bundle;
+import android.view.View;
 
 import butterknife.InjectView;
 import ch.citux.td.R;
@@ -26,12 +27,17 @@ import ch.citux.td.data.model.Game;
 import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.GamerOverviewAdapter;
+import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.ui.widget.GridView;
 import ch.citux.td.util.Log;
 
-public class GameOverviewFragment extends TDFragment<TopGames> {
+public class GameOverviewFragment extends TDFragment<TopGames> implements GridView.OnLastItemVisibleListener {
 
+    private static final int LIMIT = 15;
+
+    @InjectView(android.R.id.empty) EmptyView emptyView;
     @InjectView(R.id.gridview) GridView gridView;
+
     private GamerOverviewAdapter adapter;
     private int offset;
 
@@ -45,11 +51,12 @@ public class GameOverviewFragment extends TDFragment<TopGames> {
         super.onActivityCreated(savedInstanceState);
         adapter = new GamerOverviewAdapter(getActivity());
         gridView.setAdapter(adapter);
+        gridView.setOnLastItemVisibleListener(this);
     }
 
     @Override
     public void loadData() {
-        TDTaskManager.getTopGames(this, offset);
+        TDTaskManager.getTopGames(this, LIMIT, offset);
     }
 
     @Override
@@ -57,6 +64,15 @@ public class GameOverviewFragment extends TDFragment<TopGames> {
         for (Game game : response.getGames()) {
             Log.d(this, game.getName());
         }
-        adapter.setData(response);
+        adapter.addData(response);
+        emptyView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onLastItemVisible() {
+        offset += LIMIT;
+        if (adapter.getTotalCount() > offset + LIMIT) {
+            loadData();
+        }
     }
 }

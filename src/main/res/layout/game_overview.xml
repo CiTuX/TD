@@ -31,7 +31,6 @@
         android:columnWidth="102dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
-        android:scrollbars="none"
         android:gravity="center"
         android:drawSelectorOnTop="false"/>
 

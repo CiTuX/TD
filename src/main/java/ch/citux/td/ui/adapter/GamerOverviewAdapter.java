@@ -45,15 +45,22 @@ public class GamerOverviewAdapter extends BaseAdapter {
     private ArrayList<Game> data;
 
     public GamerOverviewAdapter(Context context) {
-        context = context;
         inflater = LayoutInflater.from(context);
         picasso = Picasso.with(context);
+        data = new ArrayList<Game>();
     }
 
-    public void setData(TopGames topGames) {
+    public void addData(TopGames topGames) {
         this.topGames = topGames;
-        this.data = topGames.getGames();
+        this.data.addAll(topGames.getGames());
         notifyDataSetChanged();
+    }
+
+    public int getTotalCount() {
+        if (topGames != null) {
+            return topGames.getTotal();
+        }
+        return 0;
     }
 
     @Override
@@ -96,11 +103,13 @@ public class GamerOverviewAdapter extends BaseAdapter {
         }
         picasso.load(game.getBox()).placeholder(R.drawable.default_game_box_medium).into(holder.imgBox);
         holder.lblName.setText(game.getName());
+        holder.lblViewers.setText(String.valueOf(game.getViewers()));
         return convertView;
     }
 
     class ViewHolder {
         @InjectView(R.id.imgBox) ImageView imgBox;
         @InjectView(R.id.lblName) TextView lblName;
+        @InjectView(R.id.lblViewers) TextView lblViewers;
     }
 }

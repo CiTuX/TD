@@ -44,7 +44,6 @@ import ch.citux.td.data.dto.TwitchStream;
 import ch.citux.td.data.dto.TwitchVideos;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Follows;
-import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.Response;
 import ch.citux.td.data.model.SearchChannels;
 import ch.citux.td.data.model.SearchStreams;
@@ -52,6 +51,7 @@ import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamQuality;
 import ch.citux.td.data.model.StreamToken;
+import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.TDRequestHandler;
@@ -252,9 +252,9 @@ public class TDServiceImpl implements TDService {
     }
 
     @Override
-    public TopGames getTopGames(String offset) {
+    public TopGames getTopGames(String limit, String offset) {
         TopGames result = new TopGames();
-        String url = buildUrl(TDConfig.URL_API_GET_TOP_GAMES, offset);
+        String url = buildUrl(TDConfig.URL_API_GET_TOP_GAMES, limit, offset);
         Response<String> response = TDRequestHandler.startStringRequest(url);
         if (response.getStatus() == Response.Status.OK) {
             TwitchGames twitchGames = gson.fromJson(response.getResult(), TwitchGames.class);

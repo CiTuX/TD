@@ -32,8 +32,8 @@ public class TaskGetTopGames extends TDTask<String, TopGames> {
 
     @Override
     protected TopGames doInBackground(String... params) {
-        if (params.length == 1) {
-            return TDServiceImpl.getInstance().getTopGames(params[0]);
+        if (params.length == 2) {
+            return TDServiceImpl.getInstance().getTopGames(params[0], params[1]);
         }
         TopGames games = new TopGames();
         games.setErrorResId(R.string.error_unexpected);
