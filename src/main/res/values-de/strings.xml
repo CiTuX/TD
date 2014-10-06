@@ -89,4 +89,7 @@
     <string name="preference_internal_player">Internen Player verwenden</string>
     <string name="preference_licenses">Open Source Lizenzen</string>
 
+    <!-- Game -->
+    <string name="game_box">Box</string>
+
 </resources>

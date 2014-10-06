@@ -45,6 +45,7 @@ import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.fragments.ChannelFragment;
 import ch.citux.td.ui.fragments.FavoritesFragment;
+import ch.citux.td.ui.fragments.GameOverviewFragment;
 import ch.citux.td.ui.fragments.SearchFragment;
 import ch.citux.td.ui.fragments.SettingsFragment;
 import ch.citux.td.ui.fragments.VideoFragment;
@@ -52,6 +53,7 @@ import ch.citux.td.util.Log;
 
 public class TDActivity extends Activity implements View.OnFocusChangeListener {
 
+    private GameOverviewFragment gameOverviewFragment;
     private FavoritesFragment favoritesFragment;
     private ChannelFragment channelFragment;
     private SearchFragment searchFragment;
@@ -75,6 +77,8 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         Bundle args = new Bundle();
         args.putBoolean(TDConfig.SETTINGS_CHANNEL_NAME, hasUsername);
 
+        gameOverviewFragment = new GameOverviewFragment();
+
         favoritesFragment = new FavoritesFragment();
         favoritesFragment.setArguments(args);
 
@@ -85,7 +89,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
 
         if (getSupportFragmentManager().findFragmentById(R.id.content) == null && !favoritesFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.content, favoritesFragment);
+            transaction.add(R.id.content, gameOverviewFragment);
             if (isTablet) {
                 transaction.add(R.id.detail, channelFragment);
             }

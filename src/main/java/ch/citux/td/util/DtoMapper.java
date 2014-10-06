@@ -167,10 +167,11 @@ public class DtoMapper {
         Game game = new Game();
         if (tGamesElement != null && tGamesElement.getGame() != null) {
             TwitchGame tGame = tGamesElement.getGame();
+            game.setId(tGame.get_id());
             game.setName(tGame.getName());
             game.setChannels(tGamesElement.getChannels());
             game.setViewers(tGamesElement.getViewers());
-            game.setBox(makeImageURL(tGame.getLogo().getTemplate(), BOX_WIDTH_SIZE, BOX_HEIGHT_SIZE));
+            game.setBox(makeImageURL(tGame.getBox().getTemplate(), BOX_WIDTH_SIZE, BOX_HEIGHT_SIZE));
         }
         return game;
     }
