@@ -19,24 +19,25 @@
 package ch.citux.td.data.worker.tasks;
 
 import ch.citux.td.R;
+import ch.citux.td.data.model.Streams;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.service.TDServiceImpl;
 import ch.citux.td.data.worker.TDCallback;
 
-public class TaskGetArchives extends TDTask<String , Videos> {
+public class TaskGetStreams extends TDTask<String , Streams> {
 
 
-    public TaskGetArchives(TDCallback<Videos> callback) {
+    public TaskGetStreams(TDCallback<Streams> callback) {
         super(callback);
     }
 
     @Override
-    protected Videos doInBackground(String ... params) {
+    protected Streams doInBackground(String ... params) {
         if (params.length == 2) {
-            return TDServiceImpl.getInstance().getVideos(params[0],params[1]);
+            return TDServiceImpl.getInstance().getStreams(params[0], params[1]);
         }
-        Videos videos = new Videos();
-        videos.setErrorResId(R.string.error_unexpected);
-        return videos;
+        Streams streams = new Streams();
+        streams.setErrorResId(R.string.error_unexpected);
+        return streams;
     }
 }

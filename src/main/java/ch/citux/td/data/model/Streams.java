@@ -16,27 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker.tasks;
+package ch.citux.td.data.model;
 
-import ch.citux.td.R;
-import ch.citux.td.data.model.Videos;
-import ch.citux.td.data.service.TDServiceImpl;
-import ch.citux.td.data.worker.TDCallback;
+import java.util.ArrayList;
 
-public class TaskGetArchives extends TDTask<String , Videos> {
+public class Streams extends Base {
 
+    private ArrayList<Stream> entries;
 
-    public TaskGetArchives(TDCallback<Videos> callback) {
-        super(callback);
+    public ArrayList<Stream> getEntries() {
+        return entries;
     }
 
-    @Override
-    protected Videos doInBackground(String ... params) {
-        if (params.length == 2) {
-            return TDServiceImpl.getInstance().getVideos(params[0],params[1]);
-        }
-        Videos videos = new Videos();
-        videos.setErrorResId(R.string.error_unexpected);
-        return videos;
+    public void setEntries(ArrayList<Stream> entries) {
+        this.entries = entries;
     }
 }

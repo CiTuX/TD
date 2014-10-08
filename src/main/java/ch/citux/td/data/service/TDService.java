@@ -25,6 +25,7 @@ import ch.citux.td.data.model.SearchStreams;
 import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamToken;
+import ch.citux.td.data.model.Streams;
 import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.model.Videos;
@@ -37,7 +38,9 @@ public interface TDService {
 
     public Stream getStream(String channel);
 
-    public Videos getVideos(String channel, int offset);
+    public Streams getStreams(String game, String offset);
+
+    public Videos getVideos(String channel, String offset);
 
     public VideoPlaylist getVideoPlaylist(String id);
 

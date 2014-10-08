@@ -51,6 +51,7 @@ import ch.citux.td.data.model.Stream;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamQuality;
 import ch.citux.td.data.model.StreamToken;
+import ch.citux.td.data.model.Streams;
 import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.VideoPlaylist;
 import ch.citux.td.data.model.Videos;
@@ -145,7 +146,23 @@ public class TDServiceImpl implements TDService {
     }
 
     @Override
-    public Videos getVideos(String channel, int offset) {
+    public Streams getStreams(String game, String  offset) {
+        Streams result = new Streams();
+        String url = buildUrl(TDConfig.URL_API_GET_STREAMS, game, offset);
+        Response<String> response = TDRequestHandler.startStringRequest(url);
+        if (response.getStatus() == Response.Status.OK) {
+            TwitchStream twitchStream = gson.fromJson(response.getResult(), TwitchStream.class);
+            if (twitchStream != null && (twitchStream.getStream() != null || twitchStream.getStreams() != null)) {
+                result = DtoMapper.mapStreams(twitchStream);
+            }
+        } else {
+            result.setErrorResId(R.string.error_data_error_message);
+        }
+        return result;
+    }
+
+    @Override
+    public Videos getVideos(String channel, String offset) {
         Videos result = new Videos();
         String url = buildUrl(TDConfig.URL_API_GET_VIDEOS, channel, offset);
         Response<String> response = TDRequestHandler.startStringRequest(url);

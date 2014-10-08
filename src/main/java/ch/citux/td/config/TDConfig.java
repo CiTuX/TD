@@ -34,6 +34,7 @@ public class TDConfig {
     public static final String URL_API_GET_VIDEOS = URL_API_TWITCH_KRAKEN_BASE + "channels/{0}/videos?offset={1}&limit=10&broadcasts=true";
     public static final String URL_API_GET_CHANNEL = URL_API_TWITCH_KRAKEN_BASE + "channels/{0}";
     public static final String URL_API_GET_STREAM = URL_API_TWITCH_KRAKEN_BASE + "streams/{0}";
+    public static final String URL_API_GET_STREAMS = URL_API_TWITCH_KRAKEN_BASE + "streams?game={0}&limit=20&offset={1}";
     public static final String URL_API_SEARCH_STREAMS = URL_API_TWITCH_KRAKEN_BASE + "search/streams?limit=20&q={0}&offset={1}";
     public static final String URL_API_SEARCH_CHANNELS = URL_API_TWITCH_KRAKEN_BASE + "search/channels?limit=20&q={0}&offset={1}";
     public static final String URL_API_GET_TOP_GAMES = URL_API_TWITCH_KRAKEN_BASE + "games/top?limit={0}&offset={1}";

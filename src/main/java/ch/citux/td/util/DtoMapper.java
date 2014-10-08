@@ -39,6 +39,7 @@ import ch.citux.td.data.model.Logo;
 import ch.citux.td.data.model.SearchChannels;
 import ch.citux.td.data.model.SearchStreams;
 import ch.citux.td.data.model.Stream;
+import ch.citux.td.data.model.Streams;
 import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.VideoPlaylist;
@@ -114,6 +115,19 @@ public class DtoMapper {
             stream.setThumbnail(makeImageURL(streamElement.getPreview().getTemplate(), PREVIEW_WIDTH_SIZE, PREVIEW_HEIGHT_SIZE));
         }
         return stream;
+    }
+
+    public static Streams mapStreams(TwitchStream twitchStream) {
+        Streams result = new Streams();
+
+        if (twitchStream != null && twitchStream.getStreams() != null) {
+            ArrayList<Stream> streams = new ArrayList<Stream>(twitchStream.getStreams().size());
+            for (TwitchStreamElement element : twitchStream.getStreams()) {
+                streams.add(mapStream(element));
+            }
+            result.setEntries(streams);
+        }
+        return result;
     }
 
     private static ArrayList<Logo> readLogos(String hqLogo) {
