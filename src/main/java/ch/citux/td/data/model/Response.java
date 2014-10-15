@@ -23,6 +23,11 @@ public class Response<Result> {
     private Status status;
     private Result result;
 
+    public Response() {
+        status = Status.ERROR_UNKNOWN;
+        result = null;
+    }
+
     public Response(Status status, Result result) {
         this.status = status;
         this.result = result;
@@ -53,6 +58,8 @@ public class Response<Result> {
         OK,
         ERROR_URL,
         ERROR_CONNECTION,
-        ERROR_CONTENT
+        ERROR_TIMEOUT,
+        ERROR_CONTENT,
+        ERROR_UNKNOWN
     }
 }

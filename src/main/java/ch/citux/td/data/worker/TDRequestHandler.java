@@ -83,7 +83,7 @@ public class TDRequestHandler {
                 status = Response.Status.OK;
             } catch (IOException e) {
                 Log.e(TAG, e);
-                status = Response.Status.ERROR_CONNECTION;
+                status = Response.Status.ERROR_TIMEOUT;
             }
         } else {
             status = response.getStatus();
@@ -113,7 +113,8 @@ public class TDRequestHandler {
     private static Response<InputStream> startRequest(String request) {
         Response.Status status;
         InputStream result = null;
-        HttpURLConnection urlConnection = null;
+        HttpURLConnection urlConnection;
+
         try {
             URL url = new URL(request);
 
@@ -172,6 +173,40 @@ public class TDRequestHandler {
         return out.toString();
     }
 
+//    final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
+//        public boolean verify(String hostname, SSLSession session) {
+//            return true;
+//        }
+//    };
+//    /**
+//     * Trust every server - dont check for any certificate
+//     */
+//    private static void trustAllHosts() {
+//        // Create a trust manager that does not validate certificate chains
+//        X509TrustManager[] trustAllCerts = new X509TrustManager[]{
+//                new X509TrustManager() {
+//                    public X509Certificate[] getAcceptedIssuers() {
+//                        return new X509Certificate[]{};
+//                    }
+//
+//                    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//                    }
+//
+//                    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//                    }
+//                }
+//        };
+//
+//        // Install the all-trusting trust manager
+//        try {
+//            SSLContext sc = SSLContext.getInstance("TLS");
+//            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+//            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+//        } catch (Exception e) {
+//            Log.e(TAG, e);
+//        }
+//    }
+
     public static class TrustManager implements X509TrustManager {
 
         private X509TrustManager defaultTrustManager;
@@ -187,7 +222,6 @@ public class TDRequestHandler {
 
             tmf.init(keyStore);
             localTrustManager = (X509TrustManager) tmf.getTrustManagers()[0];
-
             acceptedIssuers = ArrayUtils.addAll(defaultTrustManager.getAcceptedIssuers(), localTrustManager.getAcceptedIssuers());
         }
 

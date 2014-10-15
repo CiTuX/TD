@@ -25,6 +25,8 @@ import com.google.gson.reflect.TypeToken;
 import net.chilicat.m3u8.Element;
 import net.chilicat.m3u8.Playlist;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
@@ -42,6 +44,7 @@ import ch.citux.td.data.dto.TwitchFollows;
 import ch.citux.td.data.dto.TwitchGames;
 import ch.citux.td.data.dto.TwitchStream;
 import ch.citux.td.data.dto.TwitchVideos;
+import ch.citux.td.data.model.Base;
 import ch.citux.td.data.model.Channel;
 import ch.citux.td.data.model.Follows;
 import ch.citux.td.data.model.Response;
@@ -97,18 +100,21 @@ public class TDServiceImpl implements TDService {
         return MessageFormat.format(base, args.toArray());
     }
 
+    private String startStringRequest(String url, Base result) {
+        RequestHandler requestHandler = new RequestHandler();
+        return requestHandler.startStringRequest(url, result);
+    }
+
     @Override
     public Follows getFollows(String username) {
         Follows result = new Follows();
         String url = buildUrl(TDConfig.URL_API_GET_FOLLOWS, username);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchFollows twitchFollows = gson.fromJson(response.getResult(), TwitchFollows.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchFollows twitchFollows = gson.fromJson(response, TwitchFollows.class);
             if (twitchFollows != null && twitchFollows.getFollows() != null) {
                 result.setChannels(DtoMapper.mapTwitchChannels(twitchFollows.getFollows()));
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -117,14 +123,12 @@ public class TDServiceImpl implements TDService {
     public Channel getChannel(String channel) {
         Channel result = new Channel();
         String url = buildUrl(TDConfig.URL_API_GET_CHANNEL, channel);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchChannel twitchChannel = gson.fromJson(response.getResult(), TwitchChannel.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchChannel twitchChannel = gson.fromJson(response, TwitchChannel.class);
             if (twitchChannel != null) {
                 result = DtoMapper.mapChannel(twitchChannel);
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -133,30 +137,26 @@ public class TDServiceImpl implements TDService {
     public Stream getStream(String channel) {
         Stream result = new Stream();
         String url = buildUrl(TDConfig.URL_API_GET_STREAM, channel);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchStream twitchStream = gson.fromJson(response.getResult(), TwitchStream.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchStream twitchStream = gson.fromJson(response, TwitchStream.class);
             if (twitchStream != null && (twitchStream.getStream() != null || twitchStream.getStreams() != null)) {
                 result = DtoMapper.mapStream(twitchStream.getStream());
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
 
     @Override
-    public Streams getStreams(String game, String  offset) {
+    public Streams getStreams(String game, String offset) {
         Streams result = new Streams();
         String url = buildUrl(TDConfig.URL_API_GET_STREAMS, game, offset);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchStream twitchStream = gson.fromJson(response.getResult(), TwitchStream.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchStream twitchStream = gson.fromJson(response, TwitchStream.class);
             if (twitchStream != null && (twitchStream.getStream() != null || twitchStream.getStreams() != null)) {
                 result = DtoMapper.mapStreams(twitchStream);
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -165,14 +165,12 @@ public class TDServiceImpl implements TDService {
     public Videos getVideos(String channel, String offset) {
         Videos result = new Videos();
         String url = buildUrl(TDConfig.URL_API_GET_VIDEOS, channel, offset);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchVideos videos = gson.fromJson(response.getResult(), TwitchVideos.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchVideos videos = gson.fromJson(response, TwitchVideos.class);
             if (videos != null) {
                 result.setVideos(DtoMapper.mapVideos(videos));
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -181,15 +179,13 @@ public class TDServiceImpl implements TDService {
     public VideoPlaylist getVideoPlaylist(String id) {
         VideoPlaylist result = new VideoPlaylist();
         String url = buildUrl(TDConfig.URL_API_GET_VIDEO, id);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            List<JustinArchive> archives = jGson.fromJson(response.getResult(), new TypeToken<List<JustinArchive>>() {
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            List<JustinArchive> archives = jGson.fromJson(response, new TypeToken<List<JustinArchive>>() {
             }.getType());
             if (archives != null) {
                 result = (DtoMapper.mapVideo(archives));
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -198,16 +194,14 @@ public class TDServiceImpl implements TDService {
     public StreamToken getStreamToken(String channel) {
         StreamToken result = new StreamToken();
         String url = buildUrl(TDConfig.URL_API_GET_STREAM_TOKEN, channel);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchAccessToken accessToken = gson.fromJson(response.getResult(), TwitchAccessToken.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchAccessToken accessToken = gson.fromJson(response, TwitchAccessToken.class);
             if (accessToken != null && accessToken.getToken() != null && accessToken.getSig() != null) {
                 result.setNauth(accessToken.getToken());
                 result.setNauthsig(accessToken.getSig());
                 result.setP((int) (Math.random() * 999999));
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -240,14 +234,12 @@ public class TDServiceImpl implements TDService {
     public SearchStreams searchStreams(String query, String offset) {
         SearchStreams result = new SearchStreams();
         String url = buildUrl(TDConfig.URL_API_SEARCH_STREAMS, query, offset);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchStream searchStreams = jGson.fromJson(response.getResult(), TwitchStream.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchStream searchStreams = jGson.fromJson(response, TwitchStream.class);
             if (searchStreams != null) {
                 result = (DtoMapper.mapSearchStreams(searchStreams));
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -256,14 +248,12 @@ public class TDServiceImpl implements TDService {
     public SearchChannels searchChannels(String query, String offset) {
         SearchChannels result = new SearchChannels();
         String url = buildUrl(TDConfig.URL_API_SEARCH_CHANNELS, query, offset);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchChannels searchStreams = jGson.fromJson(response.getResult(), TwitchChannels.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchChannels searchStreams = jGson.fromJson(response, TwitchChannels.class);
             if (searchStreams != null) {
                 result = (DtoMapper.mapSearchChannels(searchStreams));
             }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
     }
@@ -272,13 +262,32 @@ public class TDServiceImpl implements TDService {
     public TopGames getTopGames(String limit, String offset) {
         TopGames result = new TopGames();
         String url = buildUrl(TDConfig.URL_API_GET_TOP_GAMES, limit, offset);
-        Response<String> response = TDRequestHandler.startStringRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            TwitchGames twitchGames = gson.fromJson(response.getResult(), TwitchGames.class);
+        String response = startStringRequest(url, result);
+        if (StringUtils.isNotEmpty(response)) {
+            TwitchGames twitchGames = gson.fromJson(response, TwitchGames.class);
             result = DtoMapper.mapGames(twitchGames);
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
         }
         return result;
+    }
+
+    private class RequestHandler {
+
+        private static final int MAX_RETRY_COUNT = 5;
+
+        private int retryCount;
+
+        private String startStringRequest(String url, Base result) {
+            Response<String> response = TDRequestHandler.startStringRequest(url);
+            if (response.getStatus() == Response.Status.OK) {
+                return response.getResult();
+            }
+            if (response.getStatus() == Response.Status.ERROR_TIMEOUT) {
+                if (++retryCount <= MAX_RETRY_COUNT) {
+                    return startStringRequest(url, result);
+                }
+            }
+            result.setErrorResId(R.string.error_data_error_message);
+            return "";
+        }
     }
 }
