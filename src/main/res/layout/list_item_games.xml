@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013-2014 Paul Stöhr
+  ~
+  ~ This file is part of TD.
+  ~
+  ~ TD is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/imgThumbnail"
+        android:layout_width="64dp"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:scaleType="center"
+        android:contentDescription="@string/channel_thumbnail"/>
+
+    <TextView
+        android:id="@+id/lblTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imgThumbnail"
+        android:layout_toRightOf="@id/imgThumbnail"
+        android:layout_alignTop="@id/imgThumbnail"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:textSize="16sp"/>
+
+    <ImageView
+        android:id="@+id/imgChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@id/imgThumbnail"
+        android:layout_alignBottom="@id/imgThumbnail"
+        android:contentDescription="@string/channel_name"
+        android:src="@drawable/ic_channel"/>
+
+    <TextView
+        android:id="@+id/lblChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/imgChannel"
+        android:layout_toLeftOf="@+id/lblViewers"
+        android:layout_alignBottom="@id/imgChannel"
+        android:minWidth="72dp"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:lines="1"
+        android:singleLine="true"
+        android:gravity="bottom|left"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/lblViewers"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="2dp"
+        android:layout_toLeftOf="@+id/imgViewers"
+        android:layout_alignBottom="@id/imgThumbnail"
+        android:singleLine="true"
+        android:gravity="bottom|right"
+        android:textSize="14sp"/>
+
+    <ImageView
+        android:id="@+id/imgViewers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="2dp"
+        android:layout_below="@id/lblTitle"
+        android:layout_alignBottom="@id/lblViewers"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/stream_viewers"
+        android:src="@drawable/ic_watching_now"/>
+
+</RelativeLayout>

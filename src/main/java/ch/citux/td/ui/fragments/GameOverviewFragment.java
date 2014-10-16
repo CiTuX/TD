@@ -19,27 +19,30 @@
 package ch.citux.td.ui.fragments;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 
 import butterknife.InjectView;
 import ch.citux.td.R;
 import ch.citux.td.data.model.Game;
 import ch.citux.td.data.model.TopGames;
 import ch.citux.td.data.worker.TDTaskManager;
-import ch.citux.td.ui.adapter.GamerOverviewAdapter;
+import ch.citux.td.ui.adapter.GameOverviewAdapter;
 import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.ui.widget.GridView;
 import ch.citux.td.util.Log;
 
-public class GameOverviewFragment extends TDFragment<TopGames> implements GridView.OnLastItemVisibleListener {
+public class GameOverviewFragment extends TDFragment<TopGames> implements GridView.OnLastItemVisibleListener, AdapterView.OnItemClickListener {
 
     private static final int LIMIT = 15;
 
-    @InjectView(android.R.id.empty) EmptyView emptyView;
+    @InjectView(R.id.empty) EmptyView emptyView;
     @InjectView(R.id.gridview) GridView gridView;
 
-    private GamerOverviewAdapter adapter;
-    private int offset;
+    private GameOverviewAdapter adapter;
+    private int offset = 0;
+    private boolean loadData = true;
 
     @Override
     protected int onCreateView() {
@@ -49,14 +52,20 @@ public class GameOverviewFragment extends TDFragment<TopGames> implements GridVi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        adapter = new GamerOverviewAdapter(getActivity());
+        if (adapter == null) {
+            adapter = new GameOverviewAdapter(getActivity());
+        }
+        gridView.setEmptyView(emptyView);
         gridView.setAdapter(adapter);
         gridView.setOnLastItemVisibleListener(this);
+        gridView.setOnItemClickListener(this);
     }
 
     @Override
     public void loadData() {
-        TDTaskManager.getTopGames(this, LIMIT, offset);
+        if (loadData) {
+            TDTaskManager.getTopGames(this, LIMIT, offset);
+        }
     }
 
     @Override
@@ -72,7 +81,28 @@ public class GameOverviewFragment extends TDFragment<TopGames> implements GridVi
     public void onLastItemVisible() {
         offset += LIMIT;
         if (adapter.getTotalCount() > offset + LIMIT) {
+            loadData = true;
             loadData();
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Game game = adapter.getItem(position);
+        if (game != null) {
+            Log.d(this, game.getName());
+
+            Bundle args = new Bundle();
+            args.putSerializable(GameStreamsFragment.GAME, game);
+
+            getTDActivity().showStreams(args);
+            loadData = false;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        loadData = true;
+        return super.onOptionsItemSelected(item);
     }
 }

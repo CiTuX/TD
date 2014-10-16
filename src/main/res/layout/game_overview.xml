@@ -35,7 +35,7 @@
         android:drawSelectorOnTop="false"/>
 
     <ch.citux.td.ui.widget.EmptyView
-        android:id="@android:id/empty"
+        android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

@@ -19,55 +19,48 @@
 package ch.citux.td.ui.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.widget.TextView;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.data.model.Stream;
-import ch.citux.td.util.FormatUtils;
-import ch.citux.td.util.MarqueeHelper;
+import ch.citux.td.data.model.Game;
+import ch.citux.td.data.model.TopGames;
 
-public class SearchAdapter extends BaseAdapter {
+public class GameOverviewAdapter extends BaseAdapter {
 
-    private ArrayList<Stream> data;
     private LayoutInflater inflater;
     private Picasso picasso;
+    private TopGames topGames;
+    private ArrayList<Game> data;
 
-    public SearchAdapter(Context context) {
-        init(context, new ArrayList<Stream>());
+    public GameOverviewAdapter(Context context) {
+        inflater = LayoutInflater.from(context);
+        picasso = Picasso.with(context);
+        data = new ArrayList<Game>();
     }
 
-    public SearchAdapter(Context context, ArrayList<Stream> data) {
-        init(context, data);
+    public void addData(TopGames topGames) {
+        this.topGames = topGames;
+        this.data.addAll(topGames.getGames());
+        notifyDataSetChanged();
     }
 
-    private void init(Context context, ArrayList<Stream> data) {
-        this.data = data;
-        this.inflater = LayoutInflater.from(context);
-        this.picasso = Picasso.with(context);
-    }
-
-    public void setData(ArrayList<Stream> data) {
-        if (data != null) {
-            this.data = data;
-            notifyDataSetChanged();
+    public int getTotalCount() {
+        if (topGames != null) {
+            return topGames.getTotal();
         }
-    }
-
-    public void clear() {
-        data.clear();
-        notifyDataSetInvalidated();
+        return 0;
     }
 
     @Override
@@ -79,41 +72,44 @@ public class SearchAdapter extends BaseAdapter {
     }
 
     @Override
-    public Stream getItem(int position) {
-        return data.get(position);
+    public Game getItem(int position) {
+        if (data != null && data.size() > position) {
+            return data.get(position);
+        }
+        return null;
     }
 
     @Override
     public long getItemId(int position) {
+        Game game = getItem(position);
+        if (game != null) {
+            return game.getId();
+        }
         return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Stream stream = data.get(position);
+        Game game = getItem(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.list_item_streams, parent, false);
+            convertView = inflater.inflate(R.layout.game_item, parent, false);
             if (convertView != null) {
                 ButterKnife.inject(holder, convertView);
             }
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        picasso.load(stream.getThumbnail()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
-        holder.lblTitle.setText(stream.getStatus());
-        MarqueeHelper.setupMarquee(holder.lblChannel, stream.getChannel().getName());
-        MarqueeHelper.setupMarquee(holder.lblGame, FormatUtils.formatGame(stream.getGame()));
-        MarqueeHelper.setupMarquee(holder.lblViewers, FormatUtils.formatNumber(stream.getViewers()));
+        picasso.load(game.getBox()).placeholder(R.drawable.default_game_box_medium).into(holder.imgBox);
+        holder.lblName.setText(game.getName());
+        holder.lblViewers.setText(String.valueOf(game.getViewers()));
         return convertView;
     }
 
-    static class ViewHolder {
-        @InjectView(R.id.imgThumbnail) ImageView imgThumbnail;
-        @InjectView(R.id.lblTitle) TextView lblTitle;
-        @InjectView(R.id.lblChannel) TextView lblChannel;
-        @InjectView(R.id.lblGame) TextView lblGame;
+    class ViewHolder {
+        @InjectView(R.id.imgBox) ImageView imgBox;
+        @InjectView(R.id.lblName) TextView lblName;
         @InjectView(R.id.lblViewers) TextView lblViewers;
     }
 }

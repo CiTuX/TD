@@ -22,19 +22,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ch.citux.td.R;
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Video;
-import ch.citux.td.data.model.Videos;
+import ch.citux.td.data.model.Game;
+import ch.citux.td.data.model.Stream;
+import ch.citux.td.data.model.Streams;
 import ch.citux.td.data.worker.TDTaskManager;
-import ch.citux.td.ui.adapter.ArchiveAdapter;
+import ch.citux.td.ui.adapter.GameStreamsAdapter;
 import ch.citux.td.ui.widget.ListView;
 import ch.citux.td.util.VideoPlayer;
 
-public class ChannelVideosFragment extends TDListFragment<Videos> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
+public class GameStreamsFragment extends TDListFragment<Streams> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
 
-    private ArchiveAdapter adapter;
-    private Channel channel;
+    public static final String GAME = "game";
+
+    private GameStreamsAdapter adapter;
+    private Game game;
     private int offset;
 
     @Override
@@ -46,16 +50,12 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(ChannelFragment.CHANNEL)) {
-            channel = (Channel) getArguments().getSerializable(ChannelFragment.CHANNEL);
+        if (getArguments() != null && getArguments().containsKey(GAME)) {
+            game = (Game) getArguments().getSerializable(GAME);
+            offset = 0;
         }
 
         setOnItemClickListener(this);
-        setOnLastItemVisibleListener(this);
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
     }
 
     @Override
@@ -68,25 +68,28 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
 
     @Override
     public void loadData() {
-        if (channel != null) {
-            TDTaskManager.getArchives(this, channel.getName(), String .valueOf(offset));
+        if (StringUtils.isNotEmpty(game.getName())) {
+            TDTaskManager.getStreams(this, game.getName(), offset);
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Video video = adapter.getItem(position);
-        TDTaskManager.getVideoPlaylist(new VideoPlayer.GetVideoCallback(this), video.getId());
+        Stream stream = adapter.getItem(position);
+        if (stream != null) {
+            TDTaskManager.getStreamPlaylist(new VideoPlayer.StreamPlaylistCallback(this, stream.getStatus()), stream.getName());
+        }
     }
 
     @Override
-    public void onResponse(Videos response) {
-        emptyView.setText(R.string.channel_archives_empty);
+    public void onResponse(Streams response) {
+        setOnLastItemVisibleListener(this);
+        emptyView.setText(R.string.search_no_result);
         if (adapter == null) {
-            adapter = new ArchiveAdapter(getActivity(), response.getVideos());
+            adapter = new GameStreamsAdapter(getActivity(), response.getEntries());
             setListAdapter(adapter);
         } else {
-            adapter.setData(response.getVideos());
+            adapter.setData(response.getEntries());
         }
     }
 

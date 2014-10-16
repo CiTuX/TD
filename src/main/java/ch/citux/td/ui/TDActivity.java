@@ -46,6 +46,7 @@ import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.fragments.ChannelFragment;
 import ch.citux.td.ui.fragments.FavoritesFragment;
 import ch.citux.td.ui.fragments.GameOverviewFragment;
+import ch.citux.td.ui.fragments.GameStreamsFragment;
 import ch.citux.td.ui.fragments.SearchFragment;
 import ch.citux.td.ui.fragments.SettingsFragment;
 import ch.citux.td.ui.fragments.VideoFragment;
@@ -54,6 +55,7 @@ import ch.citux.td.util.Log;
 public class TDActivity extends Activity implements View.OnFocusChangeListener {
 
     private GameOverviewFragment gameOverviewFragment;
+    private GameStreamsFragment gameStreamsFragment;
     private FavoritesFragment favoritesFragment;
     private ChannelFragment channelFragment;
     private SearchFragment searchFragment;
@@ -77,24 +79,21 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         Bundle args = new Bundle();
         args.putBoolean(TDConfig.SETTINGS_CHANNEL_NAME, hasUsername);
 
-        gameOverviewFragment = new GameOverviewFragment();
-
         favoritesFragment = new FavoritesFragment();
         favoritesFragment.setArguments(args);
 
         channelFragment = new ChannelFragment();
         channelFragment.setArguments(args);
 
-        videoFragment = new VideoFragment();
-
         if (getSupportFragmentManager().findFragmentById(R.id.content) == null && !favoritesFragment.isAdded()) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.content, gameOverviewFragment);
+            transaction.add(R.id.content, favoritesFragment);
             if (isTablet) {
                 transaction.add(R.id.detail, channelFragment);
             }
             transaction.commitAllowingStateLoss();
         }
+        showGameOverview();
     }
 
     @Override
@@ -192,7 +191,11 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
     }
 
     public void showVideo(Bundle args) {
+        if(videoFragment == null){
+            videoFragment = new VideoFragment();
+        }
         videoFragment.setArguments(args);
+
         if (videoFragment.isAdded()) {
             videoFragment.playVideo();
         } else {
@@ -208,6 +211,29 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (channelFragment.isAdded()) {
             channelFragment.showPlaylist(playlist);
         }
+    }
+
+    public void showGameOverview() {
+        if (gameOverviewFragment == null) {
+            gameOverviewFragment = new GameOverviewFragment();
+        }
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(isTablet ? R.id.detail : R.id.content, gameOverviewFragment);
+        transaction.addToBackStack(GameOverviewFragment.class.getSimpleName());
+        transaction.commit();
+    }
+
+    public void showStreams(Bundle args) {
+        if (gameStreamsFragment == null) {
+            gameStreamsFragment = new GameStreamsFragment();
+        }
+        gameStreamsFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(isTablet ? R.id.detail : R.id.content, gameStreamsFragment);
+        transaction.addToBackStack(GameStreamsFragment.class.getSimpleName());
+        transaction.commit();
     }
 
     public void startLoading() {
@@ -257,6 +283,12 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         }
         if (searchFragment != null && searchFragment.isAdded()) {
             searchFragment.refreshData();
+        }
+        if (gameOverviewFragment != null && gameOverviewFragment.isAdded()) {
+            gameOverviewFragment.refreshData();
+        }
+        if (gameStreamsFragment != null && gameStreamsFragment.isAdded()) {
+            gameStreamsFragment.refreshData();
         }
     }
 

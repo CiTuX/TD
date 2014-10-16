@@ -109,10 +109,12 @@ public class DtoMapper {
             stream.setChannel(mapChannel(streamElement.getChannel()));
             stream.setChannelId(streamElement.getChannel_id());
             stream.setGame(streamElement.getGame());
-            stream.setName(streamElement.getName());
             stream.setStatus(streamElement.getChannel().getStatus());
             stream.setViewers(streamElement.getViewers());
             stream.setThumbnail(makeImageURL(streamElement.getPreview().getTemplate(), PREVIEW_WIDTH_SIZE, PREVIEW_HEIGHT_SIZE));
+            if (stream.getChannel() != null) {
+                stream.setName(stream.getChannel().getName());
+            }
         }
         return stream;
     }

@@ -46,26 +46,23 @@
         android:textStyle="bold"
         android:singleLine="true"/>
 
-    <ImageView
-        android:id="@+id/imgViewers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lblName"
-        android:layout_alignStart="@id/lblName"
-        android:layout_alignLeft="@id/lblName"
-        android:src="@drawable/ic_watching_now"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/imgViewers"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/lblName"-->
+        <!--android:layout_alignStart="@id/lblName"-->
+        <!--android:layout_alignLeft="@id/lblName"-->
+        <!--android:src="@drawable/ic_watching_now"/>-->
 
     <TextView
         android:id="@+id/lblViewers"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/lblName"
-        android:layout_toRightOf="@id/imgViewers"
-        android:layout_toEndOf="@id/imgViewers"
-        android:layout_alignEnd="@id/imgBox"
-        android:layout_alignRight="@id/imgBox"
-        android:layout_alignBottom="@id/imgViewers"
-        android:gravity="end|bottom"
+        android:layout_alignEnd="@id/lblName"
+        android:layout_alignRight="@id/lblName"
+        android:gravity="start|bottom"
         android:ellipsize="marquee"
         android:textStyle="bold"
         android:singleLine="true"/>
