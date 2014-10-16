@@ -281,7 +281,7 @@ public class TDServiceImpl implements TDService {
             if (response.getStatus() == Response.Status.OK) {
                 return response.getResult();
             }
-            if (response.getStatus() == Response.Status.ERROR_TIMEOUT) {
+            if (response.getStatus() != Response.Status.ERROR_UNKNOWN) {
                 if (++retryCount <= MAX_RETRY_COUNT) {
                     return startStringRequest(url, result);
                 }
