@@ -42,6 +42,7 @@
     <string name="error_no_player_message">Damit du Videos abspielen kannst,
         brauchst du einen Player, wie z.B. VLC oder MX Player.</string>
     <string name="error_internal_player">Interner Player kann nicht verwendet werden</string>
+    <string name="error_no_archived_videos">Twitch hat eine API-Änderung durchgeführt, Videos funktionieren momentan nicht :(</string>
 
     <!-- DialogMessages -->
     <string name="dialog_error_title">Fehler</string>
@@ -59,6 +60,9 @@
         <item>High</item>
         <item>Source</item>
     </string-array>
+
+    <!-- Favorites -->
+    <string name="favorites_title">Favoriten</string>
 
     <!-- Channel -->
     <string name="channel_name">Kanal</string>
@@ -90,6 +94,7 @@
     <string name="preference_licenses">Open Source Lizenzen</string>
 
     <!-- Game -->
+    <string name="game_title">Game Übersicht</string>
     <string name="game_box">Box</string>
 
 </resources>

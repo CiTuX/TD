@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
@@ -33,7 +32,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import org.holoeverywhere.addon.AddonSlider;
+import org.holoeverywhere.addon.Addons;
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.slider.SliderMenu;
 import org.holoeverywhere.widget.LinearLayout;
 
 import java.lang.reflect.Field;
@@ -52,16 +54,16 @@ import ch.citux.td.ui.fragments.SettingsFragment;
 import ch.citux.td.ui.fragments.VideoFragment;
 import ch.citux.td.util.Log;
 
+@Addons(AddonSlider.class)
 public class TDActivity extends Activity implements View.OnFocusChangeListener {
 
     private GameOverviewFragment gameOverviewFragment;
     private GameStreamsFragment gameStreamsFragment;
-    private FavoritesFragment favoritesFragment;
     private ChannelFragment channelFragment;
     private SearchFragment searchFragment;
     private VideoFragment videoFragment;
 
-    private MenuItem settingsItem;
+    private SliderMenu sliderMenu;
     private MenuItem refreshItem;
     private MenuItem searchItem;
     private boolean isLoading;
@@ -79,21 +81,15 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         Bundle args = new Bundle();
         args.putBoolean(TDConfig.SETTINGS_CHANNEL_NAME, hasUsername);
 
-        favoritesFragment = new FavoritesFragment();
-        favoritesFragment.setArguments(args);
+        sliderMenu = addonSlider().obtainDefaultSliderMenu();
+        sliderMenu.setInverseTextColorWhenSelected(false);
+        sliderMenu.setNavigateUpBehavior(SliderMenu.NavigateUpBehavior.PopUpFragment);
+        sliderMenu.add(R.string.favorites_title, FavoritesFragment.class, args);
+        sliderMenu.add(R.string.game_title, GameOverviewFragment.class);
+        sliderMenu.add(R.string.action_settings, SettingsFragment.class);
 
         channelFragment = new ChannelFragment();
         channelFragment.setArguments(args);
-
-        if (getSupportFragmentManager().findFragmentById(R.id.content) == null && !favoritesFragment.isAdded()) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.content, favoritesFragment);
-            if (isTablet) {
-                transaction.add(R.id.detail, channelFragment);
-            }
-            transaction.commitAllowingStateLoss();
-        }
-        showGameOverview();
     }
 
     @Override
@@ -107,11 +103,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             searchFragment.setQuery(query);
             searchFragment.loadData();
 
-            if (getSupportFragmentManager().findFragmentById(R.id.content) != searchFragment) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.content, searchFragment);
-                fragmentTransaction.commit();
-            }
+            sliderMenu.replaceFragment(searchFragment);
             Log.d(this, query);
         }
     }
@@ -128,7 +120,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         inflater.inflate(R.menu.main, menu);
 
         refreshItem = menu.findItem(R.id.menu_refresh);
-        settingsItem = menu.findItem(R.id.menu_settings);
         searchItem = menu.findItem(R.id.menu_search);
 
         // Associate searchable configuration with the SearchView
@@ -165,13 +156,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
                     refreshData();
                 }
                 return true;
-            case R.id.menu_settings:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content, new SettingsFragment())
-                        .addToBackStack(SettingsFragment.class.getSimpleName())
-                        .commit();
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -183,15 +167,12 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             Bundle arguments = new Bundle();
             arguments.putSerializable(ChannelFragment.CHANNEL, channel);
             channelFragment.setArguments(arguments);
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.content, channelFragment);
-            transaction.addToBackStack(ChannelFragment.class.getSimpleName());
-            transaction.commit();
+            sliderMenu.replaceFragment(channelFragment);
         }
     }
 
     public void showVideo(Bundle args) {
-        if(videoFragment == null){
+        if (videoFragment == null) {
             videoFragment = new VideoFragment();
         }
         videoFragment.setArguments(args);
@@ -199,10 +180,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (videoFragment.isAdded()) {
             videoFragment.playVideo();
         } else {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(isTablet ? R.id.detail : R.id.content, videoFragment);
-            transaction.addToBackStack(VideoFragment.class.getSimpleName());
-            transaction.commit();
+            sliderMenu.replaceFragment(videoFragment);
         }
         MenuItemCompat.collapseActionView(searchItem);
     }
@@ -213,27 +191,12 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         }
     }
 
-    public void showGameOverview() {
-        if (gameOverviewFragment == null) {
-            gameOverviewFragment = new GameOverviewFragment();
-        }
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(isTablet ? R.id.detail : R.id.content, gameOverviewFragment);
-        transaction.addToBackStack(GameOverviewFragment.class.getSimpleName());
-        transaction.commit();
-    }
-
     public void showStreams(Bundle args) {
         if (gameStreamsFragment == null) {
             gameStreamsFragment = new GameStreamsFragment();
         }
         gameStreamsFragment.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(isTablet ? R.id.detail : R.id.content, gameStreamsFragment);
-        transaction.addToBackStack(GameStreamsFragment.class.getSimpleName());
-        transaction.commit();
+        sliderMenu.replaceFragment(gameStreamsFragment);
     }
 
     public void startLoading() {
@@ -254,9 +217,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (refreshItem != null) {
             refreshItem.setVisible(true);
         }
-        if (settingsItem != null) {
-            settingsItem.setVisible(true);
-        }
         if (searchItem != null) {
             searchItem.setVisible(true);
         }
@@ -266,18 +226,12 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (refreshItem != null) {
             refreshItem.setVisible(false);
         }
-        if (settingsItem != null) {
-            settingsItem.setVisible(false);
-        }
         if (searchItem != null) {
             searchItem.setVisible(false);
         }
     }
 
     protected void refreshData() {
-        if (favoritesFragment != null && favoritesFragment.isAdded()) {
-            favoritesFragment.refreshData();
-        }
         if (channelFragment != null && channelFragment.isAdded()) {
             channelFragment.refreshData();
         }
@@ -298,22 +252,12 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
 
     @Override
     public void onFocusChange(View view, boolean queryTextFocused) {
-        if (queryTextFocused) {
-            if (settingsItem != null) {
-                settingsItem.setVisible(false);
-            }
-        } else {
+        if (!queryTextFocused) {
             MenuItemCompat.collapseActionView(searchItem);
-
-            if (settingsItem != null) {
-                settingsItem.setVisible(true);
-            }
-
-            if (getSupportFragmentManager().findFragmentById(R.id.content) == searchFragment) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.content, favoritesFragment);
-                transaction.commit();
-            }
         }
+    }
+
+    public AddonSlider.AddonSliderA addonSlider() {
+        return addon(AddonSlider.class);
     }
 }

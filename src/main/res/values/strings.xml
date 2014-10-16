@@ -43,6 +43,7 @@
     <string name="error_no_player_message">In order to play videos you need
         to install an external video player, like VLC or MX Player.</string>
     <string name="error_internal_player">Unable to use internal Player</string>
+    <string name="error_no_archived_videos">Twitch changed its API, videos are currently broken :(</string>
 
     <!-- DialogMessages -->
     <string name="dialog_error_title">Error</string>
@@ -60,6 +61,9 @@
         <item>High</item>
         <item>Source</item>
     </string-array>
+
+    <!-- Favorites -->
+    <string name="favorites_title">Favorites</string>
 
     <!-- Channel -->
     <string name="channel_name">Channel-Name</string>
@@ -91,6 +95,7 @@
     <string name="preference_licenses">Open Source Licenses</string>
 
     <!-- Game -->
+    <string name="game_title">Game Overview</string>
     <string name="game_box">Box</string>
 
 </resources>
