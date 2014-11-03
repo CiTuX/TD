@@ -39,15 +39,14 @@ import ch.citux.td.ui.widget.EmptyView;
 public abstract class TDFragment<Result> extends Fragment implements TDBase, TDCallback<Result> {
 
     private TDActivity activity;
+    private Bundle args;
     protected boolean hasUsername;
     @Optional @InjectView(android.R.id.empty) EmptyView emptyView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            hasUsername = getArguments().getBoolean(TDConfig.SETTINGS_CHANNEL_NAME);
-        }
+        hasUsername = getArgs().getBoolean(TDConfig.SETTINGS_CHANNEL_NAME);
     }
 
     @Override
@@ -117,5 +116,18 @@ public abstract class TDFragment<Result> extends Fragment implements TDBase, TDC
 
     public TDActivity getTDActivity() {
         return activity;
+    }
+
+    @Override
+    public void setArgs(Bundle args) {
+        this.args = args;
+    }
+
+    @Override
+    public Bundle getArgs() {
+        if (args == null) {
+            args = new Bundle();
+        }
+        return args;
     }
 }

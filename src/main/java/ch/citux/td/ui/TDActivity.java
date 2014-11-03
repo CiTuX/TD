@@ -89,7 +89,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         sliderMenu.add(R.string.action_settings, SettingsFragment.class);
 
         channelFragment = new ChannelFragment();
-        channelFragment.setArguments(args);
+        channelFragment.setArgs(args);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         } else {
             Bundle arguments = new Bundle();
             arguments.putSerializable(ChannelFragment.CHANNEL, channel);
-            channelFragment.setArguments(arguments);
+            channelFragment.setArgs(arguments);
             sliderMenu.replaceFragment(channelFragment);
         }
     }
@@ -175,7 +175,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (videoFragment == null) {
             videoFragment = new VideoFragment();
         }
-        videoFragment.setArguments(args);
+        videoFragment.setArgs(args);
 
         if (videoFragment.isAdded()) {
             videoFragment.playVideo();
@@ -195,7 +195,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (gameStreamsFragment == null) {
             gameStreamsFragment = new GameStreamsFragment();
         }
-        gameStreamsFragment.setArguments(args);
+        gameStreamsFragment.setArgs(args);
         sliderMenu.replaceFragment(gameStreamsFragment);
     }
 

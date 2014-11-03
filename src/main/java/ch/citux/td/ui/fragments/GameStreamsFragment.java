@@ -50,8 +50,8 @@ public class GameStreamsFragment extends TDListFragment<Streams> implements Adap
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(GAME)) {
-            game = (Game) getArguments().getSerializable(GAME);
+        if (getArgs().containsKey(GAME)) {
+            game = (Game) getArgs().getSerializable(GAME);
             offset = 0;
         }
 

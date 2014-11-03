@@ -64,8 +64,8 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(CHANNEL)) {
-            updateChannel((Channel) getArguments().get(CHANNEL));
+        if (getArgs().containsKey(CHANNEL)) {
+            updateChannel((Channel) getArgs().get(CHANNEL));
         } else {
             if (hasUsername) {
                 emptyView.setText(R.string.channel_detail_empty);

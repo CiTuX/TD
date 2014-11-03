@@ -101,9 +101,11 @@ public class FavoritesFragment extends TDListFragment<Follows> implements Adapte
         } else {
             adapter.setData(response.getChannels());
         }
-        for (int i = 0; i < response.getChannels().size(); i++) {
-            Channel channel = response.getChannels().valueAt(i);
-            TDTaskManager.getStatus(new ChannelCallback(channel.getId(), this), channel.getName());
+        if (response.getChannels() != null) {
+            for (int i = 0; i < response.getChannels().size(); i++) {
+                Channel channel = response.getChannels().valueAt(i);
+                TDTaskManager.getStatus(new ChannelCallback(channel.getId(), this), channel.getName());
+            }
         }
     }
 

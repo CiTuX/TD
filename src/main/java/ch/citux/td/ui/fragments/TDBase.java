@@ -20,6 +20,7 @@ package ch.citux.td.ui.fragments;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import org.holoeverywhere.preference.SharedPreferences;
 
@@ -36,4 +37,8 @@ public interface TDBase {
     public boolean isAdded();
 
     public TDActivity getTDActivity();
+
+    public void setArgs(Bundle args);
+
+    public Bundle getArgs();
 }

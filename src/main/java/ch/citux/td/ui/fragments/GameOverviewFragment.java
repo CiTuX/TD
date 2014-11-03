@@ -70,11 +70,13 @@ public class GameOverviewFragment extends TDFragment<TopGames> implements GridVi
 
     @Override
     public void onResponse(TopGames response) {
-        for (Game game : response.getGames()) {
-            Log.d(this, game.getName());
+        if (response != null && response.getGames() != null) {
+            for (Game game : response.getGames()) {
+                Log.d(this, game.getName());
+            }
+            adapter.addData(response);
+            emptyView.setVisibility(View.GONE);
         }
-        adapter.addData(response);
-        emptyView.setVisibility(View.GONE);
     }
 
     @Override

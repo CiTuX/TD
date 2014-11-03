@@ -33,7 +33,7 @@ import ch.citux.td.R;
 import ch.citux.td.ui.TDActivity;
 import ch.citux.td.ui.widget.EmptyView;
 
-public class VideoFragment extends Fragment {//implements MediaPlayer.OnPreparedListener {
+public class VideoFragment extends TDFragment {//implements MediaPlayer.OnPreparedListener {
 
     public static final String PLAYLIST = "playlist";
     public static final String TITLE = "title";
@@ -45,10 +45,8 @@ public class VideoFragment extends Fragment {//implements MediaPlayer.OnPrepared
     @InjectView(R.id.chat) View chat;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View contentView = inflater.inflate(R.layout.video, container, false);
-        ButterKnife.inject(this, contentView);
-        return contentView;
+    protected int onCreateView() {
+        return R.layout.video;
     }
 
     @Override
@@ -68,6 +66,11 @@ public class VideoFragment extends Fragment {//implements MediaPlayer.OnPrepared
 //        onOrientationChange(getResources().getConfiguration().orientation);
 //
 //        playVideo();
+    }
+
+    @Override
+    public void loadData() {
+
     }
 
     @Override
@@ -114,6 +117,11 @@ public class VideoFragment extends Fragment {//implements MediaPlayer.OnPrepared
 //            }
 //            videoView.start();
 //        }
+    }
+
+    @Override
+    public void onResponse(Object response) {
+
     }
 
 //    @Override

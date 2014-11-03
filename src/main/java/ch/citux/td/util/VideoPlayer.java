@@ -18,7 +18,6 @@
  */
 package ch.citux.td.util;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -88,7 +87,7 @@ public class VideoPlayer {
                 if (intent.getData() != null) {
                     try {
                         activity.startActivity(intent);
-                    } catch (ActivityNotFoundException exception) {
+                    } catch (Exception exception) {
                         ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(activity);
                         builder.setTitle(R.string.error_no_player_title);
                         builder.setMessage(R.string.error_no_player_message);

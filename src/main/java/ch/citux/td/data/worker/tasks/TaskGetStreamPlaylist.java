@@ -20,8 +20,6 @@ package ch.citux.td.data.worker.tasks;
 
 import android.util.Log;
 
-import org.apache.commons.lang3.StringUtils;
-
 import ch.citux.td.R;
 import ch.citux.td.data.model.StreamPlayList;
 import ch.citux.td.data.model.StreamToken;
@@ -40,7 +38,7 @@ public class TaskGetStreamPlaylist extends TDTask<String, StreamPlayList> {
         StreamPlayList result = new StreamPlayList();
         if (params.length == 1) {
             StreamToken streamToken = TDServiceImpl.getInstance().getStreamToken(params[0]);
-            if (StringUtils.isNoneEmpty(streamToken.getNauth(), streamToken.getNauthsig())) {
+            if (streamToken.getNauth() != null && !streamToken.getNauth().equals("") && streamToken.getNauthsig() != null && !streamToken.getNauthsig().equals("")) {
                 Log.d("Twitch", streamToken.toString());
                 return TDServiceImpl.getInstance().getStreamPlaylist(params[0], streamToken);
             } else {
