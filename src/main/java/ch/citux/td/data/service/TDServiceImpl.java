@@ -20,7 +20,6 @@ package ch.citux.td.data.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import net.chilicat.m3u8.Element;
 import net.chilicat.m3u8.Playlist;
@@ -36,8 +35,8 @@ import java.util.List;
 
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
-import ch.citux.td.data.dto.JustinArchive;
 import ch.citux.td.data.dto.TwitchAccessToken;
+import ch.citux.td.data.dto.TwitchBroadcast;
 import ch.citux.td.data.dto.TwitchChannel;
 import ch.citux.td.data.dto.TwitchChannels;
 import ch.citux.td.data.dto.TwitchFollows;
@@ -181,10 +180,9 @@ public class TDServiceImpl implements TDService {
         String url = buildUrl(TDConfig.URL_API_GET_VIDEO, id);
         String response = startStringRequest(url, result);
         if (StringUtils.isNotEmpty(response)) {
-            List<JustinArchive> archives = jGson.fromJson(response, new TypeToken<List<JustinArchive>>() {
-            }.getType());
-            if (archives != null) {
-                result = (DtoMapper.mapVideo(archives));
+            TwitchBroadcast broadcast = jGson.fromJson(response, TwitchBroadcast.class);
+            if (broadcast != null) {
+                result = (DtoMapper.mapVideo(broadcast));
             }
         }
         return result;

@@ -22,13 +22,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.squareup.picasso.Picasso;
+
 import ch.citux.td.R;
 import ch.citux.td.data.model.Channel;
+import ch.citux.td.data.model.Video;
 import ch.citux.td.data.model.Videos;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.ArchiveAdapter;
-import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.ListView;
+import ch.citux.td.util.VideoPlayer;
 
 public class ChannelVideosFragment extends TDListFragment<Videos> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
 
@@ -74,12 +77,8 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        Video video = adapter.getItem(position);
-//        TDTaskManager.getVideoPlaylist(new VideoPlayer.GetVideoCallback(this), video.getId());
-        new ErrorDialogFragment.ErrorDialogFragmentBuilder(getTDActivity())
-                .setTitle(R.string.dialog_error_title)
-                .setMessage(R.string.error_no_archived_videos)
-                .show();
+        Video video = adapter.getItem(position);
+        TDTaskManager.getVideoPlaylist(new VideoPlayer.GetVideoCallback(this), video.getId());
     }
 
     @Override

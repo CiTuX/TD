@@ -41,9 +41,7 @@ public class TDConfig {
 
     public static final String URL_API_TWITCH_API_BASE = "https://api.twitch.tv/api/";
     public static final String URL_API_GET_STREAM_TOKEN = URL_API_TWITCH_API_BASE + "channels/{0}/access_token";
-
-    public static final String URL_API_JUSTIN_BASE = "https://api.justin.tv/api/";
-    public static final String URL_API_GET_VIDEO = URL_API_JUSTIN_BASE + "broadcast/by_archive/{0}.json";
+    public static final String URL_API_GET_VIDEO = URL_API_TWITCH_API_BASE + "videos/{0}?as3=t";
 
     public static final String URL_API_USHER_BASE = "http://usher.twitch.tv/";
     public static final String URL_API_GET_STREAM_PLAYLIST = URL_API_USHER_BASE + "select/{0}.json?p={1}&nauth={2}&allow_source=true&nauthsig={3}&type=any&private_code=null";

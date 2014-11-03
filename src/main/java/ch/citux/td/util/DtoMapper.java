@@ -23,9 +23,10 @@ import android.util.SparseArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.citux.td.data.dto.JustinArchive;
+import ch.citux.td.data.dto.TwitchBroadcast;
 import ch.citux.td.data.dto.TwitchChannel;
 import ch.citux.td.data.dto.TwitchChannels;
+import ch.citux.td.data.dto.TwitchChunk;
 import ch.citux.td.data.dto.TwitchGame;
 import ch.citux.td.data.dto.TwitchGames;
 import ch.citux.td.data.dto.TwitchGamesElement;
@@ -71,7 +72,7 @@ public class DtoMapper {
 
     public static Video mapVideo(TwitchVideo tVideo) {
         Video video = new Video();
-        video.setId(tVideo.get_id().split("\\D+")[1]);
+        video.setId(tVideo.get_id());
         video.setDuration(tVideo.getLength());
         video.setDate(tVideo.getRecorded_at());
         video.setThumbnail(tVideo.getPreview());
@@ -80,24 +81,23 @@ public class DtoMapper {
         return video;
     }
 
-    public static VideoPlaylist mapVideo(List<JustinArchive> jArchive) {
+    public static VideoPlaylist mapVideo(TwitchBroadcast twitchBroadcast) {
         VideoPlaylist playlist = new VideoPlaylist();
         ArrayList<Video> videos = new ArrayList<Video>();
-        String title = "";
         Video video;
 
-        for (JustinArchive archive : jArchive) {
-            title = archive.getTitle();
-            video = new Video();
-            video.setTitle(title);
-            video.setUrl(archive.getVideo_file_url());
-            video.setDuration(archive.getLength());
-            video.setDate(archive.getCreated_on());
-            videos.add(video);
+        if (twitchBroadcast.getChunks() != null) {
+            for (TwitchChunk chunk : twitchBroadcast.getChunks().getLive()) {
+                video = new Video();
+                video.setUrl(chunk.getUrl());
+                video.setDuration(chunk.getLength());
+                video.setThumbnail(twitchBroadcast.getPreview());
+                video.setId(twitchBroadcast.getApi_id());
+                video.setSize(chunk.getLength());
+                videos.add(video);
+            }
+            playlist.setVideos(videos);
         }
-        playlist.setTitle(title);
-        playlist.setVideos(videos);
-
         return playlist;
     }
 

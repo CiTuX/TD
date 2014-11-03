@@ -18,15 +18,17 @@
  */
 package ch.citux.td.data.dto;
 
-public abstract class JustinBase {
+import java.util.List;
 
-    private String error;
+public class TwitchChunks {
 
-    public String getError() {
-        return error;
+    private List<TwitchChunk> live;
+
+    public List<TwitchChunk> getLive() {
+        return live;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public void setLive(List<TwitchChunk> live) {
+        this.live = live;
     }
 }
