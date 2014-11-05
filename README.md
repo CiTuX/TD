@@ -12,3 +12,6 @@ git clone https://github.com/CiTuX/TD.git TD
 cd TD
 gradle assemble
 ```
+
+
+[![Tip Me With ChangeTip](https://cdn.changetip.com/img/logos/tipme_rectangle.png?1 "Tip Me With ChangeTip")](http://citux.tip.me)
