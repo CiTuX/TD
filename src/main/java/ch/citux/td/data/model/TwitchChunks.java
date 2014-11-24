@@ -16,20 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+import java.util.List;
 
-    public void startLoading();
+public class TwitchChunks extends TwitchBase {
 
-    public void stopLoading();
+    private List<TwitchChunk> live;
 
-    public Result startRequest();
+    public List<TwitchChunk> getLive() {
+        return live;
+    }
 
-    public void onResponse(Result response);
-
-    public void onError(String title, String message);
-
-    public boolean isAdded();
-
+    public void setLive(List<TwitchChunk> live) {
+        this.live = live;
+    }
 }

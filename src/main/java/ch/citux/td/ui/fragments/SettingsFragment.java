@@ -29,7 +29,7 @@ import ch.citux.td.license.GnuGeneralPublicLicense30;
 import ch.citux.td.license.VitamioLicense;
 import ch.citux.td.ui.TDActivity;
 import de.psdev.licensesdialog.LicenseResolver;
-import de.psdev.licensesdialog.LicensesDialog;
+import de.psdev.licensesdialog.LicensesDialogFragment;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
@@ -79,7 +79,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        new LicensesDialog(getActivity(), R.raw.notices, false, true).show();
+        LicensesDialogFragment.newInstance(R.raw.notices, false, true)
+                .show(getSupportActivity().getSupportFragmentManager(), "licenses");
         return true;
     }
 }

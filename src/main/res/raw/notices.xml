@@ -56,15 +56,20 @@
         <license>Apache Software License 2.0</license>
     </notice>
     <notice>
-        <name>Gson</name>
-        <url>https://code.google.com/p/google-gson/</url>
-        <copyright>Copyright 2002-2011 The Apache Software Foundation</copyright>
+        <name>Retrofit</name>
+        <url>http://square.github.io/retrofit/</url>
+        <copyright>Copyright 2013 Square, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Jackson</name>
+        <url>http://jackson.codehaus.org/</url>
         <license>Apache Software License 2.0</license>
     </notice>
     <!--<notice>-->
-        <!--<name>Vitamio</name>-->
-        <!--<url>http://www.vitamio.org</url>-->
-        <!--<copyright>Copyright (C) 2011-2014 Vitamio</copyright>-->
-        <!--<license>Vitamio License</license>-->
+    <!--<name>Vitamio</name>-->
+    <!--<url>http://www.vitamio.org</url>-->
+    <!--<copyright>Copyright (C) 2011-2014 Vitamio</copyright>-->
+    <!--<license>Vitamio License</license>-->
     <!--</notice>-->
 </notices>

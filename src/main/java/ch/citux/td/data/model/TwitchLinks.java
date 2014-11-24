@@ -16,20 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-    public void startLoading();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class TwitchLinks extends TwitchBase {
 
-    public void stopLoading();
+    private String self;
+    private String next;
 
-    public Result startRequest();
+    public String getSelf() {
+        return self;
+    }
 
-    public void onResponse(Result response);
+    public void setSelf(String self) {
+        this.self = self;
+    }
 
-    public void onError(String title, String message);
+    public String getNext() {
+        return next;
+    }
 
-    public boolean isAdded();
-
+    public void setNext(String next) {
+        this.next = next;
+    }
 }

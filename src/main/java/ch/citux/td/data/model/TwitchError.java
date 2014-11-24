@@ -16,20 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
-
-    public void startLoading();
-
-    public void stopLoading();
-
-    public Result startRequest();
-
-    public void onResponse(Result response);
-
-    public void onError(String title, String message);
-
-    public boolean isAdded();
+public class TwitchError extends TwitchBase {
 
 }

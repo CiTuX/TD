@@ -32,13 +32,14 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
 import ch.citux.td.config.TDConfig;
+import ch.citux.td.data.model.TwitchBase;
 import ch.citux.td.data.worker.TDCallback;
 import ch.citux.td.ui.TDActivity;
 import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.ui.widget.ListView;
 
-public abstract class TDListFragment<Result> extends ListFragment implements TDBase, TDCallback<Result> {
+public abstract class TDListFragment<Result extends TwitchBase> extends ListFragment implements TDBase, TDCallback<Result> {
 
     private TDActivity activity;
     private Bundle args;
@@ -146,7 +147,11 @@ public abstract class TDListFragment<Result> extends ListFragment implements TDB
     @Override
     public Bundle getArgs() {
         if (args == null) {
-            args = new Bundle();
+            if (getArguments() != null) {
+                args = getArguments();
+            } else {
+                args = new Bundle();
+            }
         }
         return args;
     }

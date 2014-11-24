@@ -32,8 +32,8 @@ apply plugin: 'hugo'
 
 repositories {
     mavenCentral()
-    maven { url 'http://holoeverywhere.cf/repo/' }
-    maven { url 'http://holoeverywhere.cf/snapshot/' }
+    maven { url 'http://holorepo.citux.ch/repo/' }
+    maven { url 'http://holorepo.citux.ch/snapshot/' }
     flatDir { dirs 'libs' }
 }
 
@@ -45,11 +45,12 @@ dependencies {
     compile 'org.holoeverywhere:addon-slider:2.1.1-SNAPSHOT@aar'
 
     //3th Party
-    compile 'com.google.code.gson:gson:2.3'
     compile 'org.apache.commons:commons-lang3:3.2.1'
-    compile 'com.squareup.picasso:picasso:2.3.2'
-    compile 'com.jakewharton:butterknife:5.1.1'
-    compile('de.psdev.licensesdialog:licensesdialog:1.5.0') {
+    compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.squareup.retrofit:retrofit:1.8.0'
+    compile 'com.squareup.retrofit:converter-jackson:1.8.0'
+    compile 'com.jakewharton:butterknife:6.0.0'
+    compile('de.psdev.licensesdialog:licensesdialog:1.6.0') {
         exclude module: 'support-v4'
     }
 
@@ -72,6 +73,11 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 19
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
     }
 
     signingConfigs {

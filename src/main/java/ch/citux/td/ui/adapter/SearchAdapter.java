@@ -19,7 +19,6 @@
 package ch.citux.td.ui.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,35 +29,36 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.data.model.Stream;
+import ch.citux.td.data.model.TwitchStreamElement;
 import ch.citux.td.util.FormatUtils;
 import ch.citux.td.util.MarqueeHelper;
 
 public class SearchAdapter extends BaseAdapter {
 
-    private ArrayList<Stream> data;
+    private List<TwitchStreamElement> data;
     private LayoutInflater inflater;
     private Picasso picasso;
 
     public SearchAdapter(Context context) {
-        init(context, new ArrayList<Stream>());
+        init(context, new ArrayList<TwitchStreamElement>());
     }
 
-    public SearchAdapter(Context context, ArrayList<Stream> data) {
+    public SearchAdapter(Context context, List<TwitchStreamElement> data) {
         init(context, data);
     }
 
-    private void init(Context context, ArrayList<Stream> data) {
+    private void init(Context context, List<TwitchStreamElement> data) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
         this.picasso = Picasso.with(context);
     }
 
-    public void setData(ArrayList<Stream> data) {
+    public void setData(List<TwitchStreamElement> data) {
         if (data != null) {
             this.data = data;
             notifyDataSetChanged();
@@ -79,7 +79,7 @@ public class SearchAdapter extends BaseAdapter {
     }
 
     @Override
-    public Stream getItem(int position) {
+    public TwitchStreamElement getItem(int position) {
         return data.get(position);
     }
 
@@ -90,7 +90,7 @@ public class SearchAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Stream stream = data.get(position);
+        TwitchStreamElement stream = data.get(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
@@ -101,8 +101,8 @@ public class SearchAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        picasso.load(stream.getThumbnail()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
-        holder.lblTitle.setText(stream.getStatus());
+        picasso.load(stream.getPreview().getMedium()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
+        holder.lblTitle.setText(stream.getChannel().getStatus());
         MarqueeHelper.setupMarquee(holder.lblChannel, stream.getChannel().getName());
         MarqueeHelper.setupMarquee(holder.lblGame, FormatUtils.formatGame(stream.getGame()));
         MarqueeHelper.setupMarquee(holder.lblViewers, FormatUtils.formatNumber(stream.getViewers()));

@@ -22,21 +22,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.squareup.picasso.Picasso;
-
 import ch.citux.td.R;
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Video;
-import ch.citux.td.data.model.Videos;
+import ch.citux.td.data.model.TwitchChannel;
+import ch.citux.td.data.model.TwitchVideo;
+import ch.citux.td.data.model.TwitchVideos;
+import ch.citux.td.data.service.TDServiceImpl;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.ArchiveAdapter;
 import ch.citux.td.ui.widget.ListView;
 import ch.citux.td.util.VideoPlayer;
 
-public class ChannelVideosFragment extends TDListFragment<Videos> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
+public class ChannelVideosFragment extends TDListFragment<TwitchVideos> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
 
     private ArchiveAdapter adapter;
-    private Channel channel;
+    private TwitchChannel channel;
     private int offset;
 
     @Override
@@ -49,14 +48,14 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
         super.onActivityCreated(savedInstanceState);
 
         if (getArguments() != null && getArguments().containsKey(ChannelFragment.CHANNEL)) {
-            channel = (Channel) getArguments().getSerializable(ChannelFragment.CHANNEL);
+            channel = (TwitchChannel) getArguments().getSerializable(ChannelFragment.CHANNEL);
         }
 
         setOnItemClickListener(this);
         setOnLastItemVisibleListener(this);
     }
 
-    public void setChannel(Channel channel) {
+    public void setChannel(TwitchChannel channel) {
         this.channel = channel;
     }
 
@@ -71,18 +70,29 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
     @Override
     public void loadData() {
         if (channel != null) {
-            TDTaskManager.getArchives(this, channel.getName(), String.valueOf(offset));
+            TDTaskManager.executeTask(this);
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Video video = adapter.getItem(position);
-        TDTaskManager.getVideoPlaylist(new VideoPlayer.GetVideoCallback(this), video.getId());
+        TwitchVideo video = adapter.getItem(position);
+        TDTaskManager.executeTask(new VideoPlayer.GetVideoCallback(this, video));
     }
 
     @Override
-    public void onResponse(Videos response) {
+    public void onLastItemVisible() {
+        offset += 10;
+        loadData();
+    }
+
+    @Override
+    public TwitchVideos startRequest() {
+        return TDServiceImpl.getInstance().getVideos(channel.getName(), offset);
+    }
+
+    @Override
+    public void onResponse(TwitchVideos response) {
         emptyView.setText(R.string.channel_archives_empty);
         if (adapter == null) {
             adapter = new ArchiveAdapter(getActivity(), response.getVideos());
@@ -90,11 +100,5 @@ public class ChannelVideosFragment extends TDListFragment<Videos> implements Ada
         } else {
             adapter.setData(response.getVideos());
         }
-    }
-
-    @Override
-    public void onLastItemVisible() {
-        offset += 10;
-        loadData();
     }
 }

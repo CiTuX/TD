@@ -25,20 +25,21 @@ import android.widget.AdapterView;
 import org.apache.commons.lang3.StringUtils;
 
 import ch.citux.td.R;
-import ch.citux.td.data.model.Game;
-import ch.citux.td.data.model.Stream;
-import ch.citux.td.data.model.Streams;
+import ch.citux.td.data.model.TwitchGame;
+import ch.citux.td.data.model.TwitchStream;
+import ch.citux.td.data.model.TwitchStreamElement;
+import ch.citux.td.data.service.TDServiceImpl;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.GameStreamsAdapter;
 import ch.citux.td.ui.widget.ListView;
 import ch.citux.td.util.VideoPlayer;
 
-public class GameStreamsFragment extends TDListFragment<Streams> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
+public class GameStreamsFragment extends TDListFragment<TwitchStream> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
 
     public static final String GAME = "game";
 
     private GameStreamsAdapter adapter;
-    private Game game;
+    private TwitchGame game;
     private int offset;
 
     @Override
@@ -51,7 +52,7 @@ public class GameStreamsFragment extends TDListFragment<Streams> implements Adap
         super.onActivityCreated(savedInstanceState);
 
         if (getArgs().containsKey(GAME)) {
-            game = (Game) getArgs().getSerializable(GAME);
+            game = (TwitchGame) getArgs().getSerializable(GAME);
             offset = 0;
         }
 
@@ -69,27 +70,32 @@ public class GameStreamsFragment extends TDListFragment<Streams> implements Adap
     @Override
     public void loadData() {
         if (StringUtils.isNotEmpty(game.getName())) {
-            TDTaskManager.getStreams(this, game.getName(), offset);
+            TDTaskManager.executeTask(this);
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Stream stream = adapter.getItem(position);
+        TwitchStreamElement stream = adapter.getItem(position);
         if (stream != null) {
-            TDTaskManager.getStreamPlaylist(new VideoPlayer.StreamPlaylistCallback(this, stream.getStatus()), stream.getName());
+            TDTaskManager.executeTask(new VideoPlayer.StreamPlaylistCallback(this, stream.getChannel().getName()));
         }
     }
 
     @Override
-    public void onResponse(Streams response) {
+    public TwitchStream startRequest() {
+        return TDServiceImpl.getInstance().getStreams(game.getName(), offset);
+    }
+
+    @Override
+    public void onResponse(TwitchStream response) {
         setOnLastItemVisibleListener(this);
         emptyView.setText(R.string.search_no_result);
         if (adapter == null) {
-            adapter = new GameStreamsAdapter(getActivity(), response.getEntries());
+            adapter = new GameStreamsAdapter(getActivity(), response.getStreams());
             setListAdapter(adapter);
         } else {
-            adapter.setData(response.getEntries());
+            adapter.setData(response.getStreams());
         }
     }
 

@@ -32,35 +32,34 @@ import com.squareup.picasso.Picasso;
 import org.holoeverywhere.LayoutInflater;
 
 import ch.citux.td.R;
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Logo;
-import ch.citux.td.data.model.Status;
+import ch.citux.td.data.model.TwitchChannel;
+import ch.citux.td.data.model.TwitchLogo;
 
 public class FavoritesAdapter extends BaseAdapter {
 
-    private SparseArray<Channel> data;
+    private SparseArray<TwitchChannel> data;
     private LayoutInflater inflater;
     private Picasso picasso;
 
     public FavoritesAdapter(Context context) {
-        init(context, new SparseArray<Channel>());
+        init(context, new SparseArray<TwitchChannel>());
     }
 
-    public FavoritesAdapter(Context context, SparseArray<Channel> data) {
+    public FavoritesAdapter(Context context, SparseArray<TwitchChannel> data) {
         init(context, data);
     }
 
-    private void init(Context context, SparseArray<Channel> data) {
-        this.data = data;
+    private void init(Context context, SparseArray<TwitchChannel> data) {
         this.inflater = LayoutInflater.from(context);
         this.picasso = Picasso.with(context);
+        setData(data);
     }
 
-    public SparseArray<Channel> getData() {
+    public SparseArray<TwitchChannel> getData() {
         return data;
     }
 
-    public void setData(SparseArray<Channel> data) {
+    public void setData(SparseArray<TwitchChannel> data) {
         this.data = data;
         notifyDataSetChanged();
     }
@@ -70,19 +69,23 @@ public class FavoritesAdapter extends BaseAdapter {
         notifyDataSetInvalidated();
     }
 
-    public void updateChannel(Channel channel) {
-        updateChannel(channel.getId(), channel.getStatus());
-    }
-
-    public void updateChannel(int id, Status status) {
-        Channel channel = data.get(id);
+    public void setUpdatePending(int id) {
+        TwitchChannel channel = data.get(id);
         if (channel != null) {
-            channel.setStatus(status);
+            channel.setChannelStatus(TwitchChannel.Status.UNKNOWN);
             notifyDataSetChanged();
         }
     }
 
-    private void updateStatus(Status status, ViewHolder holder) {
+    public void updateChannelStatus(int id, boolean online) {
+        TwitchChannel channel = data.get(id);
+        if (channel != null) {
+            channel.setChannelStatus(online ? TwitchChannel.Status.ONLINE : TwitchChannel.Status.OFFLINE);
+            notifyDataSetChanged();
+        }
+    }
+
+    private void updateStatus(TwitchChannel.Status status, ViewHolder holder) {
         if (status == null || holder == null) {
             return;
         }
@@ -122,7 +125,7 @@ public class FavoritesAdapter extends BaseAdapter {
     }
 
     @Override
-    public Channel getItem(int position) {
+    public TwitchChannel getItem(int position) {
         return data.valueAt(position);
     }
 
@@ -133,7 +136,7 @@ public class FavoritesAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Channel channel = getItem(position);
+        TwitchChannel channel = getItem(position);
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -150,9 +153,9 @@ public class FavoritesAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        picasso.load(channel.getLogo(Logo.SMALL)).placeholder(R.drawable.default_channel_logo_small).into(holder.imgLogo);
-        holder.lblTitle.setText(channel.getTitle());
-        updateStatus(channel.getStatus(), holder);
+        picasso.load(channel.getLogo().getUrl(TwitchLogo.Size.SMALL)).placeholder(R.drawable.default_channel_logo_small).into(holder.imgLogo);
+        holder.lblTitle.setText(channel.getDisplay_name());
+        updateStatus(channel.getChannelStatus(), holder);
 
         return convertView;
     }

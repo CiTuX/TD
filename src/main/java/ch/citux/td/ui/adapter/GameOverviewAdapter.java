@@ -34,31 +34,31 @@ import java.util.ArrayList;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.data.model.Game;
-import ch.citux.td.data.model.TopGames;
+import ch.citux.td.data.model.TwitchGames;
+import ch.citux.td.data.model.TwitchGamesElement;
 
 public class GameOverviewAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private Picasso picasso;
-    private TopGames topGames;
-    private ArrayList<Game> data;
+    private TwitchGames topGames;
+    private ArrayList<TwitchGamesElement> data;
 
     public GameOverviewAdapter(Context context) {
         inflater = LayoutInflater.from(context);
         picasso = Picasso.with(context);
-        data = new ArrayList<Game>();
+        data = new ArrayList<TwitchGamesElement>();
     }
 
-    public void addData(TopGames topGames) {
+    public void addData(TwitchGames topGames) {
         this.topGames = topGames;
-        this.data.addAll(topGames.getGames());
+        this.data.addAll(topGames.getTop());
         notifyDataSetChanged();
     }
 
     public int getTotalCount() {
         if (topGames != null) {
-            return topGames.getTotal();
+            return topGames.get_total();
         }
         return 0;
     }
@@ -72,7 +72,7 @@ public class GameOverviewAdapter extends BaseAdapter {
     }
 
     @Override
-    public Game getItem(int position) {
+    public TwitchGamesElement getItem(int position) {
         if (data != null && data.size() > position) {
             return data.get(position);
         }
@@ -81,16 +81,16 @@ public class GameOverviewAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        Game game = getItem(position);
+        TwitchGamesElement game = getItem(position);
         if (game != null) {
-            return game.getId();
+            return game.getGame().get_id();
         }
         return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Game game = getItem(position);
+        TwitchGamesElement game = getItem(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
@@ -101,8 +101,8 @@ public class GameOverviewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        picasso.load(game.getBox()).placeholder(R.drawable.default_game_box_medium).into(holder.imgBox);
-        holder.lblName.setText(game.getName());
+        picasso.load(game.getGame().getBox().getMedium()).placeholder(R.drawable.default_game_box_medium).into(holder.imgBox);
+        holder.lblName.setText(game.getGame().getName());
         holder.lblViewers.setText(String.valueOf(game.getViewers()));
         return convertView;
     }

@@ -16,20 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+import java.util.ArrayList;
 
-    public void startLoading();
+public class TwitchGames extends TwitchBase {
 
-    public void stopLoading();
+    private int _total;
+    private ArrayList<TwitchGamesElement> top;
 
-    public Result startRequest();
+    public int get_total() {
+        return _total;
+    }
 
-    public void onResponse(Result response);
+    public void set_total(int _total) {
+        this._total = _total;
+    }
 
-    public void onError(String title, String message);
+    public ArrayList<TwitchGamesElement> getTop() {
+        return top;
+    }
 
-    public boolean isAdded();
-
+    public void setTop(ArrayList<TwitchGamesElement> top) {
+        this.top = top;
+    }
 }

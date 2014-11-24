@@ -16,20 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+public class TwitchGame extends TwitchBase {
 
-    public void startLoading();
+    private long _id;
+    private String name;
+    private TwitchPicture box;
+    private TwitchPicture logo;
 
-    public void stopLoading();
+    public long get_id() {
+        return _id;
+    }
 
-    public Result startRequest();
+    public void set_id(long _id) {
+        this._id = _id;
+    }
 
-    public void onResponse(Result response);
+    public String getName() {
+        return name;
+    }
 
-    public void onError(String title, String message);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public boolean isAdded();
+    public TwitchPicture getBox() {
+        return box;
+    }
 
+    public void setBox(TwitchPicture box) {
+        this.box = box;
+    }
+
+    public TwitchPicture getLogo() {
+        return logo;
+    }
+
+    public void setLogo(TwitchPicture logo) {
+        this.logo = logo;
+    }
 }

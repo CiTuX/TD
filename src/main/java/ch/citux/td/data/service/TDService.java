@@ -18,39 +18,60 @@
  */
 package ch.citux.td.data.service;
 
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Follows;
-import ch.citux.td.data.model.SearchChannels;
-import ch.citux.td.data.model.SearchStreams;
-import ch.citux.td.data.model.Stream;
-import ch.citux.td.data.model.StreamPlayList;
-import ch.citux.td.data.model.StreamToken;
-import ch.citux.td.data.model.Streams;
-import ch.citux.td.data.model.TopGames;
-import ch.citux.td.data.model.VideoPlaylist;
-import ch.citux.td.data.model.Videos;
+import ch.citux.td.data.model.TwitchAccessToken;
+import ch.citux.td.data.model.TwitchBroadcast;
+import ch.citux.td.data.model.TwitchChannel;
+import ch.citux.td.data.model.TwitchChannels;
+import ch.citux.td.data.model.TwitchFollows;
+import ch.citux.td.data.model.TwitchGames;
+import ch.citux.td.data.model.TwitchStream;
+import ch.citux.td.data.model.TwitchVideos;
+import retrofit.client.Response;
+import retrofit.http.GET;
+import retrofit.http.Path;
+import retrofit.http.Query;
 
 public interface TDService {
 
-    public Follows getFollows(String username);
+    public interface TwitchKraken {
 
-    public Channel getChannel(String channel);
+        @GET("/users/{username}/follows/channels")
+        public TwitchFollows getFollows(@Path("username") String username);
 
-    public Stream getStream(String channel);
+        @GET("/channels/{channel}")
+        public TwitchChannel getChannel(@Path("channel") String channel);
 
-    public Streams getStreams(String game, String offset);
+        @GET("/streams/{channel}")
+        public TwitchStream getStream(@Path("channel") String channel);
 
-    public Videos getVideos(String channel, String offset);
+        @GET("/streams?limit=20")
+        public TwitchStream getStreams(@Query("game") String game, @Query("offset") int offset);
 
-    public VideoPlaylist getVideoPlaylist(String id);
+        @GET("/channels/{channel}/videos?limit=10&broadcasts=true")
+        public TwitchVideos getVideos(@Path("channel") String channel, @Query("offset") int offset);
 
-    public StreamToken getStreamToken(String channel);
+        @GET("/search/streams?limit=20")
+        public TwitchStream searchStreams(@Query("query") String query, @Query("offset") int offset);
 
-    public StreamPlayList getStreamPlaylist(String channel, StreamToken streamToken);
+        @GET("/search/channels?limit=20")
+        public TwitchChannels searchChannels(@Query("query") String query, @Query("offset") int offset);
 
-    public SearchStreams searchStreams(String query, String offset);
+        @GET("/games/top")
+        public TwitchGames getTopGames(@Query("limit") int limit, @Query("offset") int offset);
+    }
 
-    public SearchChannels searchChannels(String query, String offset);
+    public interface TwitchAPI {
 
-    public TopGames getTopGames(String limit, String offset);
+        @GET("/channels/{channel}/access_token")
+        public TwitchAccessToken getStreamToken(@Path("channel") String channel);
+
+        @GET("/videos/{id}?as3=t")
+        public TwitchBroadcast getVideoPlaylist(@Path("id") String id);
+    }
+
+    public interface TwitchUsher {
+
+        @GET("/select/{channel}.json?allow_source=true&type=any&private_code=null")
+        public Response getStreamPlaylist(@Path("channel") String channel, @Query("p") String p, @Query("nauth") String nauth, @Query("nauthsig") String nauthsig);
+    }
 }

@@ -42,8 +42,8 @@ import java.lang.reflect.Field;
 
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.VideoPlaylist;
+import ch.citux.td.data.model.TwitchBroadcast;
+import ch.citux.td.data.model.TwitchChannel;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.fragments.ChannelFragment;
 import ch.citux.td.ui.fragments.FavoritesFragment;
@@ -68,14 +68,13 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
     private MenuItem searchItem;
     private boolean isLoading;
     private boolean isTablet;
-    private boolean hasUsername;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        hasUsername = !PreferenceManager.getDefaultSharedPreferences(this).getString(TDConfig.SETTINGS_CHANNEL_NAME, "").equals("");
+        boolean hasUsername = !PreferenceManager.getDefaultSharedPreferences(this).getString(TDConfig.SETTINGS_CHANNEL_NAME, "").equals("");
         isTablet = findViewById(R.id.detail) != null;
 
         Bundle args = new Bundle();
@@ -87,9 +86,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         sliderMenu.add(R.string.favorites_title, FavoritesFragment.class, args);
         sliderMenu.add(R.string.game_title, GameOverviewFragment.class);
         sliderMenu.add(R.string.action_settings, SettingsFragment.class);
-
-        channelFragment = new ChannelFragment();
-        channelFragment.setArgs(args);
     }
 
     @Override
@@ -160,7 +156,12 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showChannel(Channel channel) {
+    public void showChannel(TwitchChannel channel) {
+        //TODO remove Hololol menu
+        if (channelFragment == null) {
+            channelFragment = new ChannelFragment();
+        }
+
         if (channelFragment.isAdded()) {
             channelFragment.updateChannel(channel);
         } else {
@@ -185,9 +186,9 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         MenuItemCompat.collapseActionView(searchItem);
     }
 
-    public void showPlaylist(VideoPlaylist playlist) {
+    public void showPlaylist(TwitchBroadcast broadcast) {
         if (channelFragment.isAdded()) {
-            channelFragment.showPlaylist(playlist);
+            channelFragment.showPlaylist(broadcast);
         }
     }
 

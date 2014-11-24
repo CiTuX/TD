@@ -25,15 +25,17 @@ import android.widget.AdapterView;
 
 import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.data.model.Game;
-import ch.citux.td.data.model.TopGames;
+import ch.citux.td.data.model.TwitchGame;
+import ch.citux.td.data.model.TwitchGames;
+import ch.citux.td.data.model.TwitchGamesElement;
+import ch.citux.td.data.service.TDServiceImpl;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.GameOverviewAdapter;
 import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.ui.widget.GridView;
 import ch.citux.td.util.Log;
 
-public class GameOverviewFragment extends TDFragment<TopGames> implements GridView.OnLastItemVisibleListener, AdapterView.OnItemClickListener {
+public class GameOverviewFragment extends TDFragment<TwitchGames> implements GridView.OnLastItemVisibleListener, AdapterView.OnItemClickListener {
 
     private static final int LIMIT = 15;
 
@@ -64,15 +66,20 @@ public class GameOverviewFragment extends TDFragment<TopGames> implements GridVi
     @Override
     public void loadData() {
         if (loadData) {
-            TDTaskManager.getTopGames(this, LIMIT, offset);
+            TDTaskManager.executeTask(this);
         }
     }
 
     @Override
-    public void onResponse(TopGames response) {
-        if (response != null && response.getGames() != null) {
-            for (Game game : response.getGames()) {
-                Log.d(this, game.getName());
+    public TwitchGames startRequest() {
+        return TDServiceImpl.getInstance().getTopGames(LIMIT, offset);
+    }
+
+    @Override
+    public void onResponse(TwitchGames response) {
+        if (response != null && response.getTop() != null) {
+            for (TwitchGamesElement game : response.getTop()) {
+                Log.d(this, game.getGame().getName());
             }
             adapter.addData(response);
             emptyView.setVisibility(View.GONE);
@@ -90,7 +97,7 @@ public class GameOverviewFragment extends TDFragment<TopGames> implements GridVi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Game game = adapter.getItem(position);
+        TwitchGame game = adapter.getItem(position).getGame();
         if (game != null) {
             Log.d(this, game.getName());
 

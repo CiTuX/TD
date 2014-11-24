@@ -18,61 +18,55 @@
  */
 package ch.citux.td.data.service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import net.chilicat.m3u8.Element;
-import net.chilicat.m3u8.Playlist;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import ch.citux.td.R;
+import ch.citux.td.BuildConfig;
 import ch.citux.td.config.TDConfig;
-import ch.citux.td.data.dto.TwitchAccessToken;
-import ch.citux.td.data.dto.TwitchBroadcast;
-import ch.citux.td.data.dto.TwitchChannel;
-import ch.citux.td.data.dto.TwitchChannels;
-import ch.citux.td.data.dto.TwitchFollows;
-import ch.citux.td.data.dto.TwitchGames;
-import ch.citux.td.data.dto.TwitchStream;
-import ch.citux.td.data.dto.TwitchVideos;
-import ch.citux.td.data.model.Base;
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Follows;
-import ch.citux.td.data.model.Response;
-import ch.citux.td.data.model.SearchChannels;
-import ch.citux.td.data.model.SearchStreams;
-import ch.citux.td.data.model.Stream;
-import ch.citux.td.data.model.StreamPlayList;
-import ch.citux.td.data.model.StreamQuality;
-import ch.citux.td.data.model.StreamToken;
-import ch.citux.td.data.model.Streams;
-import ch.citux.td.data.model.TopGames;
-import ch.citux.td.data.model.VideoPlaylist;
-import ch.citux.td.data.model.Videos;
-import ch.citux.td.data.worker.TDRequestHandler;
-import ch.citux.td.util.DtoMapper;
+import ch.citux.td.data.model.TwitchAccessToken;
+import ch.citux.td.data.model.TwitchBroadcast;
+import ch.citux.td.data.model.TwitchChannel;
+import ch.citux.td.data.model.TwitchChannels;
+import ch.citux.td.data.model.TwitchFollows;
+import ch.citux.td.data.model.TwitchGames;
+import ch.citux.td.data.model.TwitchStream;
+import ch.citux.td.data.model.TwitchVideos;
+import ch.citux.td.data.service.TDService.TwitchAPI;
+import ch.citux.td.data.service.TDService.TwitchKraken;
+import ch.citux.td.data.service.TDService.TwitchUsher;
 import ch.citux.td.util.Log;
+import retrofit.RequestInterceptor;
+import retrofit.RestAdapter;
+import retrofit.client.Response;
+import retrofit.converter.JacksonConverter;
 
-public class TDServiceImpl implements TDService {
+public class TDServiceImpl implements TwitchAPI, TwitchKraken, TwitchUsher, RestAdapter.Log {
 
     private static final String TAG = "TDService";
 
     private static TDServiceImpl instance;
 
-    private Gson gson;
-    private Gson jGson;
+    private TwitchAPI twitchAPI;
+    private TwitchUsher twitchUsher;
+    private TwitchKraken twitchKraken;
 
     private TDServiceImpl() {
-        gson = new Gson();
-        jGson = new GsonBuilder().setDateFormat("y-M-d H:m:s 'UTC'").create(); //2013-01-19 02:49:36 UTC
+        RestAdapter.Builder builder = new RestAdapter.Builder()
+                .setLog(this)
+                .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
+                .setConverter(new JacksonConverter());
+
+        RestAdapter apiAdapter = builder
+                .setEndpoint(TDConfig.URL_API_TWITCH_API_BASE)
+                .build();
+        RestAdapter usherAdapter = builder
+                .setEndpoint(TDConfig.URL_API_USHER_BASE)
+                .build();
+        RestAdapter krakenAdapter = builder
+                .setEndpoint(TDConfig.URL_API_TWITCH_KRAKEN_BASE)
+                .setRequestInterceptor(new KrakenRequestInterceptor())
+                .build();
+
+        twitchAPI = apiAdapter.create(TwitchAPI.class);
+        twitchUsher = usherAdapter.create(TwitchUsher.class);
+        twitchKraken = krakenAdapter.create(TwitchKraken.class);
     }
 
     public static TDServiceImpl getInstance() {
@@ -82,210 +76,70 @@ public class TDServiceImpl implements TDService {
         return instance;
     }
 
-    private String buildUrl(String base, Object... params) {
-        ArrayList<String> args = new ArrayList<String>(params.length);
-
-        for (Object param : params) {
-            try {
-                String arg = param.toString();
-                arg = URLEncoder.encode(arg, TDConfig.UTF_8);
-                args.add(arg);
-            } catch (UnsupportedEncodingException e) {
-                Log.e(TAG, e);
-            } catch (NullPointerException e) {
-                Log.e(TAG, e);
-            }
-        }
-        return MessageFormat.format(base, args.toArray());
+    @Override
+    public void log(String message) {
+        Log.d(TAG, message);
     }
 
-    private String startStringRequest(String url, Base result) {
-        RequestHandler requestHandler = new RequestHandler();
-        return requestHandler.startStringRequest(url, result);
+    private class KrakenRequestInterceptor implements RequestInterceptor {
+        @Override
+        public void intercept(RequestInterceptor.RequestFacade request) {
+            request.addHeader("Accept", TDConfig.MIME_TWITCH);
+        }
     }
 
     @Override
-    public Follows getFollows(String username) {
-        Follows result = new Follows();
-        String url = buildUrl(TDConfig.URL_API_GET_FOLLOWS, username);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchFollows twitchFollows = gson.fromJson(response, TwitchFollows.class);
-            if (twitchFollows != null && twitchFollows.getFollows() != null) {
-                result.setChannels(DtoMapper.mapTwitchChannels(twitchFollows.getFollows()));
-            }
-        }
-        return result;
+    public TwitchFollows getFollows(String username) {
+        return twitchKraken.getFollows(username);
     }
 
     @Override
-    public Channel getChannel(String channel) {
-        Channel result = new Channel();
-        String url = buildUrl(TDConfig.URL_API_GET_CHANNEL, channel);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchChannel twitchChannel = gson.fromJson(response, TwitchChannel.class);
-            if (twitchChannel != null) {
-                result = DtoMapper.mapChannel(twitchChannel);
-            }
-        }
-        return result;
+    public TwitchChannel getChannel(String channel) {
+        return twitchKraken.getChannel(channel);
     }
 
     @Override
-    public Stream getStream(String channel) {
-        Stream result = new Stream();
-        String url = buildUrl(TDConfig.URL_API_GET_STREAM, channel);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchStream twitchStream = gson.fromJson(response, TwitchStream.class);
-            if (twitchStream != null && (twitchStream.getStream() != null || twitchStream.getStreams() != null)) {
-                result = DtoMapper.mapStream(twitchStream.getStream());
-            }
-        }
-        return result;
+    public TwitchStream getStream(String channel) {
+        return twitchKraken.getStream(channel);
     }
 
     @Override
-    public Streams getStreams(String game, String offset) {
-        Streams result = new Streams();
-        String url = buildUrl(TDConfig.URL_API_GET_STREAMS, game, offset);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchStream twitchStream = gson.fromJson(response, TwitchStream.class);
-            if (twitchStream != null && (twitchStream.getStream() != null || twitchStream.getStreams() != null)) {
-                result = DtoMapper.mapStreams(twitchStream);
-            }
-        }
-        return result;
+    public TwitchStream getStreams(String game, int offset) {
+        return twitchKraken.getStreams(game, offset);
     }
 
     @Override
-    public Videos getVideos(String channel, String offset) {
-        Videos result = new Videos();
-        String url = buildUrl(TDConfig.URL_API_GET_VIDEOS, channel, offset);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchVideos videos = gson.fromJson(response, TwitchVideos.class);
-            if (videos != null) {
-                result.setVideos(DtoMapper.mapVideos(videos));
-            }
-        }
-        return result;
+    public TwitchVideos getVideos(String channel, int offset) {
+        return twitchKraken.getVideos(channel, offset);
     }
 
     @Override
-    public VideoPlaylist getVideoPlaylist(String id) {
-        VideoPlaylist result = new VideoPlaylist();
-        String url = buildUrl(TDConfig.URL_API_GET_VIDEO, id);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchBroadcast broadcast = jGson.fromJson(response, TwitchBroadcast.class);
-            if (broadcast != null) {
-                result = (DtoMapper.mapVideo(broadcast));
-            }
-        }
-        return result;
+    public TwitchBroadcast getVideoPlaylist(String id) {
+        return twitchAPI.getVideoPlaylist(id);
     }
 
     @Override
-    public StreamToken getStreamToken(String channel) {
-        StreamToken result = new StreamToken();
-        String url = buildUrl(TDConfig.URL_API_GET_STREAM_TOKEN, channel);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchAccessToken accessToken = gson.fromJson(response, TwitchAccessToken.class);
-            if (accessToken != null && accessToken.getToken() != null && accessToken.getSig() != null) {
-                result.setNauth(accessToken.getToken());
-                result.setNauthsig(accessToken.getSig());
-                result.setP((int) (Math.random() * 999999));
-            }
-        }
-        return result;
+    public TwitchAccessToken getStreamToken(String channel) {
+        return twitchAPI.getStreamToken(channel);
     }
 
     @Override
-    public StreamPlayList getStreamPlaylist(String channel, StreamToken streamToken) {
-        StreamPlayList result = new StreamPlayList();
-        String url = buildUrl(TDConfig.URL_API_GET_STREAM_PLAYLIST, channel, streamToken.getP(), streamToken.getNauth(), streamToken.getNauthsig());
-        Response<Playlist> response = TDRequestHandler.startPlaylistRequest(url);
-        if (response.getStatus() == Response.Status.OK) {
-            List<Element> elements = response.getResult().getElements();
-            if (elements.size() > 0) {
-                HashMap<StreamQuality, String> streams = new HashMap<StreamQuality, String>();
-                for (Element element : elements) {
-                    Log.d(TAG, "URI: " + element.getURI() + " Name: " + element.getName());
-                    StreamQuality quality = StreamPlayList.parseQuality(element.getName());
-                    if (quality != null) {
-                        streams.put(quality, element.getURI().toString());
-                    }
-                }
-                result.setStreams(streams);
-            }
-        } else {
-            result.setErrorResId(R.string.error_data_error_message);
-        }
-        return result;
+    public Response getStreamPlaylist(String channel, String p, String nauth, String nauthsig) {
+        return twitchUsher.getStreamPlaylist(channel, p, nauth, nauthsig);
     }
 
     @Override
-    public SearchStreams searchStreams(String query, String offset) {
-        SearchStreams result = new SearchStreams();
-        String url = buildUrl(TDConfig.URL_API_SEARCH_STREAMS, query, offset);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchStream searchStreams = jGson.fromJson(response, TwitchStream.class);
-            if (searchStreams != null) {
-                result = (DtoMapper.mapSearchStreams(searchStreams));
-            }
-        }
-        return result;
+    public TwitchStream searchStreams(String query, int offset) {
+        return twitchKraken.searchStreams(query, offset);
     }
 
     @Override
-    public SearchChannels searchChannels(String query, String offset) {
-        SearchChannels result = new SearchChannels();
-        String url = buildUrl(TDConfig.URL_API_SEARCH_CHANNELS, query, offset);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchChannels searchStreams = jGson.fromJson(response, TwitchChannels.class);
-            if (searchStreams != null) {
-                result = (DtoMapper.mapSearchChannels(searchStreams));
-            }
-        }
-        return result;
+    public TwitchChannels searchChannels(String query, int offset) {
+        return twitchKraken.searchChannels(query, offset);
     }
 
     @Override
-    public TopGames getTopGames(String limit, String offset) {
-        TopGames result = new TopGames();
-        String url = buildUrl(TDConfig.URL_API_GET_TOP_GAMES, limit, offset);
-        String response = startStringRequest(url, result);
-        if (StringUtils.isNotEmpty(response)) {
-            TwitchGames twitchGames = gson.fromJson(response, TwitchGames.class);
-            result = DtoMapper.mapGames(twitchGames);
-        }
-        return result;
-    }
-
-    private class RequestHandler {
-
-        private static final int MAX_RETRY_COUNT = 5;
-
-        private int retryCount;
-
-        private String startStringRequest(String url, Base result) {
-            Response<String> response = TDRequestHandler.startStringRequest(url);
-            if (response.getStatus() == Response.Status.OK) {
-                return response.getResult();
-            }
-            if (response.getStatus() != Response.Status.ERROR_UNKNOWN) {
-                if (++retryCount <= MAX_RETRY_COUNT) {
-                    return startStringRequest(url, result);
-                }
-            }
-            result.setErrorResId(R.string.error_data_error_message);
-            return "";
-        }
+    public TwitchGames getTopGames(int limit, int offset) {
+        return twitchKraken.getTopGames(limit, offset);
     }
 }

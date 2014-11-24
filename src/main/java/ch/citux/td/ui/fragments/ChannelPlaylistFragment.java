@@ -24,16 +24,17 @@ import android.widget.AdapterView;
 
 import org.holoeverywhere.widget.CheckBox;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ch.citux.td.R;
-import ch.citux.td.data.model.Video;
-import ch.citux.td.data.model.VideoPlaylist;
+import ch.citux.td.data.model.TwitchBroadcast;
+import ch.citux.td.data.model.TwitchChunk;
 import ch.citux.td.ui.adapter.PlaylistAdapter;
 import ch.citux.td.util.VideoPlayer;
 
-public class ChannelPlaylistFragment extends TDListFragment<Void> implements AdapterView.OnItemClickListener {
+public class ChannelPlaylistFragment extends TDListFragment implements AdapterView.OnItemClickListener {
 
+    private TwitchBroadcast broadcast;
     private PlaylistAdapter adapter;
 
     @Override
@@ -45,15 +46,16 @@ public class ChannelPlaylistFragment extends TDListFragment<Void> implements Ada
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(ChannelFragment.PLAYLIST)) {
-            VideoPlaylist playlist = (VideoPlaylist) getArguments().getSerializable(ChannelFragment.PLAYLIST);
-            setData(playlist.getVideos());
+        if (getArguments() != null && getArguments().containsKey(ChannelFragment.CHUNKS)) {
+            TwitchBroadcast broadcast = (TwitchBroadcast) getArguments().getSerializable(ChannelFragment.CHUNKS);
+            this.broadcast = broadcast;
+            setData(broadcast.getChunks().getLive());
         }
 
         setOnItemClickListener(this);
     }
 
-    public void setData(ArrayList<Video> videos) {
+    public void setData(List<TwitchChunk> videos) {
         if (adapter == null) {
             adapter = new PlaylistAdapter(getActivity(), videos);
             setListAdapter(adapter);
@@ -67,14 +69,21 @@ public class ChannelPlaylistFragment extends TDListFragment<Void> implements Ada
     }
 
     @Override
-    public void onResponse(Void response) {
+    public Void startRequest() {
+        return null;
+    }
+
+    @Override
+    public void onResponse(Object response) {
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Video video = adapter.getItem(position);
+        TwitchChunk video = adapter.getItem(position);
         if (video != null) {
-            VideoPlayer.playVideo(getTDActivity(), video.getTitle(), video.getUrl());
+            //TODO Name
+            VideoPlayer.playVideo(getTDActivity(), "", video.getUrl());
         }
         if (view != null) {
             CheckBox chkPlayed = (CheckBox) view.findViewById(R.id.chkPlayed);

@@ -28,32 +28,32 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.data.model.Stream;
+import ch.citux.td.data.model.TwitchStreamElement;
 import ch.citux.td.util.FormatUtils;
 import ch.citux.td.util.MarqueeHelper;
 
 public class GameStreamsAdapter extends BaseAdapter {
 
-    private ArrayList<Stream> data;
+    private List<TwitchStreamElement> data;
     private LayoutInflater inflater;
     private Picasso picasso;
 
-    public GameStreamsAdapter(Context context, ArrayList<Stream> data) {
+    public GameStreamsAdapter(Context context, List<TwitchStreamElement> data) {
         init(context, data);
     }
 
-    private void init(Context context, ArrayList<Stream> data) {
+    private void init(Context context, List<TwitchStreamElement> data) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
         this.picasso = Picasso.with(context);
     }
 
-    public void setData(ArrayList<Stream> data) {
+    public void setData(List<TwitchStreamElement> data) {
         if (data != null) {
             if (getCount() == 0) {
                 this.data = data;
@@ -78,7 +78,7 @@ public class GameStreamsAdapter extends BaseAdapter {
     }
 
     @Override
-    public Stream getItem(int position) {
+    public TwitchStreamElement getItem(int position) {
         return data.get(position);
     }
 
@@ -89,7 +89,7 @@ public class GameStreamsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Stream stream = data.get(position);
+        TwitchStreamElement stream = data.get(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
@@ -100,8 +100,8 @@ public class GameStreamsAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        picasso.load(stream.getThumbnail()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
-        MarqueeHelper.setupMarquee(holder.lblTitle, stream.getStatus());
+        picasso.load(stream.getPreview().getMedium()).placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
+        MarqueeHelper.setupMarquee(holder.lblTitle, stream.getChannel().getStatus());
         MarqueeHelper.setupMarquee(holder.lblChannel, stream.getChannel().getName());
         MarqueeHelper.setupMarquee(holder.lblViewers, FormatUtils.formatNumber(stream.getViewers()));
         return convertView;

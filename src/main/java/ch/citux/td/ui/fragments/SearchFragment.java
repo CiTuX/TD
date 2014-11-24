@@ -24,15 +24,16 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import ch.citux.td.R;
-import ch.citux.td.data.model.SearchStreams;
-import ch.citux.td.data.model.Stream;
+import ch.citux.td.data.model.TwitchStream;
+import ch.citux.td.data.model.TwitchStreamElement;
+import ch.citux.td.data.service.TDServiceImpl;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.SearchAdapter;
 import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.util.Log;
 import ch.citux.td.util.VideoPlayer;
 
-public class SearchFragment extends TDListFragment<SearchStreams> implements AdapterView.OnItemClickListener {
+public class SearchFragment extends TDListFragment<TwitchStream> implements AdapterView.OnItemClickListener {
 
     public static final String QUERY = "query";
     public static final String OFFSET = "offset";
@@ -81,7 +82,7 @@ public class SearchFragment extends TDListFragment<SearchStreams> implements Ada
         if (emptyView != null) {
             emptyView.showProgress();
         }
-        TDTaskManager.searchStreams(this, query, offset);
+        TDTaskManager.executeTask(this);
     }
 
     @Override
@@ -91,12 +92,17 @@ public class SearchFragment extends TDListFragment<SearchStreams> implements Ada
     }
 
     @Override
-    public void onResponse(SearchStreams response) {
-        adapter.setData(response.getResult());
+    public TwitchStream startRequest() {
+        return TDServiceImpl.getInstance().searchStreams(query, offset);
+    }
+
+    @Override
+    public void onResponse(TwitchStream response) {
+        adapter.setData(response.getStreams());
         if (emptyView != null) {
             emptyView.showText();
         }
-        Log.d(this, "SearchResult: " + response.getResult());
+        Log.d(this, "SearchResult: " + response.getStreams());
     }
 
     public void setQuery(String query) {
@@ -105,9 +111,9 @@ public class SearchFragment extends TDListFragment<SearchStreams> implements Ada
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Stream stream = adapter.getItem(i);
+        TwitchStreamElement stream = adapter.getItem(i);
         if (stream != null) {
-            TDTaskManager.getStreamPlaylist(new VideoPlayer.StreamPlaylistCallback(this, stream.getStatus()), stream.getChannel().getName());
+            TDTaskManager.executeTask(new VideoPlayer.StreamPlaylistCallback(this, stream.getChannel().getName()));
         }
     }
 }

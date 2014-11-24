@@ -28,15 +28,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Follows;
-import ch.citux.td.data.model.Status;
+import ch.citux.td.data.model.TwitchChannel;
+import ch.citux.td.data.model.TwitchFollows;
+import ch.citux.td.data.model.TwitchStream;
+import ch.citux.td.data.service.TDServiceImpl;
 import ch.citux.td.data.worker.TDBasicCallback;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.FavoritesAdapter;
 import ch.citux.td.ui.widget.EmptyView;
 
-public class FavoritesFragment extends TDListFragment<Follows> implements AdapterView.OnItemClickListener {
+public class FavoritesFragment extends TDListFragment<TwitchFollows> implements AdapterView.OnItemClickListener {
 
     private String channelName;
     private SharedPreferences preferences;
@@ -72,7 +73,7 @@ public class FavoritesFragment extends TDListFragment<Follows> implements Adapte
     public void loadData() {
         channelName = preferences.getString(TDConfig.SETTINGS_CHANNEL_NAME, "");
         if (StringUtils.isNotBlank(channelName)) {
-            TDTaskManager.getFavorites(this, channelName);
+            TDTaskManager.executeTask(this);
         }
     }
 
@@ -85,50 +86,59 @@ public class FavoritesFragment extends TDListFragment<Follows> implements Adapte
         } else {
             //Only status update
             for (int i = 0; i < adapter.getData().size(); i++) {
-                Channel channel = adapter.getData().valueAt(i);
-                channel.setStatus(Status.UNKNOWN);
-                adapter.updateChannel(channel);
-                TDTaskManager.getStatus(new ChannelCallback(channel.getId(), this), channel.getName());
+                TwitchChannel channel = adapter.getData().valueAt(i);
+                adapter.setUpdatePending(channel.get_id());
+                TDTaskManager.executeTask(new StatusCallback(this, channel));
             }
         }
     }
 
     @Override
-    public void onResponse(Follows response) {
+    public TwitchFollows startRequest() {
+        return TDServiceImpl.getInstance().getFollows(channelName);
+    }
+
+    @Override
+    public void onResponse(TwitchFollows response) {
         if (adapter == null) {
-            adapter = new FavoritesAdapter(getActivity(), response.getChannels());
+            adapter = new FavoritesAdapter(getActivity(), response.getFollows());
             setListAdapter(adapter);
         } else {
-            adapter.setData(response.getChannels());
+            adapter.setData(response.getFollows());
         }
-        if (response.getChannels() != null) {
-            for (int i = 0; i < response.getChannels().size(); i++) {
-                Channel channel = response.getChannels().valueAt(i);
-                TDTaskManager.getStatus(new ChannelCallback(channel.getId(), this), channel.getName());
+        if (response.getFollows() != null) {
+            for (int i = 0; i < response.getFollows().size(); i++) {
+                TwitchChannel channel = response.getFollows().valueAt(i);
+                TDTaskManager.executeTask(new StatusCallback(this, channel));
             }
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Channel channel = adapter.getItem(position);
-        if (channel != null && channel.getStatus() != null) {
+        TwitchChannel channel = adapter.getItem(position);
+        if (channel != null && channel.getChannelStatus() != TwitchChannel.Status.UNKNOWN) {
             getTDActivity().showChannel(channel);
         }
     }
 
-    private class ChannelCallback extends TDBasicCallback<Channel> {
+    private class StatusCallback extends TDBasicCallback<TwitchStream> {
 
-        private int id;
+        private TwitchChannel channel;
 
-        protected ChannelCallback(int id, Object caller) {
+        protected StatusCallback(Object caller, TwitchChannel channel) {
             super(caller);
-            this.id = id;
+            this.channel = channel;
         }
 
         @Override
-        public void onResponse(Channel response) {
-            adapter.updateChannel(id, response.getStatus());
+        public TwitchStream startRequest() {
+            return TDServiceImpl.getInstance().getStream(channel.getName());
+        }
+
+        @Override
+        public void onResponse(TwitchStream response) {
+            adapter.updateChannelStatus(channel.get_id(), response.getStream() != null);
         }
 
         @Override

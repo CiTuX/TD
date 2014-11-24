@@ -16,20 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+import java.util.List;
 
-    public void startLoading();
+public class TwitchStream extends TwitchBase {
 
-    public void stopLoading();
+    private TwitchStreamElement stream;
+    private List<TwitchStreamElement> streams;
 
-    public Result startRequest();
+    public TwitchStreamElement getStream() {
+        return stream;
+    }
 
-    public void onResponse(Result response);
+    public void setStream(TwitchStreamElement stream) {
+        this.stream = stream;
+    }
 
-    public void onError(String title, String message);
+    public List<TwitchStreamElement> getStreams() {
+        return streams;
+    }
 
-    public boolean isAdded();
-
+    public void setStreams(List<TwitchStreamElement> streams) {
+        this.streams = streams;
+    }
 }

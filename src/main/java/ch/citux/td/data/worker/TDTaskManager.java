@@ -24,25 +24,7 @@ import android.os.Build;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Follows;
-import ch.citux.td.data.model.SearchChannels;
-import ch.citux.td.data.model.SearchStreams;
-import ch.citux.td.data.model.StreamPlayList;
-import ch.citux.td.data.model.Streams;
-import ch.citux.td.data.model.TopGames;
-import ch.citux.td.data.model.VideoPlaylist;
-import ch.citux.td.data.model.Videos;
-import ch.citux.td.data.worker.tasks.TDTask;
-import ch.citux.td.data.worker.tasks.TaskGetArchives;
-import ch.citux.td.data.worker.tasks.TaskGetChannel;
-import ch.citux.td.data.worker.tasks.TaskGetFavorites;
-import ch.citux.td.data.worker.tasks.TaskGetStreamPlaylist;
-import ch.citux.td.data.worker.tasks.TaskGetStreams;
-import ch.citux.td.data.worker.tasks.TaskGetTopGames;
-import ch.citux.td.data.worker.tasks.TaskGetVideoPlaylist;
-import ch.citux.td.data.worker.tasks.TaskSearchChannels;
-import ch.citux.td.data.worker.tasks.TaskSearchStreams;
+import ch.citux.td.data.model.TwitchBase;
 
 public class TDTaskManager {
 
@@ -65,78 +47,14 @@ public class TDTaskManager {
         }
     }
 
-    public static TDTask getFavorites(TDCallback<Follows> callback, String username) {
-        TaskGetFavorites task = new TaskGetFavorites(callback);
-        task.execute(username);
-        tasks.add(task);
-        return task;
-    }
-
     @TargetApi(11)
-    public static TDTask getStatus(TDCallback<Channel> callback, String channel) {
-        TaskGetChannel task = new TaskGetChannel(callback, true);
+    public static <Result extends TwitchBase> void executeTask(TDCallback<Result> callback) {
+        TDTask<Result> task = new TDTask<Result>(callback);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, channel);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
-            task.execute(channel);
+            task.execute();
         }
         tasks.add(task);
-        return task;
-    }
-
-    public static TDTask getChannel(TDCallback<Channel> callback, String channel) {
-        TaskGetChannel task = new TaskGetChannel(callback);
-        task.execute(channel);
-        tasks.add(task);
-        return task;
-    }
-
-    public static TDTask getVideoPlaylist(TDCallback<VideoPlaylist> callback, String id) {
-        TaskGetVideoPlaylist task = new TaskGetVideoPlaylist(callback);
-        task.execute(id);
-        tasks.add(task);
-        return task;
-    }
-
-    public static TDTask getArchives(TDCallback<Videos> callback, String channel, String offset) {
-        TaskGetArchives task = new TaskGetArchives(callback);
-        task.execute(channel, offset);
-        tasks.add(task);
-        return task;
-    }
-
-    public static TDTask getStreamPlaylist(TDCallback<StreamPlayList> callback, String channel) {
-        TaskGetStreamPlaylist task = new TaskGetStreamPlaylist(callback);
-        task.execute(channel);
-        tasks.add(task);
-        return task;
-    }
-
-    public static TDTask searchStreams(TDCallback<SearchStreams> callback, String query, int offset) {
-        TaskSearchStreams task = new TaskSearchStreams(callback);
-        task.execute(query, String.valueOf(offset));
-        tasks.add(task);
-        return task;
-    }
-
-    public static TDTask searchChannels(TDCallback<SearchChannels> callback, String query, int offset) {
-        TaskSearchChannels task = new TaskSearchChannels(callback);
-        task.execute(query, String.valueOf(offset));
-        tasks.add(task);
-        return task;
-    }
-
-    public static TDTask getTopGames(TDCallback<TopGames> callback, int limit, int offset) {
-        TaskGetTopGames task = new TaskGetTopGames(callback);
-        task.execute(String.valueOf(limit), String.valueOf(offset));
-        tasks.add(task);
-        return task;
-    }
-
-    public static TDTask getStreams(TDCallback<Streams> callback, String game, int offset) {
-        TaskGetStreams task = new TaskGetStreams(callback);
-        task.execute(game, String.valueOf(offset));
-        tasks.add(task);
-        return task;
     }
 }

@@ -28,33 +28,29 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ch.citux.td.R;
-import ch.citux.td.data.model.Video;
+import ch.citux.td.data.model.TwitchVideo;
 import ch.citux.td.util.FormatUtils;
 
 public class ArchiveAdapter extends BaseAdapter {
 
-    private ArrayList<Video> data;
+    private List<TwitchVideo> data;
     private LayoutInflater inflater;
     private Picasso picasso;
 
-    public ArchiveAdapter(Context context) {
-        init(context, new ArrayList<Video>());
-    }
-
-    public ArchiveAdapter(Context context, ArrayList<Video> data) {
+    public ArchiveAdapter(Context context, List<TwitchVideo> data) {
         init(context, data);
     }
 
-    private void init(Context context, ArrayList<Video> data) {
+    private void init(Context context, List<TwitchVideo> data) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
         this.picasso = Picasso.with(context);
     }
 
-    public void setData(ArrayList<Video> data) {
+    public void setData(List<TwitchVideo> data) {
         if (data != null) {
             if (getCount() == 0) {
                 this.data = data;
@@ -79,7 +75,7 @@ public class ArchiveAdapter extends BaseAdapter {
     }
 
     @Override
-    public Video getItem(int position) {
+    public TwitchVideo getItem(int position) {
         return data.get(position);
     }
 
@@ -90,7 +86,7 @@ public class ArchiveAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Video video = getItem(position);
+        TwitchVideo video = getItem(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
@@ -104,10 +100,10 @@ public class ArchiveAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        picasso.load(video.getThumbnail()).fit().placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
+        picasso.load(video.getPreview()).fit().placeholder(R.drawable.default_archive_thumbnail).into(holder.imgThumbnail);
         holder.lblTitle.setText(video.getTitle());
-        holder.lblDate.setText(FormatUtils.formateDate(video.getDate()));
-        holder.lblDuration.setText(FormatUtils.formatTime(video.getDuration()));
+        holder.lblDate.setText(FormatUtils.formateDate(video.getRecorded_at()));
+        holder.lblDuration.setText(FormatUtils.formatTime(video.getLength()));
         return convertView;
     }
 

@@ -21,13 +21,8 @@ package ch.citux.td.ui.fragments;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Fragment;
-
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.citux.td.R;
 import ch.citux.td.ui.TDActivity;
@@ -106,17 +101,22 @@ public class VideoFragment extends TDFragment {//implements MediaPlayer.OnPrepar
     public void playVideo() {
 
 //        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-//        if (getArguments() != null && (!getArguments().containsKey(URL) || !getArguments().containsKey(PLAYLIST))) {
+//        if (getArguments() != null && (!getArguments().containsKey(URL) || !getArguments().containsKey(CHUNKS))) {
 //            getSupportActionBar().setTitle(getArguments().getString(TITLE));
 //
 //            if (getArguments().containsKey(URL)) {
 //                videoView.setVideoURI(Uri.parse(getArguments().getString(URL)));
 //            }
-//            if (getArguments().containsKey(PLAYLIST)) {
-//                videoView.setVideoPlaylist(getArguments().getStringArray(PLAYLIST));
+//            if (getArguments().containsKey(CHUNKS)) {
+//                videoView.setVideoPlaylist(getArguments().getStringArray(CHUNKS));
 //            }
 //            videoView.start();
 //        }
+    }
+
+    @Override
+    public Object startRequest() {
+        return null;
     }
 
     @Override

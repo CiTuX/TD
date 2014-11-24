@@ -33,17 +33,16 @@ import org.holoeverywhere.app.Fragment;
 
 import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.data.model.Channel;
-import ch.citux.td.data.model.Logo;
-import ch.citux.td.data.model.Status;
-import ch.citux.td.data.model.VideoPlaylist;
+import ch.citux.td.data.model.TwitchBroadcast;
+import ch.citux.td.data.model.TwitchChannel;
+import ch.citux.td.data.model.TwitchLogo;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.util.VideoPlayer;
 
 public class ChannelFragment extends TDFragment<Void> implements View.OnClickListener {
 
     public static final String CHANNEL = "channel";
-    public static final String PLAYLIST = "playlist";
+    public static final String CHUNKS = "chunks";
 
     @InjectView(R.id.content) ViewGroup content;
     @InjectView(R.id.imgLogo) ImageView imgLogo;
@@ -51,7 +50,7 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
     @InjectView(R.id.lblStatus) TextView lblStatus;
     @InjectView(R.id.btnStream) Button btnStream;
 
-    private Channel channel;
+    private TwitchChannel channel;
     private ChannelVideosFragment videosFragment;
     private ChannelPlaylistFragment playlistFragment;
 
@@ -65,7 +64,7 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
         super.onActivityCreated(savedInstanceState);
 
         if (getArgs().containsKey(CHANNEL)) {
-            updateChannel((Channel) getArgs().get(CHANNEL));
+            updateChannel((TwitchChannel) getArgs().get(CHANNEL));
         } else {
             if (hasUsername) {
                 emptyView.setText(R.string.channel_detail_empty);
@@ -92,12 +91,12 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
         }
     }
 
-    public void updateChannel(final Channel channel) {
+    public void updateChannel(final TwitchChannel channel) {
         this.channel = channel;
-        Picasso.with(getActivity()).load(channel.getLogo(Logo.LARGE)).placeholder(R.drawable.default_channel_logo_medium).into(imgLogo);
-        lblTitle.setText(channel.getTitle());
-        lblStatus.setText(channel.getStatus().getText());
-        btnStream.setVisibility(channel.getStatus() == Status.ONLINE ? View.VISIBLE : View.GONE);
+        Picasso.with(getActivity()).load(channel.getLogo().getUrl(TwitchLogo.Size.LARGE)).placeholder(R.drawable.default_channel_logo_medium).into(imgLogo);
+        lblTitle.setText(channel.getDisplay_name());
+        lblStatus.setText(channel.getChannelStatus().getText());
+        btnStream.setVisibility(channel.getChannelStatus() == TwitchChannel.Status.ONLINE ? View.VISIBLE : View.GONE);
 
         emptyView.showProgress();
         emptyView.setVisibility(View.GONE);
@@ -109,10 +108,10 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
         setFragment(videosFragment, false);
     }
 
-    public void showPlaylist(final VideoPlaylist playlist) {
-        if (playlist != null && playlist.getVideos() != null) {
+    public void showPlaylist(final TwitchBroadcast broadcast) {
+        if (broadcast != null && broadcast.getChunks() != null) {
             Bundle args = new Bundle();
-            args.putSerializable(PLAYLIST, playlist);
+            args.putSerializable(CHUNKS, broadcast);
             playlistFragment = Fragment.instantiate(ChannelPlaylistFragment.class, args);
             setFragment(playlistFragment, true);
         }
@@ -145,7 +144,7 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        TDTaskManager.getStreamPlaylist(new VideoPlayer.StreamPlaylistCallback(this, channel.getTitle()), channel.getName());
+        TDTaskManager.executeTask(new VideoPlayer.StreamPlaylistCallback(this, channel.getName()));
     }
 
     @Override
@@ -153,6 +152,11 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
         if (videosFragment != null) {
             videosFragment.loadData();
         }
+    }
+
+    @Override
+    public Void startRequest() {
+        return null;
     }
 
     @Override

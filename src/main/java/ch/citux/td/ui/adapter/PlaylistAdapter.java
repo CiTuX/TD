@@ -28,26 +28,27 @@ import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.widget.CheckBox;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.citux.td.R;
-import ch.citux.td.data.model.Video;
+import ch.citux.td.data.model.TwitchChunk;
 
 public class PlaylistAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
-    private ArrayList<Video> videos;
+    private List<TwitchChunk> videos;
     private ArrayList<Integer> played;
 
-    public PlaylistAdapter(Context context, ArrayList<Video> videos) {
+    public PlaylistAdapter(Context context, List<TwitchChunk> videos) {
         super();
         this.inflater = LayoutInflater.from(context);
         this.videos = videos;
         this.played = new ArrayList<Integer>(videos.size());
     }
 
-    public void setVideos(ArrayList<Video> videos) {
+    public void setVideos(List<TwitchChunk> videos) {
         this.videos = videos;
         if (videos != null && videos.size() > 0) {
             notifyDataSetChanged();
@@ -66,7 +67,7 @@ public class PlaylistAdapter extends BaseAdapter {
     }
 
     @Override
-    public Video getItem(int position) {
+    public TwitchChunk getItem(int position) {
         if (position < videos.size()) {
             return videos.get(position);
         }
@@ -80,7 +81,7 @@ public class PlaylistAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Video video = getItem(position);
+        TwitchChunk video = getItem(position);
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
             holder = new ViewHolder();
@@ -93,7 +94,7 @@ public class PlaylistAdapter extends BaseAdapter {
         }
         holder.lblPartIndex.setText(String.valueOf(position + 1));
         holder.lblPartCount.setText(String.valueOf(getCount()));
-        holder.lblTitle.setText(video.getTitle());
+        //TODO holder.lblTitle.setText(video.());
         holder.chkPlayed.setChecked(played.contains(position));
         return convertView;
     }

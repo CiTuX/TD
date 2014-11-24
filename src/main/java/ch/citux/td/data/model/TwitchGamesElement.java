@@ -16,20 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+public class TwitchGamesElement extends TwitchBase {
 
-    public void startLoading();
+    private TwitchGame game;
+    private long viewers;
+    private long channels;
 
-    public void stopLoading();
+    public TwitchGame getGame() {
+        return game;
+    }
 
-    public Result startRequest();
+    public void setGame(TwitchGame game) {
+        this.game = game;
+    }
 
-    public void onResponse(Result response);
+    public long getViewers() {
+        return viewers;
+    }
 
-    public void onError(String title, String message);
+    public void setViewers(long viewers) {
+        this.viewers = viewers;
+    }
 
-    public boolean isAdded();
+    public long getChannels() {
+        return channels;
+    }
 
+    public void setChannels(long channels) {
+        this.channels = channels;
+    }
 }

@@ -16,20 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+import java.util.List;
 
-    public void startLoading();
+public class TwitchChannels extends TwitchBase {
 
-    public void stopLoading();
+    private TwitchChannel channel;
+    private List<TwitchChannel> channels;
 
-    public Result startRequest();
+    public TwitchChannel getChannel() {
+        return channel;
+    }
 
-    public void onResponse(Result response);
+    public void setChannel(TwitchChannel channel) {
+        this.channel = channel;
+    }
 
-    public void onError(String title, String message);
+    public List<TwitchChannel> getChannels() {
+        return channels;
+    }
 
-    public boolean isAdded();
-
+    public void setChannels(List<TwitchChannel> channels) {
+        this.channels = channels;
+    }
 }

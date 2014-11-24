@@ -16,20 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+import android.util.SparseArray;
 
-    public void startLoading();
+import java.util.List;
 
-    public void stopLoading();
+public class TwitchFollows extends TwitchBase {
 
-    public Result startRequest();
+    private List<TwitchChannels> follows;
 
-    public void onResponse(Result response);
+    public SparseArray<TwitchChannel> getFollows() {
+        SparseArray<TwitchChannel> result = new SparseArray<TwitchChannel>(follows.size());
+        for (TwitchChannels channels : follows) {
+            TwitchChannel channel = channels.getChannel();
+            result.put(channel.get_id(), channel);
+        }
+        return result;
+    }
 
-    public void onError(String title, String message);
-
-    public boolean isAdded();
-
+    public void setFollows(List<TwitchChannels> follows) {
+        this.follows = follows;
+    }
 }

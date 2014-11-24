@@ -16,20 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.citux.td.data.worker;
+package ch.citux.td.data.model;
 
-public interface TDCallback<Result> {
+public class TwitchStreamQuality extends TwitchBase {
 
-    public void startLoading();
+    private String name;
+    private int value;
 
-    public void stopLoading();
+    public TwitchStreamQuality(String key, int value) {
+        this.value = value;
+        this.name = key;
+    }
 
-    public Result startRequest();
+    public String getName() {
+        return name;
+    }
 
-    public void onResponse(Result response);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public void onError(String title, String message);
+    public int getValue() {
+        return value;
+    }
 
-    public boolean isAdded();
-
+    public void setValue(int value) {
+        this.value = value;
+    }
 }
