@@ -25,10 +25,7 @@ import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.PreferenceFragment;
 
 import ch.citux.td.R;
-import ch.citux.td.license.GnuGeneralPublicLicense30;
-import ch.citux.td.license.VitamioLicense;
 import ch.citux.td.ui.TDActivity;
-import de.psdev.licensesdialog.LicenseResolver;
 import de.psdev.licensesdialog.LicensesDialogFragment;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
@@ -48,9 +45,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        LicenseResolver.registerLicense(new GnuGeneralPublicLicense30());
-        LicenseResolver.registerLicense(new VitamioLicense());
 
         addPreferencesFromResource(R.xml.preferences);
         findPreference(R.id.license_dialog).setOnPreferenceClickListener(this);
