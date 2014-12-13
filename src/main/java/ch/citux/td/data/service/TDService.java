@@ -71,7 +71,7 @@ public interface TDService {
 
     public interface TwitchUsher {
 
-        @GET("/select/{channel}.json?allow_source=true&type=any&private_code=null")
-        public Response getStreamPlaylist(@Path("channel") String channel, @Query("p") String p, @Query("nauth") String nauth, @Query("nauthsig") String nauthsig);
+        @GET("/api/channel/hls/{channel}.json?allow_source=true&type=any&private_code=null")
+        public Response getStreamPlaylist(@Path("channel") String channel, @Query("p") String p, @Query("token") String token, @Query("sig") String sig);
     }
 }
