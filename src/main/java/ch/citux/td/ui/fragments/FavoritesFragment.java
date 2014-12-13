@@ -95,7 +95,7 @@ public class FavoritesFragment extends TDListFragment<TwitchFollows> implements 
 
     @Override
     public TwitchFollows startRequest() {
-        return TDServiceImpl.getInstance().getFollows(channelName);
+        return TDServiceImpl.getInstance().getFollows(channelName.trim());
     }
 
     @Override
