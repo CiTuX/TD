@@ -35,8 +35,8 @@ public interface TDService {
 
     public interface TwitchKraken {
 
-        @GET("/users/{username}/follows/channels")
-        public TwitchFollows getFollows(@Path("username") String username);
+        @GET("/users/{username}/follows/channels?limit=25")
+        public TwitchFollows getFollows(@Path("username") String username, @Query("offset") int offset);
 
         @GET("/channels/{channel}")
         public TwitchChannel getChannel(@Path("channel") String channel);
@@ -71,7 +71,7 @@ public interface TDService {
 
     public interface TwitchUsher {
 
-        @GET("/select/{channel}.json?allow_source=true&type=any&private_code=null")
-        public Response getStreamPlaylist(@Path("channel") String channel, @Query("p") String p, @Query("nauth") String nauth, @Query("nauthsig") String nauthsig);
+        @GET("/api/channel/hls/{channel}.json?allow_source=true&allow_audio_only=false&type=any&private_code=null&player=twitchweb")
+        public Response getStreamPlaylist(@Path("channel") String channel, @Query("p") String p, @Query("token") String token, @Query("sig") String sig);
     }
 }

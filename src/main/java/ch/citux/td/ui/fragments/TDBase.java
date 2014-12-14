@@ -20,9 +20,8 @@ package ch.citux.td.ui.fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import org.holoeverywhere.preference.SharedPreferences;
 
 import ch.citux.td.ui.TDActivity;
 

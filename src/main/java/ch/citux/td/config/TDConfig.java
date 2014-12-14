@@ -21,6 +21,7 @@ package ch.citux.td.config;
 public class TDConfig {
 
     public static final String SETTINGS_CHANNEL_NAME = "channel_name";
+    public static final String SETTINGS_LICENSE_DIALOG = "license_dialog";
 
     public static final String CAST_APPLICATION_ID = "D25E1BBE";
 

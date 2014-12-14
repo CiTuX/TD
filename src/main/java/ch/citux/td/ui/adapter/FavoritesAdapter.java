@@ -20,6 +20,7 @@ package ch.citux.td.ui.adapter;
 
 import android.content.Context;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -28,8 +29,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import org.holoeverywhere.LayoutInflater;
 
 import ch.citux.td.R;
 import ch.citux.td.data.model.TwitchChannel;
@@ -52,6 +51,7 @@ public class FavoritesAdapter extends BaseAdapter {
     private void init(Context context, SparseArray<TwitchChannel> data) {
         this.inflater = LayoutInflater.from(context);
         this.picasso = Picasso.with(context);
+        this.data = new SparseArray<>();
         setData(data);
     }
 
@@ -60,7 +60,11 @@ public class FavoritesAdapter extends BaseAdapter {
     }
 
     public void setData(SparseArray<TwitchChannel> data) {
-        this.data = data;
+        if (data != null) {
+            for (int i = 0; i < data.size(); i++) {
+                this.data.append(data.keyAt(i), data.valueAt(i));
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -140,7 +144,7 @@ public class FavoritesAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.list_item_favorites);
+            convertView = inflater.inflate(R.layout.list_item_favorites, parent, false);
             if (convertView != null) {
                 holder.imgLogo = (ImageView) convertView.findViewById(R.id.imgLogo);
                 holder.lblTitle = (TextView) convertView.findViewById(R.id.lblTitle);

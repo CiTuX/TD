@@ -22,7 +22,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.AbsListView;
 
-public class ListView extends org.holoeverywhere.widget.ListView implements AbsListView.OnScrollListener {
+public class ListView extends android.widget.ListView implements AbsListView.OnScrollListener {
 
     private OnLastItemVisibleListener onLastItemVisibleListener;
     private int itemCount;

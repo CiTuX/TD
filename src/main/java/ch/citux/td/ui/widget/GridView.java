@@ -22,7 +22,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.AbsListView;
 
-public class GridView extends org.holoeverywhere.widget.GridView implements AbsListView.OnScrollListener {
+public class GridView extends android.widget.GridView implements AbsListView.OnScrollListener {
 
     private OnLastItemVisibleListener onLastItemVisibleListener;
     private int itemCount;

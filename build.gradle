@@ -22,7 +22,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.14.0'
+        classpath 'com.android.tools.build:gradle:1.0.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.1.0'
     }
 }
@@ -32,17 +32,14 @@ apply plugin: 'hugo'
 
 repositories {
     mavenCentral()
-    maven { url 'http://holorepo.citux.ch/repo/' }
-    maven { url 'http://holorepo.citux.ch/snapshot/' }
     flatDir { dirs 'libs' }
 }
 
 dependencies {
-    //Holo
-    compile 'com.android.support:support-v4:19.2.0'
-    compile 'org.holoeverywhere:library:2.1.1-SNAPSHOT@aar'
-    compile 'org.holoeverywhere:addon-preferences:2.1.1-SNAPSHOT@aar'
-    compile 'org.holoeverywhere:addon-slider:2.1.1-SNAPSHOT@aar'
+    //Compat
+    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.github.machinarius:preferencefragment:0.1.1'
 
     //3th Party
     compile 'org.apache.commons:commons-lang3:3.2.1'
@@ -62,8 +59,8 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "20.0.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
 
     lintOptions {
         //ButterKnife
@@ -72,7 +69,7 @@ android {
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 19
+        targetSdkVersion 21
     }
 
     packagingOptions {

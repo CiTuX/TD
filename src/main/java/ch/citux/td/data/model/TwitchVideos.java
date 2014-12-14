@@ -24,7 +24,6 @@ public class TwitchVideos extends TwitchBase {
 
     private List<TwitchVideo> videos;
     private String title;
-    private long _total;
 
     public List<TwitchVideo> getVideos() {
         return videos;
@@ -43,13 +42,5 @@ public class TwitchVideos extends TwitchBase {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public long get_total() {
-        return _total;
-    }
-
-    public void set_total(long _total) {
-        this._total = _total;
     }
 }

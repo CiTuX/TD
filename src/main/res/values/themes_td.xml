@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="TD" parent="@style/_TD"/>
+
+  <style name="_TD" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <item name="android:editTextStyle">@style/EditTextTD</item>
+
+    <item name="android:textColorHighlight">#996441a5</item>
+
+    <item name="android:checkboxStyle">@style/CheckBoxTD</item>
+
+    <item name="android:radioButtonStyle">@style/RadioButtonTD</item>
+
+    <item name="android:buttonStyle">@style/ButtonTD</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonTD</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarTD</item>
+
+    <item name="android:listViewStyle">@style/ListViewTD</item>
+
+    <item name="android:listViewWhiteStyle">@style/ListViewTD.White</item>
+
+    <item name="android:spinnerItemStyle">@style/SpinnerItemTD</item>
+
+  </style>
+
+</resources>

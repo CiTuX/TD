@@ -89,8 +89,8 @@ public class TDServiceImpl implements TwitchAPI, TwitchKraken, TwitchUsher, Rest
     }
 
     @Override
-    public TwitchFollows getFollows(String username) {
-        return twitchKraken.getFollows(username);
+    public TwitchFollows getFollows(String username, int offset) {
+        return twitchKraken.getFollows(username, offset);
     }
 
     @Override
@@ -124,8 +124,8 @@ public class TDServiceImpl implements TwitchAPI, TwitchKraken, TwitchUsher, Rest
     }
 
     @Override
-    public Response getStreamPlaylist(String channel, String p, String nauth, String nauthsig) {
-        return twitchUsher.getStreamPlaylist(channel, p, nauth, nauthsig);
+    public Response getStreamPlaylist(String channel, String p, String token, String sig) {
+        return twitchUsher.getStreamPlaylist(channel, p, token, sig);
     }
 
     @Override

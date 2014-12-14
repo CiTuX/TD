@@ -18,11 +18,8 @@
  */
 package ch.citux.td;
 
+import android.app.Application;
 import android.content.Context;
-
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.ThemeManager;
-import org.holoeverywhere.app.Application;
 
 public class TDApplication extends Application {
 
@@ -30,8 +27,6 @@ public class TDApplication extends Application {
 
     public TDApplication() {
         instance = this;
-        LayoutInflater.registerPackage(TDApplication.class.getPackage().getName() + ".ui.widget");
-        ThemeManager.setDefaultTheme(ThemeManager.LIGHT);
     }
 
     public static Context getContext() {

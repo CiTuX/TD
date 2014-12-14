@@ -19,14 +19,16 @@
 package ch.citux.td.ui.fragments;
 
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.ListFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -35,7 +37,6 @@ import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.TwitchBase;
 import ch.citux.td.data.worker.TDCallback;
 import ch.citux.td.ui.TDActivity;
-import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.EmptyView;
 import ch.citux.td.ui.widget.ListView;
 
@@ -64,7 +65,7 @@ public abstract class TDListFragment<Result extends TwitchBase> extends ListFrag
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(onCreateView());
+        View view = inflater.inflate(onCreateView(), container, false);
         ButterKnife.inject(this, view);
         return view;
     }
@@ -88,9 +89,13 @@ public abstract class TDListFragment<Result extends TwitchBase> extends ListFrag
         return (ListView) super.getListView();
     }
 
+    public ActionBar getSupportActionBar() {
+        return activity.getSupportActionBar();
+    }
+
     @Override
-    protected EmptyView getEmptyView() {
-        return emptyView;
+    public SharedPreferences getDefaultSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(activity);
     }
 
     public void startLoading() {
@@ -113,8 +118,7 @@ public abstract class TDListFragment<Result extends TwitchBase> extends ListFrag
 
     @Override
     public void onError(String title, String message) {
-        ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
-        builder.setTitle(title).setMessage(message).show();
+        activity.onError(title, message);
     }
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {

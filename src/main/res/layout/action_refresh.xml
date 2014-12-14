@@ -20,13 +20,13 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_height="wrap_content"
-             android:layout_width="56dp"
-             android:minWidth="56dp">
+             android:layout_width="48dp"
+             android:minWidth="48dp">
 
     <ProgressBar
-        style="@style/Holo.ProgressBar.Large"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_gravity="center"/>
 
 </FrameLayout>

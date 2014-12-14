@@ -25,4 +25,5 @@
     <color name="status_unknown">#B2B2B2</color>
     <color name="status_online">#669900</color>
     <color name="status_offline">#CC0000</color>
+    <color name="navigation">#6200ea</color>
 </resources>

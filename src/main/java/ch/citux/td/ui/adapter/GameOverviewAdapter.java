@@ -19,15 +19,15 @@
 package ch.citux.td.ui.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.widget.TextView;
 
 import java.util.ArrayList;
 

@@ -22,9 +22,12 @@
     <!-- General -->
     <string name="app_name">TD</string>
 
+    <!-- Navigation -->
+    <string name="navigation_open">Schliessen</string>
+    <string name="navigation_close">Öffnen</string>
+
     <!-- ActionBarItems -->
     <string name="action_refresh">Aktualisieren</string>
-    <string name="action_settings">Einstellungen</string>
     <string name="action_clear">Löschen</string>
     <string name="action_search">Suche</string>
     <string name="action_search_hint">Stream suche</string>
@@ -90,6 +93,7 @@
     <string name="playlist_slash">/</string>
 
     <!-- Settings -->
+    <string name="preference_title">Einstellungen</string>
     <string name="preference_internal_player">Internen Player verwenden</string>
     <string name="preference_licenses">Open Source Lizenzen</string>
 

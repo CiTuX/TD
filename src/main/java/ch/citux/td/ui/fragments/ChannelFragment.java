@@ -19,6 +19,7 @@
 package ch.citux.td.ui.fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -28,8 +29,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import org.holoeverywhere.app.Fragment;
 
 import butterknife.InjectView;
 import ch.citux.td.R;
@@ -104,7 +103,7 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
 
         Bundle args = new Bundle();
         args.putSerializable(CHANNEL, channel);
-        videosFragment = Fragment.instantiate(ChannelVideosFragment.class, args);
+        videosFragment = TDFragment.instantiate(ChannelVideosFragment.class, args);
         setFragment(videosFragment, false);
     }
 
@@ -112,7 +111,7 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
         if (broadcast != null && broadcast.getChunks() != null) {
             Bundle args = new Bundle();
             args.putSerializable(CHUNKS, broadcast);
-            playlistFragment = Fragment.instantiate(ChannelPlaylistFragment.class, args);
+            playlistFragment = TDFragment.instantiate(ChannelPlaylistFragment.class, args);
             setFragment(playlistFragment, true);
         }
     }

@@ -74,6 +74,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="@string/channel_watch_stream"
+        android:textColor="@android:color/white"
         android:visibility="gone"/>
 
     <TextView

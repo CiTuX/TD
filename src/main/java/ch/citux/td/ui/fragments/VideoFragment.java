@@ -49,9 +49,9 @@ public class VideoFragment extends TDFragment {//implements MediaPlayer.OnPrepar
         super.onActivityCreated(savedInstanceState);
         super.setRetainInstance(true);
 
-        if (((TDActivity) getActivity()).isTablet()) {
-            emptyView.setImage(R.drawable.ic_glitchicon_white);
-        }
+//        if (((TDActivity) getActivity()).isTablet()) {
+//            emptyView.setImage(R.drawable.ic_glitchicon_white);
+//        }
 
 //        MediaController mediaController = new MediaController(getActivity());
 //        videoView.setMediaController(mediaController);

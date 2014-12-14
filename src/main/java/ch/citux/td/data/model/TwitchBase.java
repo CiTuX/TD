@@ -32,6 +32,7 @@ public abstract class TwitchBase implements Serializable {
     private Date created_at;
     private Date updated_at;
     private TwitchLinks _links;
+    private int _total;
 
     public String getError() {
         return error;
@@ -71,5 +72,13 @@ public abstract class TwitchBase implements Serializable {
 
     public void set_links(TwitchLinks _links) {
         this._links = _links;
+    }
+
+    public int get_total() {
+        return _total;
+    }
+
+    public void set_total(int _total) {
+        this._total = _total;
     }
 }

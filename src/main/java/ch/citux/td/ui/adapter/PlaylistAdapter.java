@@ -19,13 +19,12 @@
 package ch.citux.td.ui.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
-
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.widget.CheckBox;
 
 import java.util.ArrayList;
 import java.util.List;

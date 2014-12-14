@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="TD" parent="@style/_TD"/>
+
+  <style name="_TD" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <item name="android:editTextBackground">@drawable/td_edit_text_holo_light</item>
+
+    <item name="android:textColorHighlight">#996441a5</item>
+    <item name="android:textSelectHandleLeft">@drawable/td_text_select_handle_left</item>
+    <item name="android:textSelectHandleRight">@drawable/td_text_select_handle_right</item>
+    <item name="android:textSelectHandle">@drawable/td_text_select_handle_middle</item>
+
+    <item name="android:listChoiceIndicatorMultiple">@drawable/td_btn_check_holo_light</item>
+
+    <item name="android:listChoiceIndicatorSingle">@drawable/td_btn_radio_holo_light</item>
+
+    <item name="android:buttonStyle">@style/ButtonTD</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonTD</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarTD</item>
+
+    <item name="android:listChoiceBackgroundIndicator">@drawable/td_list_selector_holo_light</item>
+
+    <item name="android:activatedBackgroundIndicator">@drawable/td_activated_background_holo_light</item>
+
+  </style>
+
+</resources>

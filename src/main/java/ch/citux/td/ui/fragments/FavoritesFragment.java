@@ -36,12 +36,15 @@ import ch.citux.td.data.worker.TDBasicCallback;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.adapter.FavoritesAdapter;
 import ch.citux.td.ui.widget.EmptyView;
+import ch.citux.td.ui.widget.ListView;
 
-public class FavoritesFragment extends TDListFragment<TwitchFollows> implements AdapterView.OnItemClickListener {
+public class FavoritesFragment extends TDListFragment<TwitchFollows> implements AdapterView.OnItemClickListener, ListView.OnLastItemVisibleListener {
 
     private String channelName;
     private SharedPreferences preferences;
     private FavoritesAdapter adapter;
+    private int offset;
+    private int total;
 
     @Override
     protected int onCreateView() {
@@ -67,6 +70,7 @@ public class FavoritesFragment extends TDListFragment<TwitchFollows> implements 
             }
         }
         getListView().setOnItemClickListener(this);
+        getListView().setOnLastItemVisibleListener(this);
     }
 
     @Override
@@ -95,7 +99,7 @@ public class FavoritesFragment extends TDListFragment<TwitchFollows> implements 
 
     @Override
     public TwitchFollows startRequest() {
-        return TDServiceImpl.getInstance().getFollows(channelName.trim());
+        return TDServiceImpl.getInstance().getFollows(channelName.trim(), offset);
     }
 
     @Override
@@ -106,12 +110,14 @@ public class FavoritesFragment extends TDListFragment<TwitchFollows> implements 
         } else {
             adapter.setData(response.getFollows());
         }
+
         if (response.getFollows() != null) {
             for (int i = 0; i < response.getFollows().size(); i++) {
                 TwitchChannel channel = response.getFollows().valueAt(i);
                 TDTaskManager.executeTask(new StatusCallback(this, channel));
             }
         }
+        total = response.get_total();
     }
 
     @Override
@@ -119,6 +125,14 @@ public class FavoritesFragment extends TDListFragment<TwitchFollows> implements 
         TwitchChannel channel = adapter.getItem(position);
         if (channel != null && channel.getChannelStatus() != TwitchChannel.Status.UNKNOWN) {
             getTDActivity().showChannel(channel);
+        }
+    }
+
+    @Override
+    public void onLastItemVisible() {
+        offset += 25;
+        if (offset < total) {
+            loadData();
         }
     }
 

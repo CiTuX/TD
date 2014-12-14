@@ -193,11 +193,7 @@ public class VideoPlayer {
             try {
                 Playlist playlist = Playlist.parse(response.getBody().in());
                 streamPlayList.setStreams(parsePlaylist(playlist));
-            } catch (ParseException e) {
-                Log.e(this, e);
-            } catch (IOException e) {
-                Log.e(this, e);
-            } catch (NullPointerException e) {
+            } catch (ParseException | IOException e) {
                 Log.e(this, e);
             }
             return streamPlayList;
@@ -215,8 +211,8 @@ public class VideoPlayer {
                 List<Element> elements = playlist.getElements();
                 if (elements != null && elements.size() > 0) {
                     for (Element element : elements) {
-                        Log.d(TAG, "URI: " + element.getURI() + " Name: " + element.getName());
-                        TwitchStreamQuality quality = TwitchStreamPlayList.parseQuality(element.getName());
+                        Log.d(TAG, "URI: " + element.getURI() + " Name: " + element.getPlayListInfo().getVideo());
+                        TwitchStreamQuality quality = TwitchStreamPlayList.parseQuality(element.getPlayListInfo().getVideo());
                         if (quality != null) {
                             streams.put(quality, element.getURI().toString());
                         }
@@ -231,7 +227,7 @@ public class VideoPlayer {
             if (response != null && response.getStreams() != null) {
                 Log.d(this, "Streams :" + response.getStreams().toString());
                 if (response.getStreams() != null && response.getStreams().size() > 0) {
-                    TwitchStreamQuality streamQuality = TwitchStreamPlayList.parseQuality(fragment.getDefaultSharedPreferences().getString(R.id.stream_quality, TwitchStreamPlayList.QUALITY_MEDIUM.getName()));
+                    TwitchStreamQuality streamQuality = TwitchStreamPlayList.parseQuality(TwitchStreamPlayList.QUALITY_MEDIUM.getName());
                     Log.d(this, "streamQuality: " + streamQuality.getName());
                     String url = response.getStream(streamQuality);
                     if (url != null) {

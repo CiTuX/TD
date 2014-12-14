@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="EditTextTD" parent="android:Widget.EditText">
+	  <item name="android:background">@drawable/td_edit_text_holo_light</item>
+	  <item name="android:textColor">#FFFFFF</item>
+  </style>
+
+  <style name="CheckBoxTD" parent="android:Widget.CompoundButton.CheckBox">
+      <item name="android:button">@drawable/td_btn_check_holo_light</item>
+  </style>
+
+  <style name="RadioButtonTD" parent="android:Widget.CompoundButton.RadioButton">
+      <item name="android:button">@drawable/td_btn_radio_holo_light</item>
+  </style>
+
+  <style name="ButtonTD" parent="android:Widget.Button">
+	  <item name="android:background">@drawable/td_btn_default_holo_light</item>
+	  <item name="android:minHeight">48dip</item>
+	  <item name="android:minWidth">64dip</item>
+	  <item name="android:textColor">#000000</item>
+  </style>
+
+  <style name="ImageButtonTD" parent="android:Widget.ImageButton">
+	  <item name="android:background">@drawable/td_btn_default_holo_light</item>
+  </style>
+
+  <style name="ProgressBarTD" parent="android:Widget.ProgressBar.Horizontal">
+      <item name="android:progressDrawable">@drawable/td_progress_horizontal_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/td_progress_indeterminate_horizontal_holo_light</item>
+      <item name="android:minHeight">16dip</item>
+      <item name="android:maxHeight">16dip</item>
+  </style>
+
+  <style name="ListViewTD" parent="android:Widget.ListView">
+      <item name="android:listSelector">@drawable/td_list_selector_holo_light</item>
+  </style>
+
+  <style name="ListViewTD.White" parent="android:Widget.ListView.White">
+      <item name="android:listSelector">@drawable/td_list_selector_holo_light</item>
+  </style>
+
+  <style name="SpinnerItemTD" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+      <item name="android:textColor">#000000</item>
+  </style>
+
+</resources>

@@ -21,8 +21,7 @@ package ch.citux.td.ui.fragments;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-
-import org.holoeverywhere.widget.CheckBox;
+import android.widget.CheckBox;
 
 import java.util.List;
 

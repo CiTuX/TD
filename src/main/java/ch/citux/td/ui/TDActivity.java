@@ -21,29 +21,40 @@ package ch.citux.td.ui;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import org.holoeverywhere.addon.AddonSlider;
-import org.holoeverywhere.addon.Addons;
-import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.slider.SliderMenu;
-import org.holoeverywhere.widget.LinearLayout;
+import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Field;
-
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.Optional;
 import ch.citux.td.R;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.model.TwitchBroadcast;
 import ch.citux.td.data.model.TwitchChannel;
+import ch.citux.td.data.model.TwitchLogo;
+import ch.citux.td.data.service.TDServiceImpl;
+import ch.citux.td.data.worker.TDCallback;
 import ch.citux.td.data.worker.TDTaskManager;
 import ch.citux.td.ui.fragments.ChannelFragment;
 import ch.citux.td.ui.fragments.FavoritesFragment;
@@ -54,38 +65,104 @@ import ch.citux.td.ui.fragments.SettingsFragment;
 import ch.citux.td.ui.fragments.VideoFragment;
 import ch.citux.td.util.Log;
 
-@Addons(AddonSlider.class)
-public class TDActivity extends Activity implements View.OnFocusChangeListener {
+public class TDActivity extends ActionBarActivity implements TDCallback<TwitchChannel>, View.OnFocusChangeListener, AdapterView.OnItemClickListener {
 
+    private FavoritesFragment favoritesFragment;
     private GameOverviewFragment gameOverviewFragment;
     private GameStreamsFragment gameStreamsFragment;
     private ChannelFragment channelFragment;
     private SearchFragment searchFragment;
     private VideoFragment videoFragment;
+    private SettingsFragment settingsFragment;
 
-    private SliderMenu sliderMenu;
+    private ActionBarDrawerToggle toggle;
     private MenuItem refreshItem;
     private MenuItem searchItem;
+    private String username;
     private boolean isLoading;
-    private boolean isTablet;
+    private boolean hasUsername;
+
+    @InjectView(R.id.user) View user;
+    @InjectView(R.id.toolbar) Toolbar toolbar;
+    @InjectView(R.id.imgUser) ImageView imgUser;
+    @InjectView(R.id.lblUser) TextView lblUser;
+    @InjectView(R.id.lblNoUser) TextView lblNoUser;
+    @Optional @InjectView(R.id.drawerLayout) DrawerLayout drawerLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
 
-        boolean hasUsername = !PreferenceManager.getDefaultSharedPreferences(this).getString(TDConfig.SETTINGS_CHANNEL_NAME, "").equals("");
-        isTablet = findViewById(R.id.detail) != null;
+        setContentView(R.layout.main);
+        ButterKnife.inject(this);
+
+        initNavigation();
+        updateUser();
 
         Bundle args = new Bundle();
         args.putBoolean(TDConfig.SETTINGS_CHANNEL_NAME, hasUsername);
 
-        sliderMenu = addonSlider().obtainDefaultSliderMenu();
-        sliderMenu.setInverseTextColorWhenSelected(false);
-        sliderMenu.setNavigateUpBehavior(SliderMenu.NavigateUpBehavior.PopUpFragment);
-        sliderMenu.add(R.string.favorites_title, FavoritesFragment.class, args);
-        sliderMenu.add(R.string.game_title, GameOverviewFragment.class);
-        sliderMenu.add(R.string.action_settings, SettingsFragment.class);
+        favoritesFragment = new FavoritesFragment();
+        favoritesFragment.setArgs(args);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.content, favoritesFragment)
+                .commitAllowingStateLoss();
+    }
+
+    private void initNavigation() {
+        toolbar.setLogo(R.drawable.twitch_logo_white);
+        toolbar.setLogoDescription(R.string.app_name);
+        setSupportActionBar(toolbar);
+
+        if (drawerLayout != null) {
+            toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_open, R.string.navigation_close);
+            toggle.setDrawerIndicatorEnabled(true);
+            drawerLayout.setDrawerListener(toggle);
+        }
+
+        ListView lstNav = (ListView) findViewById(R.id.lstNav);
+        lstNav.setAdapter(new ArrayAdapter<>(this, R.layout.list_item_navigation, getResources().getStringArray(R.array.navigation)));
+        lstNav.setOnItemClickListener(this);
+    }
+
+    public void updateUser() {
+        username = PreferenceManager.getDefaultSharedPreferences(this).getString(TDConfig.SETTINGS_CHANNEL_NAME, "");
+        hasUsername = !username.equals("");
+
+        if (hasUsername) {
+            user.setVisibility(View.VISIBLE);
+            lblUser.setText(username);
+            lblNoUser.setVisibility(View.GONE);
+
+            TDTaskManager.executeTask(this);
+        } else {
+            user.setVisibility(View.GONE);
+            lblNoUser.setVisibility(View.VISIBLE);
+            imgUser.setImageResource(R.drawable.default_channel_logo_medium);
+        }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (drawerLayout != null) {
+            toggle.syncState();
+        }
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        replaceFragment(fragment, true);
+    }
+
+    private void replaceFragment(Fragment fragment, boolean backstack) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content, fragment);
+        if (backstack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -99,7 +176,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             searchFragment.setQuery(query);
             searchFragment.loadData();
 
-            sliderMenu.replaceFragment(searchFragment);
+            replaceFragment(searchFragment);
             Log.d(this, query);
         }
     }
@@ -124,23 +201,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextFocusChangeListener(this);
 
-        //Replace the system icons for higher resolution
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            try {
-                Field searchField = SearchView.class.getDeclaredField("mSearchButton");
-                searchField.setAccessible(true);
-                ImageView searchBtn = (ImageView) searchField.get(searchView);
-                searchBtn.setImageResource(R.drawable.ic_action_search);
-                searchField = SearchView.class.getDeclaredField("mSearchPlate");
-                searchField.setAccessible(true);
-                LinearLayout searchPlate = (LinearLayout) searchField.get(searchView);
-                ((ImageView) searchPlate.getChildAt(1)).setImageResource(R.drawable.abc_ic_clear);
-            } catch (NoSuchFieldException e) {
-                Log.e(this, e);
-            } catch (IllegalAccessException e) {
-                Log.e(this, e);
-            }
-        }
         return true;
     }
 
@@ -157,7 +217,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
     }
 
     public void showChannel(TwitchChannel channel) {
-        //TODO remove Hololol menu
         if (channelFragment == null) {
             channelFragment = new ChannelFragment();
         }
@@ -168,7 +227,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             Bundle arguments = new Bundle();
             arguments.putSerializable(ChannelFragment.CHANNEL, channel);
             channelFragment.setArgs(arguments);
-            sliderMenu.replaceFragment(channelFragment);
+            replaceFragment(channelFragment);
         }
     }
 
@@ -181,7 +240,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         if (videoFragment.isAdded()) {
             videoFragment.playVideo();
         } else {
-            sliderMenu.replaceFragment(videoFragment);
+            replaceFragment(videoFragment);
         }
         MenuItemCompat.collapseActionView(searchItem);
     }
@@ -197,7 +256,7 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
             gameStreamsFragment = new GameStreamsFragment();
         }
         gameStreamsFragment.setArgs(args);
-        sliderMenu.replaceFragment(gameStreamsFragment);
+        replaceFragment(gameStreamsFragment);
     }
 
     public void startLoading() {
@@ -214,25 +273,52 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         }
     }
 
-    public void showActionItems() {
-        if (refreshItem != null) {
-            refreshItem.setVisible(true);
-        }
-        if (searchItem != null) {
-            searchItem.setVisible(true);
+    @Override
+    public TwitchChannel startRequest() {
+        return TDServiceImpl.getInstance().getChannel(username);
+    }
+
+    @Override
+    public void onResponse(TwitchChannel response) {
+        if (response != null) {
+            Picasso
+                    .with(this)
+                    .load(response.getLogo().getUrl(TwitchLogo.Size.MEDIUM))
+                    .placeholder(R.drawable.default_channel_logo_medium)
+                    .into(imgUser);
         }
     }
 
-    public void hideActionItems() {
-        if (refreshItem != null) {
-            refreshItem.setVisible(false);
+    @Override
+    public void onError(String title, String message) {
+        Toast.makeText(this, title + ": " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean isAdded() {
+        return true;
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        super.setTitle(titleId);
+        if (toolbar != null) {
+            toolbar.setTitle(titleId);
         }
-        if (searchItem != null) {
-            searchItem.setVisible(false);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        if (toolbar != null) {
+            toolbar.setTitle(title);
         }
     }
 
     protected void refreshData() {
+        if (favoritesFragment != null && favoritesFragment.isAdded()) {
+            favoritesFragment.refreshData();
+        }
         if (channelFragment != null && channelFragment.isAdded()) {
             channelFragment.refreshData();
         }
@@ -247,10 +333,6 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         }
     }
 
-    public boolean isTablet() {
-        return isTablet;
-    }
-
     @Override
     public void onFocusChange(View view, boolean queryTextFocused) {
         if (!queryTextFocused) {
@@ -258,7 +340,39 @@ public class TDActivity extends Activity implements View.OnFocusChangeListener {
         }
     }
 
-    public AddonSlider.AddonSliderA addonSlider() {
-        return addon(AddonSlider.class);
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout != null && drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawers();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                if (favoritesFragment == null) {
+                    favoritesFragment = new FavoritesFragment();
+                }
+                replaceFragment(favoritesFragment, false);
+                break;
+            case 1:
+                if (gameOverviewFragment == null) {
+                    gameOverviewFragment = new GameOverviewFragment();
+                }
+                replaceFragment(gameOverviewFragment);
+                break;
+            case 2:
+                if (settingsFragment == null) {
+                    settingsFragment = new SettingsFragment();
+                }
+                replaceFragment(settingsFragment);
+                break;
+        }
+        if (drawerLayout != null) {
+            drawerLayout.closeDrawers();
+        }
     }
 }

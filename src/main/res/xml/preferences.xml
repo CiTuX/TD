@@ -20,11 +20,11 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
-        android:id="@+id/channel_name"
+        android:key="channel_name"
         android:dialogTitle="@string/dialog_username_title"
         android:title="@string/dialog_username_title"/>
     <ListPreference
-        android:id="@+id/stream_quality"
+        android:key="stream_quality"
         android:defaultValue="@string/dialog_stream_quality_default_value"
         android:dialogTitle="@string/dialog_stream_quality_title"
         android:entries="@array/dialog_stream_quality_entries"
@@ -35,7 +35,7 @@
         <!--android:defaultValue="false"-->
         <!--android:title="@string/preference_internal_player"/>-->
     <Preference
-        android:id="@+id/license_dialog"
+        android:key="license_dialog"
         android:title="@string/preference_licenses">
     </Preference>
 </PreferenceScreen>

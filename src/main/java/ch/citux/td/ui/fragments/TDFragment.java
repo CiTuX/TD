@@ -19,13 +19,15 @@
 package ch.citux.td.ui.fragments;
 
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.Fragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,7 +35,6 @@ import butterknife.Optional;
 import ch.citux.td.config.TDConfig;
 import ch.citux.td.data.worker.TDCallback;
 import ch.citux.td.ui.TDActivity;
-import ch.citux.td.ui.dialogs.ErrorDialogFragment;
 import ch.citux.td.ui.widget.EmptyView;
 
 public abstract class TDFragment<Result> extends Fragment implements TDBase, TDCallback<Result> {
@@ -42,6 +43,25 @@ public abstract class TDFragment<Result> extends Fragment implements TDBase, TDC
     private Bundle args;
     protected boolean hasUsername;
     @Optional @InjectView(android.R.id.empty) EmptyView emptyView;
+
+    public static <T extends Fragment> T instantiate(Class<T> clazz) {
+        return instantiate(clazz, null);
+    }
+
+    public static <T extends Fragment> T instantiate(Class<T> clazz, Bundle args) {
+        try {
+            T fragment = clazz.newInstance();
+            if (args != null) {
+                args.setClassLoader(clazz.getClassLoader());
+                fragment.setArguments(args);
+            }
+            return fragment;
+        } catch (Exception e) {
+            throw new InstantiationException("Unable to instantiate fragment " + clazz
+                    + ": make sure class name exists, is public, and has an"
+                    + " empty constructor that is public", e);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +81,7 @@ public abstract class TDFragment<Result> extends Fragment implements TDBase, TDC
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(onCreateView());
+        View view = inflater.inflate(onCreateView(), container, false);
         ButterKnife.inject(this, view);
         return view;
     }
@@ -104,8 +124,7 @@ public abstract class TDFragment<Result> extends Fragment implements TDBase, TDC
 
     @Override
     public void onError(String title, String message) {
-        ErrorDialogFragment.ErrorDialogFragmentBuilder builder = new ErrorDialogFragment.ErrorDialogFragmentBuilder(getActivity());
-        builder.setTitle(title).setMessage(message).show();
+        activity.onError(title, message);
     }
 
     public abstract void loadData();
@@ -116,6 +135,15 @@ public abstract class TDFragment<Result> extends Fragment implements TDBase, TDC
 
     public TDActivity getTDActivity() {
         return activity;
+    }
+
+    public ActionBar getSupportActionBar() {
+        return activity.getSupportActionBar();
+    }
+
+    @Override
+    public SharedPreferences getDefaultSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(activity);
     }
 
     @Override

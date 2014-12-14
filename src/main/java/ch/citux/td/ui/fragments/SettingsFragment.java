@@ -18,17 +18,18 @@
  */
 package ch.citux.td.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.preference.Preference;
 
-import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.preference.Preference;
-import org.holoeverywhere.preference.PreferenceFragment;
+import com.github.machinarius.preferencefragment.PreferenceFragment;
 
 import ch.citux.td.R;
+import ch.citux.td.config.TDConfig;
 import ch.citux.td.ui.TDActivity;
 import de.psdev.licensesdialog.LicensesDialogFragment;
 
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
     private TDActivity activity;
 
@@ -47,34 +48,27 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
-        findPreference(R.id.license_dialog).setOnPreferenceClickListener(this);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        getSupportActionBar().setTitle(R.string.action_settings);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-
-        if (activity != null) {
-            activity.hideActionItems();
-        }
+        findPreference(TDConfig.SETTINGS_LICENSE_DIALOG).setOnPreferenceClickListener(this);
+        findPreference(TDConfig.SETTINGS_CHANNEL_NAME).setOnPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        if (activity != null) {
-            activity.showActionItems();
-        }
+        activity.updateUser();
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        LicensesDialogFragment.newInstance(R.raw.notices, false, true)
-                .show(getSupportActivity().getSupportFragmentManager(), "licenses");
+        LicensesDialogFragment
+                .newInstance(R.raw.notices, false, true)
+                .show(getActivity().getSupportFragmentManager(), "licenses");
+        return true;
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        activity.updateUser();
         return true;
     }
 }
