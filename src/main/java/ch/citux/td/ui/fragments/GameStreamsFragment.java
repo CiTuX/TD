@@ -69,8 +69,10 @@ public class GameStreamsFragment extends TDListFragment<TwitchStream> implements
 
     @Override
     public void loadData() {
-        if (StringUtils.isNotEmpty(game.getName())) {
-            TDTaskManager.executeTask(this);
+        if (game != null) {
+            if (StringUtils.isNotEmpty(game.getName())) {
+                TDTaskManager.executeTask(this);
+            }
         }
     }
 
