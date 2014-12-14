@@ -3,12 +3,15 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="TD" parent="@style/_TD">
+    <style name="TD" parent="@style/_TD">
 
-    <item name="android:textSelectHandleLeft">@drawable/td_text_select_handle_left</item>
-    <item name="android:textSelectHandleRight">@drawable/td_text_select_handle_right</item>
-    <item name="android:textSelectHandle">@drawable/td_text_select_handle_middle</item>
+        <item name="android:textSelectHandleLeft">@drawable/td_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/td_text_select_handle_right</item>
+        <item name="android:textSelectHandle">@drawable/td_text_select_handle_middle</item>
 
-  </style>
+        <item name="android:listViewStyle">@style/ListViewTD</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewTD.White</item>
+
+    </style>
 
 </resources>

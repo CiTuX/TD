@@ -21,10 +21,6 @@
 
     <item name="android:progressBarStyleHorizontal">@style/ProgressBarTD</item>
 
-    <item name="android:listViewStyle">@style/ListViewTD</item>
-
-    <item name="android:listViewWhiteStyle">@style/ListViewTD.White</item>
-
     <item name="android:spinnerItemStyle">@style/SpinnerItemTD</item>
 
   </style>

@@ -31,7 +31,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -78,7 +80,9 @@ public class TDActivity extends ActionBarActivity implements TDCallback<TwitchCh
     private ActionBarDrawerToggle toggle;
     private MenuItem refreshItem;
     private MenuItem searchItem;
+    private View refreshView;
     private String username;
+    private Toast toast;
     private boolean isLoading;
     private boolean hasUsername;
 
@@ -96,19 +100,27 @@ public class TDActivity extends ActionBarActivity implements TDCallback<TwitchCh
         setContentView(R.layout.main);
         ButterKnife.inject(this);
 
+        Context contextThemeWrapper = new ContextThemeWrapper(this, R.style.Theme_TD_Light);
+        LayoutInflater inflater = LayoutInflater.from(this).cloneInContext(contextThemeWrapper);
+        refreshView = inflater.inflate(R.layout.action_refresh, null);
+
         initNavigation();
         updateUser();
 
-        Bundle args = new Bundle();
-        args.putBoolean(TDConfig.SETTINGS_CHANNEL_NAME, hasUsername);
+        if (favoritesFragment == null) {
+            Bundle args = new Bundle();
+            args.putBoolean(TDConfig.SETTINGS_CHANNEL_NAME, hasUsername);
 
-        favoritesFragment = new FavoritesFragment();
-        favoritesFragment.setArgs(args);
+            favoritesFragment = new FavoritesFragment();
+            favoritesFragment.setArgs(args);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.content, favoritesFragment)
-                .commitAllowingStateLoss();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.content, favoritesFragment)
+                    .commit();
+        } else {
+            replaceFragment(favoritesFragment);
+        }
     }
 
     private void initNavigation() {
@@ -152,17 +164,25 @@ public class TDActivity extends ActionBarActivity implements TDCallback<TwitchCh
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshData();
+    }
+
     private void replaceFragment(Fragment fragment) {
         replaceFragment(fragment, true);
     }
 
     private void replaceFragment(Fragment fragment, boolean backstack) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content, fragment);
-        if (backstack) {
-            transaction.addToBackStack(null);
+        if (fragment != null && !fragment.isAdded()) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.content, fragment);
+            if (backstack) {
+                transaction.addToBackStack(null);
+            }
+            transaction.commitAllowingStateLoss();
         }
-        transaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -262,7 +282,7 @@ public class TDActivity extends ActionBarActivity implements TDCallback<TwitchCh
     public void startLoading() {
         isLoading = true;
         if (refreshItem != null) {
-            MenuItemCompat.setActionView(refreshItem, R.layout.action_refresh);
+            MenuItemCompat.setActionView(refreshItem, refreshView);
         }
     }
 
@@ -281,8 +301,7 @@ public class TDActivity extends ActionBarActivity implements TDCallback<TwitchCh
     @Override
     public void onResponse(TwitchChannel response) {
         if (response != null) {
-            Picasso
-                    .with(this)
+            Picasso.with(this)
                     .load(response.getLogo().getUrl(TwitchLogo.Size.MEDIUM))
                     .placeholder(R.drawable.default_channel_logo_medium)
                     .into(imgUser);
@@ -291,7 +310,8 @@ public class TDActivity extends ActionBarActivity implements TDCallback<TwitchCh
 
     @Override
     public void onError(String title, String message) {
-        Toast.makeText(this, title + ": " + message, Toast.LENGTH_SHORT).show();
+        toast = Toast.makeText(this, title + ": " + message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override
@@ -356,7 +376,7 @@ public class TDActivity extends ActionBarActivity implements TDCallback<TwitchCh
                 if (favoritesFragment == null) {
                     favoritesFragment = new FavoritesFragment();
                 }
-                replaceFragment(favoritesFragment, false);
+                replaceFragment(favoritesFragment);
                 break;
             case 1:
                 if (gameOverviewFragment == null) {

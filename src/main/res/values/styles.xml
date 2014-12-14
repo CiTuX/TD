@@ -22,15 +22,23 @@
     <style name="Theme.TD" parent="TD">
         <item name="windowActionBar">false</item>
 
-        <!-- colorPrimary is used for the default action bar background -->
         <item name="colorPrimary">@color/twitch_purple</item>
-
-        <!-- colorPrimaryDark is used for the status bar -->
         <item name="colorPrimaryDark">@color/twitch_purple</item>
-
-        <!-- colorAccent is used as the default value for colorControlActivated,
-             which is used to tint widgets -->
         <item name="colorAccent">@color/twitch_purple</item>
+        <item name="colorButtonNormal">@color/twitch_purple</item>
+        <item name="colorControlNormal">@color/twitch_purple</item>
+        <item name="colorControlActivated">@color/twitch_purple</item>
+        <item name="colorControlHighlight">@color/twitch_purple</item>
+    </style>
+
+    <style name="Theme.TD.Light" parent="Theme.TD">
+        <item name="colorPrimary">@color/twitch_grey_light</item>
+        <item name="colorPrimaryDark">@color/twitch_grey_light</item>
+        <item name="colorAccent">@color/twitch_grey_light</item>
+        <item name="colorButtonNormal">@color/twitch_grey_light</item>
+        <item name="colorControlNormal">@color/twitch_grey_light</item>
+        <item name="colorControlActivated">@color/twitch_grey_light</item>
+        <item name="colorControlHighlight">@color/twitch_grey_light</item>
     </style>
 
 </resources>
