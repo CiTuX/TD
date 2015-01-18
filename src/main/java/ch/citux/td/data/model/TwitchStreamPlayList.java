@@ -28,21 +28,21 @@ public class TwitchStreamPlayList extends TwitchBase {
     public static final TwitchStreamQuality QUALITY_LOW = new TwitchStreamQuality("low", 2);
     public static final TwitchStreamQuality QUALITY_MEDIUM = new TwitchStreamQuality("medium", 3);
     public static final TwitchStreamQuality QUALITY_HIGH = new TwitchStreamQuality("high", 4);
-    public static final TwitchStreamQuality QUALITY_SOURCE = new TwitchStreamQuality("source", 5);
+    public static final TwitchStreamQuality QUALITY_CHUNKED = new TwitchStreamQuality("chunked", 5, "source");
 
     public static final TwitchStreamQuality[] SUPPORTED_QUALITIES = {
             QUALITY_MOBILE,
             QUALITY_LOW,
             QUALITY_MEDIUM,
             QUALITY_HIGH,
-            QUALITY_SOURCE
+            QUALITY_CHUNKED
     };
 
     private HashMap<TwitchStreamQuality, String> streams;
 
     public static TwitchStreamQuality parseQuality(String name) {
         for (TwitchStreamQuality quality : SUPPORTED_QUALITIES) {
-            if (quality.getName().equals(name.toLowerCase())) {
+            if (quality.getName().equalsIgnoreCase(name) || quality.getKey().equalsIgnoreCase(name)) {
                 return quality;
             }
         }

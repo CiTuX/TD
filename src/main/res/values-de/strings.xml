@@ -56,13 +56,6 @@
     <string name="dialog_playlist_title">Video Playlist</string>
     <string name="dialog_stream_quality_title">Live-Stream Qualität</string>
     <string name="dialog_stream_quality_default_value">Medium</string>
-    <string-array name="dialog_stream_quality_entries">
-        <item>Mobile</item>
-        <item>Low</item>
-        <item>Medium</item>
-        <item>High</item>
-        <item>Source</item>
-    </string-array>
 
     <!-- Favorites -->
     <string name="favorites_title">Favoriten</string>

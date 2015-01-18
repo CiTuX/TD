@@ -227,7 +227,7 @@ public class VideoPlayer {
             if (response != null && response.getStreams() != null) {
                 Log.d(this, "Streams :" + response.getStreams().toString());
                 if (response.getStreams() != null && response.getStreams().size() > 0) {
-                    String quality = fragment.getDefaultSharedPreferences().getString(TDConfig.SETTINGS_STREAM_QUALITY, TwitchStreamPlayList.QUALITY_MEDIUM.getName());
+                    String quality = fragment.getDefaultSharedPreferences().getString(TDConfig.SETTINGS_STREAM_QUALITY, TwitchStreamPlayList.QUALITY_MEDIUM.getKey());
                     TwitchStreamQuality streamQuality = TwitchStreamPlayList.parseQuality(quality);
                     Log.d(this, "streamQuality: " + streamQuality.getName());
                     String url = response.getStream(streamQuality);
