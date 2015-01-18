@@ -51,9 +51,6 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    //AARs
-//    compile(name: 'vitamio-4.2.0-SNAPSHOT', ext: 'aar')
-
     //JARs
     compile fileTree(dir: 'libs', include: '*.jar')
 }
