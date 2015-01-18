@@ -22,14 +22,8 @@
     <notice>
         <name>TD</name>
         <url>https://github.com/CiTuX/TD/</url>
-        <copyright>Copyright 2013-2014 Paul Stöhr</copyright>
+        <copyright>Copyright 2013-2015 Paul Stöhr</copyright>
         <license>GNU General Public License 3.0</license>
-    </notice>
-    <notice>
-        <name>HoloEverywhere</name>
-        <url>https://github.com/Prototik/HoloEverywhere/</url>
-        <copyright>Copyright (C) 2013 Sergey Shatunov</copyright>
-        <license>MIT License</license>
     </notice>
     <notice>
         <name>Nine Old Androids</name>
@@ -66,10 +60,4 @@
         <url>http://jackson.codehaus.org/</url>
         <license>Apache Software License 2.0</license>
     </notice>
-    <!--<notice>-->
-    <!--<name>Vitamio</name>-->
-    <!--<url>http://www.vitamio.org</url>-->
-    <!--<copyright>Copyright (C) 2011-2014 Vitamio</copyright>-->
-    <!--<license>Vitamio License</license>-->
-    <!--</notice>-->
 </notices>
