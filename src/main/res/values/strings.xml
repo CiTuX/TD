@@ -62,7 +62,7 @@
     <string name="dialog_playlist_title">Video Playlist</string>
     <string name="dialog_stream_quality_title">Live-stream quality</string>
     <string name="dialog_stream_quality_default_value">Medium</string>
-    <string-array name="dialog_stream_quality_entries">
+    <string-array name="dialog_stream_quality_entries" translatable="false">
         <item>Mobile</item>
         <item>Low</item>
         <item>Medium</item>
