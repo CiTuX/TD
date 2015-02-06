@@ -25,6 +25,7 @@ public class TDConfig {
     public static final String SETTINGS_STREAM_QUALITY = "stream_quality";
 
     public static final String CAST_APPLICATION_ID = "D25E1BBE";
+    public static final String KRAKEN_CLIENT_ID = "sx9d3whtcht2lhrtd6yjia8rv019wxi";
 
     public static final String UTF_8 = "UTF-8";
 

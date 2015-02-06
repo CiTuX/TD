@@ -37,6 +37,7 @@ public class ChannelVideosFragment extends TDListFragment<TwitchVideos> implemen
     private ArchiveAdapter adapter;
     private TwitchChannel channel;
     private int offset;
+    private boolean taskRunning;
 
     @Override
     protected int onCreateView() {
@@ -50,9 +51,6 @@ public class ChannelVideosFragment extends TDListFragment<TwitchVideos> implemen
         if (getArguments() != null && getArguments().containsKey(ChannelFragment.CHANNEL)) {
             channel = (TwitchChannel) getArguments().getSerializable(ChannelFragment.CHANNEL);
         }
-
-        setOnItemClickListener(this);
-        setOnLastItemVisibleListener(this);
     }
 
     public void setChannel(TwitchChannel channel) {
@@ -61,6 +59,7 @@ public class ChannelVideosFragment extends TDListFragment<TwitchVideos> implemen
 
     @Override
     public void refreshData() {
+        offset = 0;
         if (adapter != null) {
             adapter.clear();
         }
@@ -70,20 +69,31 @@ public class ChannelVideosFragment extends TDListFragment<TwitchVideos> implemen
     @Override
     public void loadData() {
         if (channel != null) {
-            TDTaskManager.executeTask(this);
+            if (!taskRunning) {
+                TDTaskManager.executeTask(this);
+                taskRunning = true;
+            }
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         TwitchVideo video = adapter.getItem(position);
-        TDTaskManager.executeTask(new VideoPlayer.GetVideoCallback(this, video));
+        if (video != null) {
+            if (video.get_id().startsWith("v")) { //VOD
+                TDTaskManager.executeTask(new VideoPlayer.VodPlaylistCallback(this, video));
+            } else { //Old broadcasts
+                TDTaskManager.executeTask(new VideoPlayer.GetVideoCallback(this, video));
+            }
+        }
     }
 
     @Override
     public void onLastItemVisible() {
-        offset += 10;
-        loadData();
+        if (adapter.getCount() >= 10) {
+            offset += 10;
+            loadData();
+        }
     }
 
     @Override
@@ -93,10 +103,13 @@ public class ChannelVideosFragment extends TDListFragment<TwitchVideos> implemen
 
     @Override
     public void onResponse(TwitchVideos response) {
+        taskRunning = false;
         emptyView.setText(R.string.channel_archives_empty);
         if (adapter == null) {
             adapter = new ArchiveAdapter(getActivity(), response.getVideos());
             setListAdapter(adapter);
+            setOnItemClickListener(this);
+            setOnLastItemVisibleListener(this);
         } else {
             adapter.setData(response.getVideos());
         }

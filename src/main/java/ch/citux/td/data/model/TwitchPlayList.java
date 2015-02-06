@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 
-public class TwitchStreamPlayList extends TwitchBase {
+public class TwitchPlayList extends TwitchBase {
 
     public static final TwitchStreamQuality QUALITY_MOBILE = new TwitchStreamQuality("mobile", 1);
     public static final TwitchStreamQuality QUALITY_LOW = new TwitchStreamQuality("low", 2);

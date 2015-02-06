@@ -38,7 +38,7 @@ import ch.citux.td.data.model.TwitchAccessToken;
 import ch.citux.td.data.model.TwitchBroadcast;
 import ch.citux.td.data.model.TwitchChunk;
 import ch.citux.td.data.model.TwitchChunks;
-import ch.citux.td.data.model.TwitchStreamPlayList;
+import ch.citux.td.data.model.TwitchPlayList;
 import ch.citux.td.data.model.TwitchStreamQuality;
 import ch.citux.td.data.model.TwitchVideo;
 import ch.citux.td.data.service.TDServiceImpl;
@@ -172,37 +172,39 @@ public class VideoPlayer {
         }
     }
 
-    public static class StreamPlaylistCallback extends TDBasicCallback<TwitchStreamPlayList> {
+    public static abstract class PlaylistCallback extends TDBasicCallback<TwitchPlayList> {
 
-        private TDBase fragment;
-        private TDActivity activity;
-        private String channel;
+        protected TDBase fragment;
+        protected TDActivity activity;
+        protected TwitchAccessToken accessToken;
 
-        public StreamPlaylistCallback(TDBase caller, String channel) {
+        public PlaylistCallback(TDBase caller) {
             super(caller);
             this.fragment = caller;
             this.activity = caller.getTDActivity();
-            this.channel = channel;
         }
 
+        protected abstract Response startPlaylistRequest();
+
+        protected abstract TwitchAccessToken getAccessToken();
+
+        protected abstract String getTitle();
+
         @Override
-        public TwitchStreamPlayList startRequest() {
-            TwitchStreamPlayList streamPlayList = new TwitchStreamPlayList();
-            TwitchAccessToken accessToken = getAccessToken();
-            Response response = TDServiceImpl.getInstance().getStreamPlaylist(channel, accessToken.getP(), accessToken.getToken(), accessToken.getSig());
+        public final TwitchPlayList startRequest() {
+            TwitchPlayList twitchPlayList = new TwitchPlayList();
+
+            accessToken = getAccessToken();
+            accessToken.setP(String.valueOf((Math.random() * 999999)));
+
+            Response response = startPlaylistRequest();
             try {
                 Playlist playlist = Playlist.parse(response.getBody().in());
-                streamPlayList.setStreams(parsePlaylist(playlist));
+                twitchPlayList.setStreams(parsePlaylist(playlist));
             } catch (ParseException | IOException e) {
                 Log.e(this, e);
             }
-            return streamPlayList;
-        }
-
-        private TwitchAccessToken getAccessToken() {
-            TwitchAccessToken accessToken = TDServiceImpl.getInstance().getStreamToken(channel);
-            accessToken.setP(String.valueOf((Math.random() * 999999)));
-            return accessToken;
+            return twitchPlayList;
         }
 
         private HashMap<TwitchStreamQuality, String> parsePlaylist(Playlist playlist) {
@@ -212,7 +214,7 @@ public class VideoPlayer {
                 if (elements != null && elements.size() > 0) {
                     for (Element element : elements) {
                         Log.d(TAG, "URI: " + element.getURI() + " Name: " + element.getPlayListInfo().getVideo());
-                        TwitchStreamQuality quality = TwitchStreamPlayList.parseQuality(element.getPlayListInfo().getVideo());
+                        TwitchStreamQuality quality = TwitchPlayList.parseQuality(element.getPlayListInfo().getVideo());
                         if (quality != null) {
                             streams.put(quality, element.getURI().toString());
                         }
@@ -223,16 +225,16 @@ public class VideoPlayer {
         }
 
         @Override
-        public void onResponse(TwitchStreamPlayList response) {
+        public void onResponse(TwitchPlayList response) {
             if (response != null && response.getStreams() != null) {
                 Log.d(this, "Streams :" + response.getStreams().toString());
                 if (response.getStreams() != null && response.getStreams().size() > 0) {
-                    String quality = fragment.getDefaultSharedPreferences().getString(TDConfig.SETTINGS_STREAM_QUALITY, TwitchStreamPlayList.QUALITY_MEDIUM.getKey());
-                    TwitchStreamQuality streamQuality = TwitchStreamPlayList.parseQuality(quality);
+                    String quality = fragment.getDefaultSharedPreferences().getString(TDConfig.SETTINGS_STREAM_QUALITY, TwitchPlayList.QUALITY_MEDIUM.getKey());
+                    TwitchStreamQuality streamQuality = TwitchPlayList.parseQuality(quality);
                     Log.d(this, "streamQuality: " + streamQuality.getName());
                     String url = response.getStream(streamQuality);
                     if (url != null) {
-                        playVideo(activity, channel, url);
+                        playVideo(activity, getTitle(), url);
                         return;
                     }
                 }
@@ -244,6 +246,59 @@ public class VideoPlayer {
         @Override
         public boolean isAdded() {
             return fragment.isAdded();
+        }
+    }
+
+
+    public static class StreamPlaylistCallback extends PlaylistCallback {
+
+        private String channel;
+
+        public StreamPlaylistCallback(TDBase caller, String channel) {
+            super(caller);
+            this.channel = channel;
+        }
+
+        @Override
+        protected String getTitle() {
+            return channel;
+        }
+
+        @Override
+        protected Response startPlaylistRequest() {
+            return TDServiceImpl.getInstance().getChannelPlaylist(channel, accessToken.getP(), accessToken.getToken(), accessToken.getSig());
+        }
+
+        @Override
+        protected TwitchAccessToken getAccessToken() {
+            return TDServiceImpl.getInstance().getChannelToken(channel);
+        }
+    }
+
+    public static class VodPlaylistCallback extends PlaylistCallback {
+
+        private TwitchVideo video;
+        private String videoId;
+
+        public VodPlaylistCallback(TDBase caller, TwitchVideo video) {
+            super(caller);
+            this.video = video;
+            this.videoId = video.get_id().replaceAll("[^\\d.]", "");
+        }
+
+        @Override
+        protected String getTitle() {
+            return video.getTitle();
+        }
+
+        @Override
+        protected Response startPlaylistRequest() {
+            return TDServiceImpl.getInstance().getVodPlaylist(videoId, accessToken.getP(), accessToken.getToken(), accessToken.getSig());
+        }
+
+        @Override
+        protected TwitchAccessToken getAccessToken() {
+            return TDServiceImpl.getInstance().getVodToken(videoId);
         }
     }
 }

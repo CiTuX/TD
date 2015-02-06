@@ -36,6 +36,8 @@ import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.Response;
 import retrofit.converter.JacksonConverter;
+import retrofit.http.Path;
+import retrofit.http.Query;
 
 public class TDServiceImpl implements TwitchAPI, TwitchKraken, TwitchUsher, RestAdapter.Log {
 
@@ -85,6 +87,7 @@ public class TDServiceImpl implements TwitchAPI, TwitchKraken, TwitchUsher, Rest
         @Override
         public void intercept(RequestInterceptor.RequestFacade request) {
             request.addHeader("Accept", TDConfig.MIME_TWITCH);
+            request.addHeader("Client-ID", TDConfig.KRAKEN_CLIENT_ID);
         }
     }
 
@@ -114,21 +117,6 @@ public class TDServiceImpl implements TwitchAPI, TwitchKraken, TwitchUsher, Rest
     }
 
     @Override
-    public TwitchBroadcast getVideoPlaylist(String id) {
-        return twitchAPI.getVideoPlaylist(id);
-    }
-
-    @Override
-    public TwitchAccessToken getStreamToken(String channel) {
-        return twitchAPI.getStreamToken(channel);
-    }
-
-    @Override
-    public Response getStreamPlaylist(String channel, String p, String token, String sig) {
-        return twitchUsher.getStreamPlaylist(channel, p, token, sig);
-    }
-
-    @Override
     public TwitchStream searchStreams(String query, int offset) {
         return twitchKraken.searchStreams(query, offset);
     }
@@ -141,5 +129,32 @@ public class TDServiceImpl implements TwitchAPI, TwitchKraken, TwitchUsher, Rest
     @Override
     public TwitchGames getTopGames(int limit, int offset) {
         return twitchKraken.getTopGames(limit, offset);
+    }
+
+    //TwitchAPI
+    @Override
+    public TwitchAccessToken getChannelToken(String channel) {
+        return twitchAPI.getChannelToken(channel);
+    }
+
+    @Override
+    public TwitchAccessToken getVodToken(@Path("videoId") String videoId) {
+        return twitchAPI.getVodToken(videoId);
+    }
+
+    @Override
+    public TwitchBroadcast getVideoPlaylist(@Path("id") String id) {
+        return twitchAPI.getVideoPlaylist(id);
+    }
+
+    //TwitchUsher
+    @Override
+    public Response getChannelPlaylist(String channel, String p, String token, String sig) {
+        return twitchUsher.getChannelPlaylist(channel, p, token, sig);
+    }
+
+    @Override
+    public Response getVodPlaylist(@Path("videoId") String videoId, @Query("p") String p, @Query("token") String token, @Query("sig") String sig) {
+        return twitchUsher.getVodPlaylist(videoId, p, token, sig);
     }
 }

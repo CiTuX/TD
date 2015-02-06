@@ -54,7 +54,7 @@
     <string name="dialog_progress_message">Wird geladen…</string>
     <string name="dialog_username_title">Benutzername</string>
     <string name="dialog_playlist_title">Video Playlist</string>
-    <string name="dialog_stream_quality_title">Live-Stream Qualität</string>
+    <string name="dialog_stream_quality_title">Qualität</string>
     <string name="dialog_stream_quality_default_value">Medium</string>
 
     <!-- Favorites -->

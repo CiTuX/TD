@@ -63,7 +63,10 @@ public interface TDService {
     public interface TwitchAPI {
 
         @GET("/channels/{channel}/access_token")
-        public TwitchAccessToken getStreamToken(@Path("channel") String channel);
+        public TwitchAccessToken getChannelToken(@Path("channel") String channel);
+
+        @GET("/vods/{videoId}/access_token")
+        public TwitchAccessToken getVodToken(@Path("videoId") String videoId);
 
         @GET("/videos/{id}?as3=t")
         public TwitchBroadcast getVideoPlaylist(@Path("id") String id);
@@ -71,7 +74,10 @@ public interface TDService {
 
     public interface TwitchUsher {
 
-        @GET("/api/channel/hls/{channel}.json?allow_source=true&allow_audio_only=false&type=any&private_code=null&player=twitchweb")
-        public Response getStreamPlaylist(@Path("channel") String channel, @Query("p") String p, @Query("token") String token, @Query("sig") String sig);
+        @GET("/api/channel/hls/{channel}.json?allow_source=true&allow_audio_only=false&type=any&player=twitchweb")
+        public Response getChannelPlaylist(@Path("channel") String channel, @Query("p") String p, @Query("token") String token, @Query("sig") String sig);
+
+        @GET("/vod/{videoId}?allow_source=true&allow_audio_only=false&type=any&player=twitchweb")
+        public Response getVodPlaylist(@Path("videoId") String videoId, @Query("p") String p, @Query("nauth") String token, @Query("nauthsig") String sig);
     }
 }

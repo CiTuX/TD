@@ -75,14 +75,6 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (channel != null) {
-            refreshData();
-        }
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         if (channel != null && emptyView != null) {
@@ -126,7 +118,7 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
                     transaction.addToBackStack(null);
                 }
 
-                Fragment currentFragment = (Fragment) fragmentManager.findFragmentById(R.id.container);
+                Fragment currentFragment = fragmentManager.findFragmentById(R.id.container);
                 if (currentFragment == null) {
                     transaction.add(R.id.container, fragment);
                 } else {
@@ -148,8 +140,12 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
 
     @Override
     public void loadData() {
-        if (videosFragment != null) {
-            videosFragment.loadData();
+    }
+
+    @Override
+    public void refreshData() {
+        if(videosFragment != null){
+            videosFragment.refreshData();
         }
     }
 
