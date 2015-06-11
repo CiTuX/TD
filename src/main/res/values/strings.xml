@@ -87,6 +87,7 @@
     <string name="channel_unknown">Unknown</string>
     <string name="channel_archives_empty">No archived videos</string>
     <string name="channel_detail_empty">Select a channel for details</string>
+    <string name="channel_playing">Playing</string>
 
     <!-- Stream -->
     <string name="stream_viewers">Viewers</string>

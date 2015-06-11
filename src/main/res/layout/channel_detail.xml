@@ -63,6 +63,27 @@
         android:layout_toRightOf="@+id/lblStatusLabel"
         android:layout_below="@+id/lblTitle"/>
 
+    <TextView
+        android:id="@+id/lblPlayingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toEndOf="@+id/imgLogo"
+        android:layout_toRightOf="@+id/imgLogo"
+        android:layout_below="@+id/lblStatusLabel"
+        android:text="@string/channel_playing"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/lblPlaying"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/lblPlayingLabel"
+        android:layout_toRightOf="@+id/lblPlayingLabel"
+        android:layout_below="@+id/lblStatus"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/btnStream"
         android:layout_width="fill_parent"
