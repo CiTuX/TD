@@ -30,6 +30,8 @@
 
     <item name="android:imageButtonStyle">@style/ImageButtonTD</item>
 
+    <item name="android:navigationBarColor">@color/td_color</item>
+
     </style>
 
 </resources>
