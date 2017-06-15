@@ -47,6 +47,8 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
     @InjectView(R.id.imgLogo) ImageView imgLogo;
     @InjectView(R.id.lblTitle) TextView lblTitle;
     @InjectView(R.id.lblStatus) TextView lblStatus;
+    @InjectView(R.id.lblPlayingLabel) TextView lblPlayingLabel;
+    @InjectView(R.id.lblPlaying) TextView lblPlaying;
     @InjectView(R.id.btnStream) Button btnStream;
 
     private TwitchChannel channel;
@@ -87,7 +89,12 @@ public class ChannelFragment extends TDFragment<Void> implements View.OnClickLis
         Picasso.with(getActivity()).load(channel.getLogo().getUrl(TwitchLogo.Size.LARGE)).placeholder(R.drawable.default_channel_logo_medium).into(imgLogo);
         lblTitle.setText(channel.getDisplay_name());
         lblStatus.setText(channel.getChannelStatus().getText());
-        btnStream.setVisibility(channel.getChannelStatus() == TwitchChannel.Status.ONLINE ? View.VISIBLE : View.GONE);
+        lblPlaying.setText(channel.getGame());
+
+        boolean online = channel.getChannelStatus() == TwitchChannel.Status.ONLINE;
+        lblPlayingLabel.setVisibility(online ? View.VISIBLE : View.GONE);
+        lblPlaying.setVisibility(online ? View.VISIBLE : View.GONE);
+        btnStream.setVisibility(online ? View.VISIBLE : View.GONE);
 
         emptyView.showProgress();
         emptyView.setVisibility(View.GONE);
